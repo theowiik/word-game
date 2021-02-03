@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 
 public abstract class AbstractDAO<T> {
+
   private final Class<T> entityType;
 
   // TODO: Should this be here?
@@ -13,6 +14,10 @@ public abstract class AbstractDAO<T> {
   }
 
   protected abstract EntityManager getEntityManager();
+
+  public void create(T entity) {
+    getEntityManager().persist(entity);
+  }
 
   public List<T> findAll() {
     final CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
