@@ -16,4 +16,11 @@ public class WordDAO extends AbstractDAO<Word> {
   public WordDAO() {
     super(Word.class);
   }
+
+  public Word findByName(String name) {
+    //EntityManager em = getEntityManager();
+    //final CriteriaQuery cq = em.getCriteriaBuilder().createQuery(Word.class).from(Word.class);
+    //cq.select(cq.from(Word.class)).where()
+    return null;
+  }
 }

@@ -31,8 +31,6 @@ public class WordDAOTest {
   @Test
   public void notNullDescription() {
     wordDAO.create(new Word("Word1", "Description1"));
-    wordDAO.create(new Word("Word2", "Description2"));
-    wordDAO.create(new Word("Word3", "Description3"));
 
     //Word word = new Word("Word", null);
     Assert.assertTrue(true);
@@ -46,4 +44,12 @@ public class WordDAOTest {
     Assert.assertTrue(true);
   }
 
+
+  @Test
+  public void dummy() {
+    //wordDAO.create(new Word("changeme", "Description1"));
+
+    //Word word = new Word("Word", null);
+    Assert.assertTrue(true);
+  }
 }

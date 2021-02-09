@@ -19,7 +19,7 @@ public class Word implements Serializable {
   private String word;
   @NotNull
   private String description;
-  @ManyToOne
+  @ManyToOne(optional = true)
   private Category category;
 
   public Word(String word, @NotNull String description) {
