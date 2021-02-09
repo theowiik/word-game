@@ -7,9 +7,9 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import teamsocial.socialgame.model.dao.CategoryDAO;
 import teamsocial.socialgame.model.dao.WordDAO;
 import teamsocial.socialgame.model.entity.Category;
 import teamsocial.socialgame.model.entity.Word;
@@ -23,27 +23,27 @@ public class WordDAOTest {
   @Deployment
   public static WebArchive createDeployment() {
     return ShrinkWrap.create(WebArchive.class)
-        .addClasses(WordDAO.class, Word.class, Category.class)
+        .addClasses(WordDAO.class, Word.class, Category.class, CategoryDAO.class)
         .addAsResource("META-INF/persistence.xml")
         .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
   }
 
-  @Before
-  public void init() {
+  @Test
+  public void notNullDescription() {
     wordDAO.create(new Word("Word1", "Description1"));
     wordDAO.create(new Word("Word2", "Description2"));
     wordDAO.create(new Word("Word3", "Description3"));
-  }
 
-  @Test
-  public void notNullDescription() {
     //Word word = new Word("Word", null);
     Assert.assertTrue(true);
   }
 
   @Test
   public void nonEmptyDescription() {
+    wordDAO.create(new Word("Word4", "Description1"));
+
     //Word word = new Word("Word", null);
     Assert.assertTrue(true);
   }
+
 }
