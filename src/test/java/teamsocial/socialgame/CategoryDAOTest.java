@@ -6,6 +6,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,9 +18,6 @@ import teamsocial.socialgame.model.entity.Word;
 @RunWith(Arquillian.class)
 public class CategoryDAOTest {
 
-  @EJB
-  private CategoryDAO categoryDAO;
-
   //@EJB
   //private WordDAO wordDAO;
 
@@ -30,6 +28,9 @@ public class CategoryDAOTest {
         .addAsResource("META-INF/persistence.xml")
         .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
   }
+
+  @EJB
+  private CategoryDAO categoryDAO;
 
   @Before
   public void init() {
@@ -43,6 +44,7 @@ public class CategoryDAOTest {
 
   @Test
   public void addWordsToCategory() {
+    Assert.assertTrue(true);
     //Category category = categoryDAO.findAll().get(0);
     //Word word1 = wordDAO.findAll().get(0);
     //List<Word> words = category.getWords();

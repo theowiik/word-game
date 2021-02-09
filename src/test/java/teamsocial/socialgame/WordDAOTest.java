@@ -6,6 +6,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,12 +38,12 @@ public class WordDAOTest {
   @Test
   public void notNullDescription() {
     //Word word = new Word("Word", null);
-    //Assert.assertTrue(true);
+    Assert.assertTrue(true);
   }
 
   @Test
   public void nonEmptyDescription() {
     //Word word = new Word("Word", null);
-    //Assert.assertTrue(true);
+    Assert.assertTrue(true);
   }
 }
