@@ -15,17 +15,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Word implements Serializable {
 
+  @Id
+  private String word;
+  @NotNull
+  private String description;
+  @ManyToOne
+  private Category category;
+
   public Word(String word, @NotNull String description) {
     this.word = word;
     this.description = description;
   }
-
-  @Id
-  private String word;
-
-  @NotNull
-  private String description;
-
-  @ManyToOne
-  private Category category;
 }

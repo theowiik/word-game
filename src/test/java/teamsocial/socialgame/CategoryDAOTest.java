@@ -1,13 +1,11 @@
 package teamsocial.socialgame;
 
-import java.util.List;
 import javax.ejb.EJB;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,8 +20,8 @@ public class CategoryDAOTest {
   @EJB
   private CategoryDAO categoryDAO;
 
-  @EJB
-  private WordDAO wordDAO;
+  //@EJB
+  //private WordDAO wordDAO;
 
   @Deployment
   public static WebArchive createDeployment() {
@@ -35,9 +33,9 @@ public class CategoryDAOTest {
 
   @Before
   public void init() {
-    wordDAO.create(new Word("CategoryWord1", "Description"));
-    wordDAO.create(new Word("CategoryWord2", "Description"));
-    wordDAO.create(new Word("CategoryWord3", "Description"));
+    //wordDAO.create(new Word("CategoryWord1", "Description"));
+    //wordDAO.create(new Word("CategoryWord2", "Description"));
+    //wordDAO.create(new Word("CategoryWord3", "Description"));
 
     categoryDAO.create(new Category("IT-ord"));
     categoryDAO.create(new Category("Matord"));
