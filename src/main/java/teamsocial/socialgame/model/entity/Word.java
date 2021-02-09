@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "words")
 public class Word implements Serializable {
 
   public Word(String word, @NotNull String description) {

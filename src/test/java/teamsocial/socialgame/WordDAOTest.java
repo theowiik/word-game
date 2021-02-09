@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import teamsocial.socialgame.model.dao.WordDAO;
+import teamsocial.socialgame.model.entity.Category;
 import teamsocial.socialgame.model.entity.Word;
 
 @RunWith(Arquillian.class)
@@ -22,14 +23,14 @@ public class WordDAOTest {
   @Deployment
   public static WebArchive createDeployment() {
     return ShrinkWrap.create(WebArchive.class)
-        .addClasses(WordDAO.class, Word.class)
+        .addClasses(WordDAO.class, Word.class, Category.class)
         .addAsResource("META-INF/persistence.xml")
         .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
   }
 
   @Before
   public void init() {
-    wordDAO.create(new Word("Resonabel", "Ett bra ord."));
+    wordDAO.create(new Word("ksksddksksda", "Ett bra ord."));
     wordDAO.create(new Word("AnnatOrd", "Ett bra ord."));
     wordDAO.create(new Word("OrdTre", "Ett ej så bra ord."));
   }
