@@ -15,9 +15,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Category implements Serializable {
 
+  public Category(String name) {
+    this.name = name;
+  }
+
   @Id
   private String name;
 
-  @OneToMany()
+  @OneToMany
   private List<Word> words;
 }
