@@ -4,7 +4,6 @@ import java.io.File;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.transaction.UserTransaction;
-import org.apache.deltaspike.data.api.QueryResult;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -48,9 +47,11 @@ public class CategoryDAOTest {
   }
 
   @Test
-  public void coolTest() throws Exception {
+  public void addWordToCategory() throws Exception {
     tx.begin();
-    Word myWord = new Word("myWord", "desc");
+    String theString = "myString9049450345890";
+
+    Word myWord = new Word(theString, "desc");
     Category cat = new Category("cat");
     myWord.setCategory(cat);
 
@@ -65,9 +66,5 @@ public class CategoryDAOTest {
 
     Assert.assertTrue(newCat.getWords().size() > 0);
     Assert.assertEquals(wordInCat.getWord(), myWord.getWord());
-
-    QueryResult<Word> w = wRepository.findByWord("myWord");
-    Word aWord = w.getAnyResult();
-    System.out.println("");
   }
 }
