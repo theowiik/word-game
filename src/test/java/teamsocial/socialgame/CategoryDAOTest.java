@@ -54,5 +54,7 @@ public class CategoryDAOTest {
 
     Assert.assertTrue(newCat.getWords().size() > 0);
     Assert.assertEquals(wordInCat.getWord(), myWord.getWord());
+    
+    System.out.print("Tjena Theo");
   }
 }
