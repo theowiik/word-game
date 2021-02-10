@@ -4,24 +4,23 @@ import java.io.Serializable;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
+import javax.persistence.PersistenceContext;
 import javax.transaction.TransactionScoped;
 
 @TransactionScoped
 public class EntityManagerProducer implements Serializable {
 
-  @PersistenceUnit(unitName = "socialgame")
-  private EntityManagerFactory emf;
+  @PersistenceContext(name = "socialgame")
+  private EntityManager entityManager;
 
   @Produces
-  public EntityManager create() {
-    return emf.createEntityManager();
+  protected EntityManager createEntityManager() {
+    return this.entityManager;
   }
 
-  public void close(@Disposes EntityManager em) {
-    if (em.isOpen()) {
-      em.close();
+  protected void closeEntityManager(@Disposes EntityManager entityManager) {
+    if (entityManager.isOpen()) {
+      entityManager.close();
     }
   }
 }
