@@ -1,6 +1,5 @@
 package teamsocial.socialgame;
 
-import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.transaction.UserTransaction;
@@ -38,26 +37,22 @@ public class CategoryDAOTest {
   }
 
   @Test
-  public void addWordsToCategory() throws Exception {
+  public void coolTest() throws Exception {
     tx.begin();
-    categoryDAO.create(new Category("CategoryName"));
-    wordDAO.create(new Word("CategoryWord1", "Description"));
+    Word myWord = new Word("myWord", "desc");
+    Category cat = new Category("cat");
+    myWord.setCategory(cat);
 
-    Category category = categoryDAO.findAll().get(0);
-    Word word1 = wordDAO.findAll().get(0);
-    List<Word> words = category.getWords();
-    //words.add(word1);
-    word1.setCategory(category);
-    //wordDAO.getEntityManager().flush();
-    //categoryDAO.getEntityManager().merge(category);
-    wordDAO.getEntityManager().merge(word1);
+    categoryDAO.create(cat);
+    wordDAO.create(myWord);
+
+    Category newCat = categoryDAO.findAll().get(0);
+    categoryDAO.getEntityManager().refresh(newCat);
     tx.commit();
 
-    System.out.println("lorem");
-    System.out.println("Kategoriens ord: " + category.getWords());
-    System.out.println("Ordets kategori: " + word1.getCategory());
+    Word wordInCat = newCat.getWords().get(0);
 
-    Assert.assertTrue(word1.getCategory() != null);
-    Assert.assertTrue(true);
+    Assert.assertTrue(newCat.getWords().size() > 0);
+    Assert.assertEquals(wordInCat.getWord(), myWord.getWord());
   }
 }
