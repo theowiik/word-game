@@ -28,8 +28,8 @@ public class WordDAOTest {
 
   @Inject
   private WordRepository wRepository;
-  
-    @Inject
+
+  @Inject
   private UserTransaction tx;
 
   @Deployment
@@ -50,7 +50,7 @@ public class WordDAOTest {
     String wordName = "Word59054034549038";
     wordDAO.create(new Word(wordName, "Description1"));
     tx.commit();
- 
+
     QueryResult<Word> queryResult = wRepository.findByWord(wordName);
     Word wordInDB = queryResult.getSingleResult();
 

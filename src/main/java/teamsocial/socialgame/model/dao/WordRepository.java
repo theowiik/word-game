@@ -9,5 +9,6 @@ import teamsocial.socialgame.model.entity.Word;
 @Repository
 @Transactional
 public abstract class WordRepository extends AbstractEntityRepository<Word, String> {
+
   public abstract QueryResult<Word> findByWord(String word);
 }

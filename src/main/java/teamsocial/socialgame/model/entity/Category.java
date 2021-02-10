@@ -1,7 +1,6 @@
 package teamsocial.socialgame.model.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -20,7 +19,7 @@ public class Category implements Serializable {
   private String name;
   @OneToMany(mappedBy = "category")
   private List<Word> words;
-  
+
   public Category(String name) {
     this.name = name;
   }
