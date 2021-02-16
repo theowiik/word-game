@@ -1,26 +1,17 @@
 import "./App.css";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import { Route } from "react-router";
+import { BrowserRouter, Switch } from "react-router-dom";
+import Page from "./Page";
+import Home from "./Home";
 
 function App() {
   return (
-    <div className="App">
-      <Container>
-        {" "}
-        <Row>
-          <Col>
-            <Button variant="primary">Hej</Button>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Button variant="success">hej</Button>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" compontent={Home} />
+        <Route path="/Page" component={Page} />
+      </Switch>
+    </BrowserRouter>
   );
 }
 
