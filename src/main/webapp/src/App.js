@@ -1,11 +1,10 @@
 import "./App.css";
 import { Route } from "react-router";
 import { BrowserRouter, Switch } from "react-router-dom";
-import Lobby from "./Lobby";
-import Home from "./Home";
-import PresentWord from "./PresentWord";
-import GameSettings from "./GameSettings";
-
+import Lobby from "./use-cases/Lobby";
+import Home from "./use-cases/Home";
+import PresentWord from "./use-cases/PresentWord";
+import GameSettings from "./use-cases/GameSettings.jsx";
 
 function App() {
   return (

@@ -9,7 +9,7 @@ function Home() {
     <Container>
       <Row>
         <Col>
-          <h1>Home Page hello</h1>
+          <h1>Home Page</h1>
         </Col>
       </Row>
       <Row>

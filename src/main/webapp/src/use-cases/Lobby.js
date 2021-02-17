@@ -18,7 +18,7 @@ function Lobby() {
         </Row>
         <Row>
           <Link to="/present-word">
-            <Button variant="success">Move to Game</Button>
+            <Button variant="success">Start Game</Button>
           </Link>
         </Row>
       </Container>
