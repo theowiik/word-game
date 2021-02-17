@@ -19,6 +19,13 @@ function Home() {
           </Link>
         </Col>
       </Row>
+      <Row>
+        <Col>
+          <Link to="/game-settings">
+            <Button variant="primary">Start a game</Button>
+          </Link>
+        </Col>
+      </Row>
     </Container>
   );
 }
