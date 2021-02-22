@@ -1,7 +1,16 @@
+import classNames from "classnames";
 import React from "react";
 
+const getButtonClassNames = (props) => {
+  return classNames({
+    'btn-primary': props.primary,
+    'btn-secondary': props.secondary,
+    'btn-success': props.success,
+    'btn-danger': props.danger,
+  });
+};
+
 function Button({
-  className,
   label,
   onClick,
   primary,
@@ -9,12 +18,10 @@ function Button({
   success,
   secondary,
 }) {
+  const classes = getButtonClassNames({ primary, secondary, danger, success });
+
   return (
-    <button
-      className={`${className} font-bold ${primary ? "btn-primary" : ""} ${
-        danger ? "btn-danger" : ""
-      } ${success ? "btn-success" : ""} ${secondary ? "btn-secondary" : ""}`}
-    >
+    <button className={classes}>
       {label}
     </button>
   );

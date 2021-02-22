@@ -25,16 +25,10 @@ function Home() {
           </Link>
         </div>
 
-        <div>
-          <div>
-            <Link to="/game-settings">
-              <Button
-                className="mt-24"
-                label="Create a game"
-                secondary
-              ></Button>
-            </Link>
-          </div>
+        <div className="mt-24">
+          <Link to="/game-settings">
+            <Button label="Create a game" secondary></Button>
+          </Link>
         </div>
       </div>
     </div>
