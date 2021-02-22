@@ -1,20 +1,17 @@
-import "./App.css";
+import "App.css";
+import "main.css";
 import { Route } from "react-router";
 import { BrowserRouter, Switch } from "react-router-dom";
-import Lobby from "./use-cases/Lobby";
-import Home from "./use-cases/Home";
-import PresentWord from "./use-cases/PresentWord";
-import GameSettings from "./use-cases/GameSettings.jsx";
-import "./main.css";
+import { Home, Lobby, PresentWord, StartGame } from "views";
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" component={Home} exact/>
+        <Route path="/" component={Home} exact />
         <Route path="/lobby" component={Lobby} exact />
-        <Route path="/present-word" component={PresentWord} exact/>
-        <Route path="/game-settings" component={GameSettings} exact/>
+        <Route path="/present-word" component={PresentWord} exact />
+        <Route path="/game-settings" component={StartGame} exact />
       </Switch>
     </BrowserRouter>
   );

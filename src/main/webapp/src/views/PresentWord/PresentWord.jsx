@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function PresentWord() {
+export function PresentWord() {
   return (
     <div className="App">
       <div>
@@ -14,5 +14,3 @@ function PresentWord() {
     </div>
   );
 }
-
-export default PresentWord;

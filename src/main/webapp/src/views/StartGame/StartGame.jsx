@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
 import Axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-const GameSettings = () => {
+export function StartGame() {
   const [categories, setCategories] = useState([]);
 
   const fetchCategories = () =>
@@ -41,6 +41,4 @@ const GameSettings = () => {
       </ul>
     </div>
   );
-};
-
-export default GameSettings;
+}

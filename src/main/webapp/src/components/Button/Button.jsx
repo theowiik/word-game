@@ -10,7 +10,7 @@ const getButtonClassNames = (props) => {
   });
 };
 
-function Button({
+export function Button({
   label,
   onClick,
   primary,
@@ -26,5 +26,3 @@ function Button({
     </button>
   );
 }
-
-export default Button;

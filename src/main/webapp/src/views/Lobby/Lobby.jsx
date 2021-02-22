@@ -1,9 +1,7 @@
+import { Button, Container, LobbyInfo } from "components";
 import { Link } from "react-router-dom";
-import Container from "../components/layout/Container";
-import LobbyInfo from "../components/lobby/LobbyInfo";
-import Button from "../components/button";
 
-function Lobby() {
+export function Lobby() {
   const lobbyPin = "123456";
   const max = 10;
   const current = 4;
@@ -28,5 +26,3 @@ function Lobby() {
     </div>
   );
 }
-
-export default Lobby;

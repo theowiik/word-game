@@ -1,8 +1,7 @@
+import { Button, Logo } from "components";
 import { Link } from "react-router-dom";
-import Button from "../components/button";
-import Logo from "../components/logo";
 
-function Home() {
+export const Home = () => {
   return (
     <div className="w-screen h-screen bg-white dark:bg-gray-800 flex justify-center items-center">
       <div className="flex flex-col items-center">
@@ -33,6 +32,4 @@ function Home() {
       </div>
     </div>
   );
-}
-
-export default Home;
+};
