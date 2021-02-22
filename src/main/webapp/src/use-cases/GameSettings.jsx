@@ -1,8 +1,24 @@
 import { Link } from "react-router-dom";
+import Axios from "axios";
+import React, { useEffect, useState } from "react";
 
-let categories = ["My first category", "Another secondary category", "A cat"];
+const GameSettings = () => {
+  const [categories, setCategories] = useState([]);
 
-function GameSettings() {
+  const fetchCategories = () =>
+    Axios.get("/socialgame/ws/category")
+      .then((res) => {
+        if (Array.isArray(res.data)) setCategories(res.data);
+      })
+      .catch((err) => {
+        console.log("Failed to fetch categories");
+        console.log(err);
+      });
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   return (
     <div>
       <div>
@@ -25,6 +41,6 @@ function GameSettings() {
       </ul>
     </div>
   );
-}
+};
 
 export default GameSettings;
