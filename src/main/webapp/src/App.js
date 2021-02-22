@@ -5,6 +5,7 @@ import Lobby from "./use-cases/Lobby";
 import Home from "./use-cases/Home";
 import PresentWord from "./use-cases/PresentWord";
 import GameSettings from "./use-cases/GameSettings.jsx";
+import "./main.css";
 
 function App() {
   return (

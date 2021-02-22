@@ -1,32 +1,29 @@
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
+
 import { Link } from "react-router-dom";
 
 function Home() {
   return (
-    <Container>
-      <Row>
-        <Col>
+    <div>
+      <div>
+        <div>
           <h1>Home Page</h1>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
+        </div>
+      </div>
+      <div>
+        <div className="bg-indigo-800">
           <Link to="/lobby">
-            <Button variant="primary">Move to lobby</Button>
+            <a>Move to lobby</a>
           </Link>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
+        </div>
+      </div>
+      <div>
+        <div>
           <Link to="/game-settings">
-            <Button variant="primary">Start a game</Button>
+            <a >Start a game</a>
           </Link>
-        </Col>
-      </Row>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 }
 
