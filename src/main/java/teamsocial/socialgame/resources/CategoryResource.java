@@ -7,7 +7,7 @@ import javax.ws.rs.Path;
 import teamsocial.socialgame.model.dao.CategoryDAO;
 import teamsocial.socialgame.model.entity.Category;
 
-@Path("category")
+@Path("categories")
 public class CategoryResource {
 
   @EJB
@@ -15,7 +15,6 @@ public class CategoryResource {
 
   @GET
   public List<Category> getCategories() {
-    System.out.println("test");
     return categoryDAO.findAll();
   }
 }

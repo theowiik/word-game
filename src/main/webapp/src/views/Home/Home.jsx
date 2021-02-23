@@ -1,4 +1,4 @@
-import { Button, Logo } from "components";
+import { Button, Input, Logo } from "components";
 import { Link } from "react-router-dom";
 
 export function Home() {
@@ -7,16 +7,10 @@ export function Home() {
       <div className="flex flex-col items-center">
         <Logo />
 
-        <input
-          className="appearance-none rounded-none rounded-lg mb-4 font-bold bg-gray-50 dark:bg-gray-700 border-none relative block w-full px-5 py-4 border border-gray-300 placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-elva-1-600 focus:border-elva-1-600 focus:z-10 sm:text-xl"
-          placeholder="Game PIN"
-        />
-        <input
-          className="appearance-none rounded-none rounded-lg mb-4 font-bold bg-gray-50 dark:bg-gray-700 border-none relative block w-full px-5 py-4 border border-gray-300 placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-elva-1-600 focus:border-elva-1-600 focus:z-10 sm:text-xl"
-          placeholder="Your name"
-        />
+        <Input id="pin" name="pin" placeholder="Game PIN" />
+        <Input id="name" name="name" placeholder="Your name" />
 
-        <div className="bg-indigo-800  hover:bg-indigo-900 w-96 rounded-xl shadow-xl py-5">
+        <div className="bg-indigo-800  hover:bg-indigo-900 w-96 rounded-xl shadow-xl py-4 mt-8">
           <Link to="/lobby">
             <a className="w-full h-full flex justify-center items-center text-white font-bold text-lg">
               Move to lobby
