@@ -93,8 +93,8 @@
     <plugins>
       <plugin>
         <configuration>
-          <nodeVersion>v10.16.0</nodeVersion>
-          <npmVersion>6.10.2</npmVersion>
+          <nodeVersion>v12.16.1</nodeVersion>
+          <npmVersion>6.13.4</npmVersion>
           <workingDirectory>${project.basedir}/src/main/webapp</workingDirectory>
           <installDirectory>${project.build.directory}</installDirectory>
         </configuration>
