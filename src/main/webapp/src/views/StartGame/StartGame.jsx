@@ -6,7 +6,7 @@ export function StartGame() {
   const [categories, setCategories] = useState([]);
 
   const fetchCategories = () =>
-    Axios.get("/socialgame/ws/category")
+    Axios.get("http://localhost:8080/socialgame/ws/category")
       .then((res) => {
         if (Array.isArray(res.data)) setCategories(res.data);
       })
@@ -28,13 +28,13 @@ export function StartGame() {
         <h1>Game Settings</h1>{" "}
       </div>
 
-      <h1>Kategorier</h1>
+      <h1 className="text-2xl font-bold">Kategorier</h1>
 
       <ul>
         {categories.map((category) => (
           <>
-            <input type="checkbox" value={category} />
-            <label class="ml-2">{category}</label>
+            <input type="checkbox" value={category.name} />
+            <label class="ml-2">{category.name}</label>
             <br></br>
           </>
         ))}

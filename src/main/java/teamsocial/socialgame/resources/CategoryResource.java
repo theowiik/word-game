@@ -15,6 +15,7 @@ public class CategoryResource {
 
   @GET
   public List<Category> getCategories() {
+    System.out.println("test");
     return categoryDAO.findAll();
   }
 }
