@@ -17,6 +17,7 @@ import teamsocial.socialgame.model.entity.Game;
 @ApplicationScoped
 public class GameManagerBean {
   private Map<String, Game> games;
+  private int counter;
   
   @EJB
   private CategoryDAO categoryDAO;
@@ -24,14 +25,28 @@ public class GameManagerBean {
   @PostConstruct
   private void init() {
     games = new HashMap<String, Game>();
-    Category category = categoryDAO.findAll().get(0);
-    games.put("hello", new Game(category));
+    Category category = getDummyCategory();
+    String pin = getUnusedPin();
+    games.put(pin, new Game(category, pin));
   }
 
   public Game getGame(String pin) {
-    System.out.println("lorem");
     Game game = games.get(pin);
-    System.out.println(game);
     return game;
+  }
+
+  public Game createGame() {
+    String pin = getUnusedPin();
+    games.put(pin, new Game(getDummyCategory(), pin));
+    return games.get(pin);
+  }
+  
+  private Category getDummyCategory() {
+    return categoryDAO.findAll().get(0);
+  }
+  
+  private String getUnusedPin() {
+    counter++;
+    return String.valueOf(12345 + counter);
   }
 }

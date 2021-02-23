@@ -10,7 +10,7 @@ export function Home() {
         <Input id="pin" name="pin" placeholder="Game PIN" />
         <Input id="name" name="name" placeholder="Your name" />
 
-        <div className="bg-indigo-800  hover:bg-indigo-900 w-96 rounded-xl shadow-xl py-4 mt-8">
+        <div className="bg-indigo-800  hover:bg-indigo-900 w-96 rounded-xl shadow-xl py-4 mt-4">
           <Link to="/lobby">
             <a className="w-full h-full flex justify-center items-center text-white font-bold text-lg">
               Move to lobby

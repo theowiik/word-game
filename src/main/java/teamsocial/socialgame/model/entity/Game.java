@@ -13,9 +13,11 @@ public class Game implements Serializable {
   private int round;
   private List<Player> players;
   private Round currentRound;
+  private String pin;
   
-  public Game(Category category) {
+  public Game(Category category, String pin) {
     this.category = category;
+    this.pin = pin;
   }
   
   private void nextRound() {
