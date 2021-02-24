@@ -1,22 +1,14 @@
 import { Button, Input, Logo } from "components";
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import Axios from "axios";
+import { gameExists } from '../../services/database-service'
+
 
 export function Home() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const gameExists = async (pin) => {
-    try {
-      const res = await Axios.get(
-        `http://localhost:8080/socialgame/ws/games/${pin}`
-      );
-      return true;
-    } catch (err) {
-      return false;
-    }
-  };
+  
 
   const history = useHistory();
 

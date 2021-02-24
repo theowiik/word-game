@@ -1,3 +1,4 @@
+import Axios from "axios";
 
 export const gameExists = async (pin) => {
     try {
