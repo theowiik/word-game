@@ -1,6 +1,7 @@
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Navbar } from "components";
 
 export function StartGame() {
   const [categories, setCategories] = useState([]);
@@ -20,25 +21,28 @@ export function StartGame() {
   }, []);
 
   return (
-    <div>
+    <div className="w-full h-screen bg-white dark:bg-gray-800 justify-center">
+      <Navbar label="Game Settings" onBackClickPath="/" />
       <div>
         <Link to="/">
           <a>Go back</a>
         </Link>
-        <h1>Game Settings</h1>{" "}
+        <h1 className="text-gray-50 text-center font-bold text-4xl">
+          Game Settings
+        </h1>
       </div>
-
-      <h1 className="text-2xl font-bold">Kategorier</h1>
-
-      <ul>
-        {categories.map((category) => (
-          <>
-            <input type="checkbox" value={category.name} />
-            <label class="ml-2">{category.name}</label>
-            <br></br>
-          </>
-        ))}
-      </ul>
+      <div>
+        <h2 className="text-2xl font-bold text-center">Kategorier</h2>
+        <ul>
+          {categories.map((category) => (
+            <>
+              <input type="checkbox" value={category.name} />
+              <label class="ml-2">{category.name}</label>
+              <br></br>
+            </>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
