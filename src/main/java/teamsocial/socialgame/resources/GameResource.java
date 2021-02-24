@@ -15,8 +15,9 @@ public class GameResource {
   private GameManagerBean gameManager;
   
   @POST
-  public Game createGame() {
-    return gameManager.createGame();
+  @Path("/{category}")
+  public Game createGame(@PathParam("category") String category) {
+    return gameManager.createGame(category);
   }
   
   @GET

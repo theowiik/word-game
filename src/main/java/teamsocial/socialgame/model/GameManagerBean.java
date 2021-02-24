@@ -1,16 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package teamsocial.socialgame.model;
 
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
-import teamsocial.socialgame.model.dao.CategoryDAO;
+import javax.inject.Inject;
+import teamsocial.socialgame.model.dao.CategoryRepository;
 import teamsocial.socialgame.model.entity.Category;
 import teamsocial.socialgame.model.entity.Game;
 
@@ -19,8 +14,8 @@ public class GameManagerBean {
   private Map<String, Game> games;
   private int counter;
   
-  @EJB
-  private CategoryDAO categoryDAO;
+  @Inject
+  private CategoryRepository categoryRepository;
   
   @PostConstruct
   private void init() {
@@ -35,14 +30,15 @@ public class GameManagerBean {
     return game;
   }
 
-  public Game createGame() {
+  public Game createGame(String category) {
     String pin = getUnusedPin();
-    games.put(pin, new Game(getDummyCategory(), pin));
+    Category cat = categoryRepository.findBy(category);
+    games.put(pin, new Game(cat, pin));
     return games.get(pin);
   }
   
   private Category getDummyCategory() {
-    return categoryDAO.findAll().get(0);
+    return categoryRepository.findBy("cat1");
   }
   
   private String getUnusedPin() {

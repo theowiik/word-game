@@ -1,20 +1,20 @@
 package teamsocial.socialgame.resources;
 
 import java.util.List;
-import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import teamsocial.socialgame.model.dao.WordDAO;
-import teamsocial.socialgame.model.entity.Category;
+import teamsocial.socialgame.model.dao.WordRepository;
+import teamsocial.socialgame.model.entity.Word;
 
-@Path("word")
+@Path("words")
 public class WordResource {
 
-  @EJB
-  private WordDAO wordDAO;
+  @Inject
+  private WordRepository wordRepository;
 
   @GET
-  public List<Category> getWords() {
-    return null;
+  public List<Word> getWords() {
+    return wordRepository.findAll();
   }
 }
