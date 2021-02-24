@@ -1,4 +1,4 @@
-import { Button, Container, LobbyInfo, UserTile } from "components";
+import { Button, Container, LobbyInfo, UserTile, Navbar } from "components";
 import { Link } from "react-router-dom";
 
 export function Lobby() {
@@ -19,14 +19,9 @@ export function Lobby() {
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-800 dark:text-white">
+    <Navbar label='Lobby' onBackClickPath='/' />
       <Container>
-        <div>
-          <Link to="/">
-            <a>Go back</a>
-          </Link>
-          <h1>Another Page</h1>{" "}
-        </div>
-
+      
         <LobbyInfo lobbyPin={lobbyPin} max={max} current={current} />
 
         <div className="flex flex-wrap">

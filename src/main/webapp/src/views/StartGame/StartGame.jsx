@@ -23,14 +23,7 @@ export function StartGame() {
   return (
     <div className="w-full h-screen bg-white dark:bg-gray-800 justify-center">
       <Navbar label="Game Settings" onBackClickPath="/" />
-      <div>
-        <Link to="/">
-          <a>Go back</a>
-        </Link>
-        <h1 className="text-gray-50 text-center font-bold text-4xl">
-          Game Settings
-        </h1>
-      </div>
+      
       <div>
         <h2 className="text-2xl font-bold text-center">Kategorier</h2>
         <ul>
