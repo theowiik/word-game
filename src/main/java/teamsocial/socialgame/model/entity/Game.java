@@ -25,6 +25,6 @@ public class Game implements Serializable {
   }
   
   private enum State {
-    PRESENT_WORD, SELECT_WORD, PRESENT_ANSWER, PRESENT_SCORE
+    PRESENT_WORD_INPUT_ANSWER, SELECT_WORD, PRESENT_ANSWER, PRESENT_SCORE
   }
 }

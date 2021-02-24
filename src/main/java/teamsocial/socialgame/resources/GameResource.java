@@ -1,5 +1,7 @@
 package teamsocial.socialgame.resources;
 
+import java.io.Serializable;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
@@ -9,12 +11,17 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import teamsocial.socialgame.model.GameManagerBean;
 import teamsocial.socialgame.model.entity.Game;
+import teamsocial.socialgame.model.entity.Player;
 
 @Path("games")
-public class GameResource {
+@SessionScoped
+public class GameResource implements Serializable {
 
   @Inject
   private GameManagerBean gameManager;
+  
+  @Inject
+  private Player player;
 
   @POST
   @Path("/{category}")
@@ -30,5 +37,10 @@ public class GameResource {
       throw new NotFoundException("Did not find a game with pin: " + pin);
     }
     return Response.ok(game).build();
+  }
+  
+  @POST
+  @Path("/{pin}/answer/{description}")
+  public void addAnswer(@PathParam("description") String description) {
   }
 }
