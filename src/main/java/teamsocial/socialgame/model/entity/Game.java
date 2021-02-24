@@ -1,4 +1,3 @@
-
 package teamsocial.socialgame.model.entity;
 
 import java.io.Serializable;

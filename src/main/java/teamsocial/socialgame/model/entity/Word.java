@@ -18,8 +18,10 @@ public class Word implements Serializable {
 
   @Id
   private String word;
+
   @NotNull
   private String description;
+
   @ManyToOne(optional = true)
   @JoinColumn(name = "CATEGORY_NAME")
   private Category category;
