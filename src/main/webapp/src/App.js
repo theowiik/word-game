@@ -8,10 +8,10 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" component={Home} exact />
-        <Route path="/lobby" component={Lobby} exact />
-        <Route path="/present-word" component={PresentWord} exact />
-        <Route path="/game-settings" component={StartGame} exact />
+        <Route exact path="/" component={Home}/>
+        <Route exact path="/lobby/:pin" component={Lobby}/>
+        <Route exact path="/present-word" component={PresentWord}/>
+        <Route exact path="/game-settings" component={StartGame}/>
       </Switch>
     </BrowserRouter>
   );

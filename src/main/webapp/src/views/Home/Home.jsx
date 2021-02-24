@@ -1,43 +1,51 @@
 import { Button, Input, Logo } from "components";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Axios from "axios";
 
 export function Home() {
-
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  
+  const [message, setMessage] = useState("");
 
-  const gameExists = (pin) => {
-    Axios.get(`http://localhost:8080/socialgame/ws/games/${pin}`)
-    .then((res) => {
-      //if (Array.isArray(res.data)) setCategories(res.data);
-    })
-    .catch((err) => {
-      console.log("Failed to find game");
-      console.log(err);
-    });
-  }
+  const gameExists = async (pin) => {
+    try {
+      const res = await Axios.get(
+        `http://localhost:8080/socialgame/ws/games/${pin}`
+      );
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
 
-  const handleSubmit = (e) => {
+  const history = useHistory();
 
-
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     const pin = e.target.pin.value;
     const name = e.target.name.value;
 
-    
+    if (await gameExists(pin)) {
+      setMessage("Joining lobby");
+      history.push(`/lobby/${pin}`);
+    } else {
+      setMessage(`Failed to find game with pin: ${pin}`);
+    }
 
-
+    setLoading(false);
   };
 
   return (
-    <div className="w-screen h-screen bg-white dark:bg-gray-800 flex justify-center items-center">
+    <div className="w-full h-screen bg-white dark:bg-gray-800 flex justify-center items-center">
       <div className="flex flex-col items-center">
         <Logo />
 
+        {message && (
+          <div className="h-10 bg-red-700 bg-opacity-50 text-white w-full mb-4 flex items-center justify-center rounded-lg">
+            {message}
+          </div>
+        )}
         <form className="w-full" onSubmit={handleSubmit}>
           <Input id="pin" name="pin" placeholder="Game PIN" />
           <Input id="name" name="name" placeholder="Your name" />
@@ -52,6 +60,12 @@ export function Home() {
           </Link>
         </div>
       </div>
+
+      {loading && (
+        <div className="w-full h-full absolute top-0 left-0 bg-gray-800 bg-opacity-50 flex justify-center items-center text-white text-4xl font-bold">
+          Loading game...
+        </div>
+      )}
     </div>
   );
 }

@@ -1,8 +1,9 @@
 import { Button, Container, LobbyInfo, UserTile, Navbar } from "components";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export function Lobby() {
-  const lobbyPin = "123456";
+  const params = useParams();
+  const lobbyPin = params.pin;
   const max = 10;
 
   const users = [
@@ -19,9 +20,8 @@ export function Lobby() {
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-800 dark:text-white">
-    <Navbar label='Lobby' onBackClickPath='/' />
+      <Navbar label="Lobby" onBackClickPath="/" />
       <Container>
-      
         <LobbyInfo lobbyPin={lobbyPin} max={max} current={current} />
 
         <div className="flex flex-wrap">
