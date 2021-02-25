@@ -1,27 +1,29 @@
 package teamsocial.socialgame.model.entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Data;
 
 @Data
 public class Game implements Serializable {
-
+  
   private Category category;
   private State state;
   private final static int ROUNDS = 3;
   private int round;
-  private List<Player> players;
+  private Set<Player> players;
   private Round currentRound;
   private String pin;
-
+  
   public Game(Category category, String pin) {
+    players = new HashSet<Player>();
     this.category = category;
     this.pin = pin;
     state = State.PRESENT_WORD_INPUT_ANSWER;
     nextRound();
   }
-
+  
   private void nextRound() {
     round++;
     currentRound = new Round(category);
@@ -39,7 +41,7 @@ public class Game implements Serializable {
     if (player == null || !validDescription(description)) {
       return false;
     }
-
+    
     if (state == State.PRESENT_WORD_INPUT_ANSWER) {
       currentRound.setAnswer(player, description);
       return true;
@@ -47,11 +49,16 @@ public class Game implements Serializable {
       return false;
     }
   }
-
+  
+  public void addPlayer(Player player, String name) {
+    player.setName(name);
+    players.add(player);
+  }
+  
   private enum State {
     PRESENT_WORD_INPUT_ANSWER, SELECT_WORD, PRESENT_ANSWER, PRESENT_SCORE
   }
-
+  
   private boolean validDescription(String string) {
 
     // Has content
@@ -63,7 +70,7 @@ public class Game implements Serializable {
     if (string.length() <= 1 || string.length() >= 50) {
       return false;
     }
-
+    
     return true;
   }
 }
