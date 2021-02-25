@@ -24,7 +24,16 @@ public class Round implements Serializable {
   }
 
   public void setAnswer(Player player, String description) {
-    Answer answer = new Answer(player, description);
-    answers.add(answer); // TODO: Check if player already exists.
+    boolean containsPlayer = answers.stream().anyMatch(a -> a.getPlayer() == player);
+
+    if (containsPlayer) {
+      answers.forEach(a -> {
+        if (a.getPlayer() == player) {
+          a.setDescription(description);
+        }
+      });
+    } else {
+      answers.add(new Answer(player, description));
+    }
   }
 }
