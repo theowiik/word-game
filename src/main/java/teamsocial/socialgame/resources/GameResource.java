@@ -32,7 +32,7 @@ public class GameResource implements Serializable {
   @GET
   @Path("/{pin}")
   public Response getGame(@PathParam("pin") String pin) {
-    Game game = gameManager.getGame(pin);
+    Game game = getG(pin);
     if (game == null) {
       throw new NotFoundException("Did not find a game with pin: " + pin);
     }
@@ -41,6 +41,12 @@ public class GameResource implements Serializable {
   
   @POST
   @Path("/{pin}/answer/{description}")
-  public void addAnswer(@PathParam("description") String description) {
+  public Response setAnswer(@PathParam("pin") String pin, @PathParam("description") String description) {
+    gameManager.setAnswer(pin, player, description);
+    return Response.ok().build();
+  }
+  
+  private Game getG(String pin) {
+    return gameManager.getGame(pin);
   }
 }

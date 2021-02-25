@@ -1,10 +1,14 @@
 package teamsocial.socialgame.model.entity;
 
-import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class Answer implements Serializable {
+public class Answer {
   private Player player;
-  private String answer;
+  private String description;
+  
+  public Answer(Player player, String description) {
+    this.player = player;
+    this.description = description;
+  }
 }

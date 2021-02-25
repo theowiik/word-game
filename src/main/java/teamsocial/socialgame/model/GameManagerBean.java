@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import teamsocial.socialgame.model.dao.CategoryRepository;
 import teamsocial.socialgame.model.entity.Category;
 import teamsocial.socialgame.model.entity.Game;
+import teamsocial.socialgame.model.entity.Player;
 
 @ApplicationScoped
 public class GameManagerBean {
@@ -37,12 +38,17 @@ public class GameManagerBean {
     return games.get(pin);
   }
   
+  public void setAnswer(String pin, Player player, String description) {
+    Game game = getGame(pin);
+    game.setAnswer(player, description);
+  }
+  
   private Category getDummyCategory() {
     return categoryRepository.findBy("cat1");
   }
   
   private String getUnusedPin() {
     counter++;
-    return String.valueOf(12345 + counter);
+    return String.valueOf(12344 + counter);
   }
 }

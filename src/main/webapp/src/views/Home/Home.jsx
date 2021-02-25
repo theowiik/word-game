@@ -1,15 +1,11 @@
 import { Button, Input, Logo } from "components";
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { gameExists } from '../../services/database-service'
-
+import { gameExists } from '../../services/database-service';
 
 export function Home() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
-  
-
   const history = useHistory();
 
   const handleSubmit = async (e) => {
