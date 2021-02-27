@@ -1,32 +1,52 @@
-import { Button, Container, LobbyInfo, UserTile, Navbar } from "components";
+import Axios from "axios";
+import { Button, Container, LobbyInfo, Navbar, UserTile } from "components";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { gameExists } from 'services/database-service';
 
 export function Lobby() {
   const params = useParams();
-  const lobbyPin = params.pin;
+  const pin = params.pin;
   const max = 10;
+  const [players, setPlayers] = useState([]);
+  const [gameFound, setGameFound] = useState(false);
+  const current = players.length;
 
-  const users = [
-    { name: "Jesper", color: "peach" },
-    { name: "Hentoo", color: "beach" },
-    { name: "Sudo", color: "grass" },
-    { name: "Theo", color: "ocean" },
-    { name: "Jesper", color: "peach" },
-    { name: "Hentoo", color: "beach" },
-    { name: "Sudo", color: "grass" },
-    { name: "Theo", color: "ocean" },
-  ];
-  const current = users.length;
+  const fetchPlayers = () => {
+    Axios.get(`http://localhost:8080/socialgame/ws/games/${pin}`)
+      .then((res) => {
+        if (Array.isArray(res?.data.players)) setPlayers(res.data.players);
+      })
+      .catch((err) => {
+        console.log("Failed to fetch categories");
+        console.log(err);
+      });
+  }
+
+  const checkIfGameExists = async () => {
+    if (await gameExists(pin)) {
+      setGameFound(true);
+      console.log("yyyy")
+    } else {
+      console.log("xxxx")
+    }
+  }
+
+  useEffect(() => {
+    fetchPlayers();
+    checkIfGameExists();
+  }, [])
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-800 dark:text-white">
       <Navbar label="Lobby" onBackClickPath="/" />
       <Container>
-        <LobbyInfo lobbyPin={lobbyPin} max={max} current={current} />
+        <LobbyInfo lobbyPin={pin} max={max} current={current} />
+        <p>Game exists: {gameFound ? 'yaa' : 'naa'}</p>
 
         <div className="flex flex-wrap">
-          {users.map((user) => {
-            return <UserTile name={user.name} color={user.color} />;
+          {players.map((player) => {
+            return <UserTile name={player.name} color="grass" />;
           })}
         </div>
 
