@@ -1,8 +1,8 @@
 import Axios from "axios";
 import { Button, Container, LobbyInfo, Navbar, UserTile } from "components";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { gameExists } from 'services/database-service';
+import { Link, useHistory, useParams } from "react-router-dom";
+import { gameExists } from "services/database-service";
 
 export function Lobby() {
   const params = useParams();
@@ -11,6 +11,7 @@ export function Lobby() {
   const [players, setPlayers] = useState([]);
   const [gameFound, setGameFound] = useState(false);
   const current = players.length;
+  const history = useHistory();
 
   const fetchPlayers = () => {
     Axios.get(`http://localhost:8080/socialgame/ws/games/${pin}`)
@@ -21,28 +22,27 @@ export function Lobby() {
         console.log("Failed to fetch categories");
         console.log(err);
       });
-  }
+  };
 
   const checkIfGameExists = async () => {
     if (await gameExists(pin)) {
       setGameFound(true);
-      console.log("yyyy")
     } else {
-      console.log("xxxx")
+      history.push("/");
     }
-  }
+  };
 
   useEffect(() => {
     fetchPlayers();
     checkIfGameExists();
-  }, [])
+  }, []);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-800 dark:text-white">
       <Navbar label="Lobby" onBackClickPath="/" />
       <Container>
         <LobbyInfo lobbyPin={pin} max={max} current={current} />
-        <p>Game exists: {gameFound ? 'yaa' : 'naa'}</p>
+        <p>Game exists: {gameFound ? "yaa" : "naa"}</p>
 
         <div className="flex flex-wrap">
           {players.map((player) => {
