@@ -1,4 +1,4 @@
-import Axios from "axios";
+import axios from "axios";
 import { Button, Container, LobbyInfo, Navbar, UserTile } from "components";
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -14,12 +14,17 @@ export function Lobby() {
   const history = useHistory();
 
   const fetchPlayers = () => {
-    Axios.get(`http://localhost:8080/socialgame/ws/games/${pin}`)
+    axios
+      .get(`http://localhost:8080/socialgame/ws/games/${pin}`, {
+        headers: { Accept: "application/json" },
+      })
       .then((res) => {
-        if (Array.isArray(res?.data.players)) setPlayers(res.data.players);
+        if (Array.isArray(res?.data.players)) {
+          setPlayers(res.data.players);
+        }
       })
       .catch((err) => {
-        console.log("Failed to fetch categories");
+        console.log("Failed to fetch players");
         console.log(err);
       });
   };
@@ -46,7 +51,13 @@ export function Lobby() {
 
         <div className="flex flex-wrap">
           {players.map((player) => {
-            return <UserTile name={player.name} color="grass" />;
+            {
+              console.log("--");
+            }
+            {
+              console.log(player);
+            }
+            return <UserTile name={player.username} color="grass" />;
           })}
         </div>
 
