@@ -53,11 +53,7 @@ public class GameEndpoint {
     Jsonb jsonb = JsonbBuilder.create();
     String result = jsonb.toJson(game);
 
-    try {
-      session.getBasicRemote().sendObject(result);
-    } catch (IOException | EncodeException e) {
-      e.printStackTrace();
-    }
+    broadcastMessage(result);
   }
 
   @OnError
