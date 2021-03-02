@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import teamsocial.socialgame.model.GameManagerBean;
 import teamsocial.socialgame.model.entity.Game;
 import teamsocial.socialgame.model.entity.Player;
+import teamsocial.socialgame.model.entity.PlayerManager;
 
 @Path("games")
 @SessionScoped
@@ -21,7 +22,7 @@ public class GameResource implements Serializable {
   private GameManagerBean gameManager;
 
   @Inject
-  private Player player;
+  private PlayerManager player;
 
   @POST
   @Path("/{category}")
@@ -50,12 +51,13 @@ public class GameResource implements Serializable {
   @Path("/{pin}/join/{name}")
   public Response joinGame(@PathParam("pin") String pin, @PathParam("name") String name) {
     Game game = findGame(pin);
+    player.setPlayer(new Player(name, 0)); // TODO: Check if already exists.
 
     if (game == null) {
       throw new NotFoundException("Game does not exist.");
     }
 
-    game.addPlayer(player, name);
+    game.addPlayer(player.getPlayer());
 
     return Response.ok().build();
   }

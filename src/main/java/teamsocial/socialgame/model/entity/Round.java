@@ -23,7 +23,7 @@ public class Round implements Serializable {
     answers = new ArrayList<Answer>();
   }
 
-  public void setAnswer(Player player, String description) {
+  public void setAnswer(PlayerManager player, String description) {
     boolean containsPlayer = answers.stream().anyMatch(a -> a.getPlayer() == player);
 
     if (containsPlayer) {

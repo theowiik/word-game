@@ -3,49 +3,27 @@ package teamsocial.socialgame.model.entity;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import javax.enterprise.context.ApplicationScoped;
-import javax.json.bind.annotation.JsonbTransient;
 import lombok.Data;
-import lombok.Getter;
 
 @Data
-@ApplicationScoped
 public class Game implements Serializable {
 
   private Category category;
   private State state;
   private final static int ROUNDS = 3;
   private int round;
-  @Getter(onMethod = @__(
-          @JsonbTransient))
-  private Set<Player> playerSessions;
   private Round currentRound;
   private String pin;
-  private Set<ReadOnlyPlayer> players;
+  private Set<Player> players;
   private int id;
 
   public Game(Category category, String pin) {
-    playerSessions = new HashSet<Player>();
     this.category = category;
     this.pin = pin;
     state = State.PRESENT_WORD_INPUT_ANSWER;
     nextRound();
+    players = new HashSet<>();
     id = getRandomNumber(1000, 9999);
-  }
-
-  public Set<ReadOnlyPlayer> getPlayers() {
-    Set<ReadOnlyPlayer> p = new HashSet<>();
-    System.out.println("-------------START--------------");
-    System.out.println("Game contains " + playerSessions.size() + " players.");
-    for (Player player : playerSessions) {
-      System.out.println("-new-");
-      System.out.println("Found player: " + player.getName());
-      p.add(new ReadOnlyPlayer(player.getName(), player.getScore()));
-    }
-    return p;
-  }
-
-  private void setPlayers(Set<ReadOnlyPlayer> readOnlyPlayers) {
   }
 
   private void nextRound() {
@@ -65,7 +43,7 @@ public class Game implements Serializable {
    * @param description the description of the word.
    * @return true if the word was successfully added.
    */
-  public boolean setAnswer(Player player, String description) {
+  public boolean setAnswer(PlayerManager player, String description) {
     if (player == null || !validDescription(description)) {
       return false;
     }
@@ -78,15 +56,8 @@ public class Game implements Serializable {
     }
   }
 
-  public void addPlayer(Player player, String name) {
-    System.out.println("ait im bout to change the player name");
-    String oldName = player.getName();
-
-    player.setName(name);
-    String newName = player.getName();
-    System.out.println(oldName + " -> " + newName);
-
-    playerSessions.add(player);
+  public void addPlayer(Player player) {
+    players.add(player);
   }
 
   private enum State {

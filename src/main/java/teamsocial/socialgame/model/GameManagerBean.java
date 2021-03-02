@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import teamsocial.socialgame.model.dao.CategoryRepository;
 import teamsocial.socialgame.model.entity.Category;
 import teamsocial.socialgame.model.entity.Game;
-import teamsocial.socialgame.model.entity.Player;
+import teamsocial.socialgame.model.entity.PlayerManager;
 
 @ApplicationScoped
 public class GameManagerBean {
@@ -38,7 +38,7 @@ public class GameManagerBean {
     return games.get(pin);
   }
   
-  public void setAnswer(String pin, Player player, String description) {
+  public void setAnswer(String pin, PlayerManager player, String description) {
     Game game = getGame(pin);
     game.setAnswer(player, description);
   }
