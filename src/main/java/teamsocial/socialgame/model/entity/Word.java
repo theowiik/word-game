@@ -27,7 +27,7 @@ public class Word implements Serializable {
 
   @ManyToOne(optional = true)
   @JoinColumn(name = "CATEGORY_NAME")
-  @Getter(onMethod = @__( @JsonbTransient ))
+  @Getter(onMethod = @__(@JsonbTransient))
   private Category category;
 
   public Word(String word, @NotNull String description) {

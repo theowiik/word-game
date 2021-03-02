@@ -1,7 +1,6 @@
 package teamsocial.socialgame.resources;
 
 import java.util.List;
-import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

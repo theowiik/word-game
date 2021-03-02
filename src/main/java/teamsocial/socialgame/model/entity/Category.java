@@ -22,7 +22,7 @@ public class Category implements Serializable {
   private String name;
 
   @OneToMany(mappedBy = "category")
-  @Getter(onMethod = @__( @JsonbTransient ))
+  @Getter(onMethod = @__(@JsonbTransient))
   private List<Word> words;
 
   public Category(String name) {

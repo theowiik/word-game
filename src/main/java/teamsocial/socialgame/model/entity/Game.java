@@ -8,9 +8,9 @@ import lombok.Data;
 @Data
 public class Game implements Serializable {
 
+  private final static int ROUNDS = 3;
   private Category category;
   private State state;
-  private final static int ROUNDS = 3;
   private int round;
   private Round currentRound;
   private String pin;
@@ -30,16 +30,15 @@ public class Game implements Serializable {
     round++;
     currentRound = new Round(category);
   }
-  
+
   private int getRandomNumber(int min, int max) {
     return (int) ((Math.random() * (max - min)) + min);
-}
+  }
 
   /**
-   * Attempts to set the answer for the player, returns wether the operation was
-   * successful.
+   * Attempts to set the answer for the player, returns wether the operation was successful.
    *
-   * @param player the player that wants to add the word.
+   * @param player      the player that wants to add the word.
    * @param description the description of the word.
    * @return true if the word was successfully added.
    */
@@ -60,10 +59,6 @@ public class Game implements Serializable {
     players.add(player);
   }
 
-  private enum State {
-    PRESENT_WORD_INPUT_ANSWER, SELECT_WORD, PRESENT_ANSWER, PRESENT_SCORE
-  }
-
   private boolean validDescription(String string) {
 
     // Has content
@@ -72,10 +67,10 @@ public class Game implements Serializable {
     }
 
     // Valid length
-    if (string.length() <= 1 || string.length() >= 50) {
-      return false;
-    }
+    return string.length() > 1 && string.length() < 50;
+  }
 
-    return true;
+  private enum State {
+    PRESENT_WORD_INPUT_ANSWER, SELECT_WORD, PRESENT_ANSWER, PRESENT_SCORE
   }
 }

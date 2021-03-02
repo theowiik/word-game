@@ -20,11 +20,11 @@ import teamsocial.socialgame.model.GameManagerBean;
 import teamsocial.socialgame.model.entity.Game;
 
 @ServerEndpoint(value = "/players",
-        decoders = {JSONTextDecoder.class},
-        encoders = {JSONTextEncoder.class})
+    decoders = {JSONTextDecoder.class},
+    encoders = {JSONTextEncoder.class})
 public class GameEndpoint {
 
-  private static Set<Session> sessions = new HashSet<>();
+  private static final Set<Session> sessions = new HashSet<>();
 
   @Inject
   private GameManagerBean gameManager;
@@ -64,7 +64,7 @@ public class GameEndpoint {
   @OnClose
   public void onClose(Session session, CloseReason closeReason) {
     System.out.println(
-            "WebSocket closed for " + session.getId() + " with reason " + closeReason.getCloseCode()
+        "WebSocket closed for " + session.getId() + " with reason " + closeReason.getCloseCode()
     );
     sessions.remove(session);
   }

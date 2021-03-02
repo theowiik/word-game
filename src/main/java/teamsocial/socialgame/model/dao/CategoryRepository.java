@@ -8,4 +8,5 @@ import teamsocial.socialgame.model.entity.Category;
 @Repository
 @Transactional
 public abstract class CategoryRepository extends AbstractEntityRepository<Category, String> {
+
 }

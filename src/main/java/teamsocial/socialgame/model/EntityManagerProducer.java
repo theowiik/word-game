@@ -6,7 +6,7 @@ import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.TransactionScoped;
-  
+
 @TransactionScoped
 public class EntityManagerProducer implements Serializable {
 

@@ -42,7 +42,10 @@ public class GameResource implements Serializable {
 
   @POST
   @Path("/{pin}/answer/{description}")
-  public Response setAnswer(@PathParam("pin") String pin, @PathParam("description") String description) {
+  public Response setAnswer(
+      @PathParam("pin") String pin,
+      @PathParam("description") String description
+  ) {
     gameManager.setAnswer(pin, player, description);
     return Response.ok().build();
   }

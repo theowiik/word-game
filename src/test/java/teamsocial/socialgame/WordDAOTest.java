@@ -35,13 +35,13 @@ public class WordDAOTest {
   @Deployment
   public static WebArchive createDeployment() {
     final File[] files = Maven.resolver().loadPomFromFile("pom.xml").
-            importRuntimeDependencies().resolve().withTransitivity().asFile();
+        importRuntimeDependencies().resolve().withTransitivity().asFile();
     return ShrinkWrap.create(WebArchive.class)
-            .addClasses(WordDAO.class, Word.class, Category.class, CategoryDAO.class,
-                    EntityManagerProducer.class, WordRepository.class)
-            .addAsResource("META-INF/persistence.xml")
-            .addAsResource("META-INF/beans.xml")
-            .addAsLibraries(files);
+        .addClasses(WordDAO.class, Word.class, Category.class, CategoryDAO.class,
+            EntityManagerProducer.class, WordRepository.class)
+        .addAsResource("META-INF/persistence.xml")
+        .addAsResource("META-INF/beans.xml")
+        .addAsLibraries(files);
   }
 
   @Test
