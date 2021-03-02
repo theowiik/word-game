@@ -28,7 +28,18 @@ webSocket.onmessage = (event) => {
 };
 
 function onMessage(event) {
-  const eventPayload = JSON.parse(event.data);
+  let eventPayload
+  try {
+    console.log("Attempting to parse: ")
+    console.log(event.data);
+    eventPayload = JSON.parse(event.data);
+
+    setPlayers(eventPayload.players);
+  } catch (error) {
+    console.log('JSON (Derulo) is fucked')
+  }
+  
+  //setPlayers(eventPayload)
   console.log(eventPayload);
 }
 
@@ -43,7 +54,7 @@ function onError(event) {
  function send() {
   const payload = {
     name: "Spelare 1",
-    color: "peach",
+    game: pin,
   };
 
   webSocket.send(JSON.stringify(payload));
@@ -77,9 +88,11 @@ function onError(event) {
   useEffect(() => {
     fetchPlayers();
     checkIfGameExists();
+
   }, []);
 
   const coolButtonPressed = () => {
+    console.log("sending packet");
     send();
   }
 
@@ -92,12 +105,12 @@ function onError(event) {
 
         <div className="flex flex-wrap">
           {players.map((player) => {
-            return <UserTile name={player.name} color="grass" />;
+            return <UserTile name={player.name} color="peach" />;
           })}
         </div>
 
         <div className="fixed bottom-0 left-0 right-0 w-full flex justify-center mb-16 sm:mb-20 md:mb-32">
-          <button onClick={coolButtonPressed}></button>
+          <button onClick={coolButtonPressed}>hello : )</button>
           <Link to="/present-word">
             <Button label="Start game" primary />
           </Link>
