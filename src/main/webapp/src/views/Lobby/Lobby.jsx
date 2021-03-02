@@ -51,13 +51,7 @@ export function Lobby() {
 
         <div className="flex flex-wrap">
           {players.map((player) => {
-            {
-              console.log("--");
-            }
-            {
-              console.log(player);
-            }
-            return <UserTile name={player.username} color="grass" />;
+            return <UserTile name={player.name} color="grass" />;
           })}
         </div>
 
