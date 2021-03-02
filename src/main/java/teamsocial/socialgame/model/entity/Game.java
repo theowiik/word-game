@@ -62,7 +62,7 @@ public class Game implements Serializable {
   private boolean validDescription(String string) {
 
     // Has content
-    if (string == null || string.isEmpty() || string.isBlank()) {
+    if (string == null || string.isEmpty()) {
       return false;
     }
 
