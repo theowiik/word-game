@@ -2,15 +2,15 @@
 <!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource
 Definitions//EN" "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
 <resources>
-  <jdbc-connection-pool datasource-classname="org.apache.derby.jdbc.ClientDataSource"
-    name="derby_net_socialgame_appPool_production" res-type="javax.sql.DataSource">
+  <jdbc-connection-pool datasource-classname="org.postgresql.ds.PGPoolingDataSource"
+    name="postgres_word_game_pool_dev" res-type="javax.sql.DataSource">
     <property name="serverName" value="localhost"/>
-    <property name="portNumber" value="1527"/>
-    <property name="databaseName" value="socialgame_production"/>
+    <property name="portNumber" value="5432"/>
+    <property name="databaseName" value="word_game_dev"/>
     <property name="User" value=""/>
     <property name="Password" value=""/>
-    <property name="driverClass" value="org.apache.derby.jdbc.ClientDriver"/>
+    <property name="driverClass" value="org.postgresql.Driver"/>
   </jdbc-connection-pool>
   <jdbc-resource enabled="true" jndi-name="jdbc/socialgame_production"
-    object-type="user" pool-name="derby_net_socialgame_appPool_production"/>
+    object-type="user" pool-name="postgres_word_game_pool_dev"/>
 </resources>
