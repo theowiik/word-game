@@ -1,11 +1,15 @@
 package teamsocial.socialgame;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
+import javax.servlet.ServletContext;
 import javax.websocket.CloseReason;
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
@@ -18,13 +22,23 @@ import teamsocial.socialgame.encoder.JSONTextDecoder;
 import teamsocial.socialgame.encoder.JSONTextEncoder;
 import teamsocial.socialgame.model.GameManagerBean;
 import teamsocial.socialgame.model.entity.Game;
+import teamsocial.socialgame.model.entity.Player;
+import teamsocial.socialgame.model.entity.PlayerManager;
 
 @ServerEndpoint(value = "/players",
-    decoders = {JSONTextDecoder.class},
-    encoders = {JSONTextEncoder.class})
-public class GameEndpoint {
+        decoders = {JSONTextDecoder.class},
+        encoders = {JSONTextEncoder.class})
+public class GameEndpoint implements Serializable {
 
+  @Inject
+  private PlayerManager playerManager;
+  
+  @Inject
+  private ServletContext contextt;
+  
   private static final Set<Session> sessions = new HashSet<>();
+  private static final String JOIN = "JOIN";
+  private static final String CHANGE_NAME = "CHANGE_NAME";
 
   @Inject
   private GameManagerBean gameManager;
@@ -48,12 +62,31 @@ public class GameEndpoint {
   @OnMessage
   public void onMessage(String message, Session session) {
     System.out.println("Messsage recieved: " + message + " from " + session.getId());
-
     Game game = gameManager.getGame("12345");
     Jsonb jsonb = JsonbBuilder.create();
-    String result = jsonb.toJson(game);
 
+    if (message.contains(JOIN)) {
+      System.out.println("Player wants to join game.");
+
+      playerManager.setPlayer(new Player(getPlayerName(), getRandomNumber(1000, 9999)));
+      game.addPlayer(playerManager.getPlayer());
+      
+      //game.addPlayer(new Player(getPlayerName(), getRandomNumber(1000, 9999)));
+    } else if (message.contains(CHANGE_NAME)) {
+    }
+
+    String result = jsonb.toJson(game);
     broadcastMessage(result);
+  }
+
+  private int getRandomNumber(int min, int max) {
+    return (int) ((Math.random() * (max - min)) + min);
+  }
+
+  private String getPlayerName() {
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    LocalDateTime now = LocalDateTime.now();
+    return dtf.format(now);
   }
 
   @OnError
@@ -64,7 +97,7 @@ public class GameEndpoint {
   @OnClose
   public void onClose(Session session, CloseReason closeReason) {
     System.out.println(
-        "WebSocket closed for " + session.getId() + " with reason " + closeReason.getCloseCode()
+            "WebSocket closed for " + session.getId() + " with reason " + closeReason.getCloseCode()
     );
     sessions.remove(session);
   }

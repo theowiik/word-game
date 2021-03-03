@@ -22,7 +22,7 @@ public class GameResource implements Serializable {
   private GameManagerBean gameManager;
 
   @Inject
-  private PlayerManager player;
+  private PlayerManager playerManager;
 
   @POST
   @Path("/{category}")
@@ -46,7 +46,7 @@ public class GameResource implements Serializable {
       @PathParam("pin") String pin,
       @PathParam("description") String description
   ) {
-    gameManager.setAnswer(pin, player, description);
+    gameManager.setAnswer(pin, playerManager, description);
     return Response.ok().build();
   }
 
@@ -54,13 +54,16 @@ public class GameResource implements Serializable {
   @Path("/{pin}/join/{name}")
   public Response joinGame(@PathParam("pin") String pin, @PathParam("name") String name) {
     Game game = findGame(pin);
-    player.setPlayer(new Player(name, 0)); // TODO: Check if already exists.
-
+    Player player = playerManager.getPlayer();
+    
     if (game == null) {
       throw new NotFoundException("Game does not exist.");
     }
-
-    game.addPlayer(player.getPlayer());
+    
+    if (player == null) {
+      playerManager.setPlayer(new Player(name, 0)); // TODO: Check if already exists.
+      game.addPlayer(playerManager.getPlayer());
+    }
 
     return Response.ok().build();
   }
