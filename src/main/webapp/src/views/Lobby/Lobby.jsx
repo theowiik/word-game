@@ -1,6 +1,6 @@
+import axios from "axios";
 import { Button, Container, LobbyInfo, Navbar, UserTile } from "components";
-import { getRandomName } from 'lib/names';
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { gameExists } from "services/database-service";
@@ -19,26 +19,6 @@ export function Lobby({ name }) {
     CHANGE_NAME: "CHANGE_NAME",
   };
 
-  // const webSocket = new WebSocket("ws://localhost:8080/socialgame/players");
-  // let webSocketSession;
-
-  // const lobbyState = {
-  //   JOIN: "JOIN",
-  //   CHANGE_NAME: "CHANGE_NAME"
-  // }
-
-  //   webSocket.onerror = (event) => {
-  //     onError(event);
-  //   };
-
-  //   webSocket.onopen = (event) => {
-  //     onOpen(event);
-  //   };
-
-  //   webSocket.onmessage = (event) => {
-  //     onMessage(event);
-  //   };
-
   function onMessageReceived(event) {
     let eventPayload;
     try {
@@ -53,24 +33,13 @@ export function Lobby({ name }) {
     console.log(eventPayload);
   }
 
-  // function onOpen(event) {
-  //   console.log("Established connection");
-  // }
-
-  // function onError(event) {
-  //   console.log("An error occurred:" + event.data);
-  // }
-
-  // function send(payload) {
-  //   webSocket.send(JSON.stringify(payload));
-  // }
-
-  const {
-    sendMessage,
-    lastMessage,
-    readyState,
-    
-  } = useWebSocket("ws://localhost:8080/socialgame/players", { onOpen: () => console.log('Connection with WebSocket opened'), onMessage: (event) => onMessageReceived(event) });
+  const { sendMessage, lastMessage, readyState } = useWebSocket(
+    "ws://localhost:8080/socialgame/players",
+    {
+      onOpen: () => console.log("Connection with WebSocket opened"),
+      onMessage: (event) => onMessageReceived(event),
+    }
+  );
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
@@ -80,7 +49,6 @@ export function Lobby({ name }) {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
-  
   const checkIfGameExists = async () => {
     if (await gameExists(pin)) {
       setGameFound(true);
@@ -89,17 +57,18 @@ export function Lobby({ name }) {
     }
   };
 
-  const joinGame = useCallback(() => {
-    // join game
-    sendMessage(
-      JSON.stringify({
-        eventType: lobbyState.JOIN,
-        name: name ?? getRandomName(),
-        pin: pin,
-      }),
-      []
-    );
-  });
+  const joinGame = () => {
+    axios
+      .post(`http://localhost:8080/socialgame/ws/games/${pin}/join/test`)
+      .then((res) => {
+        console.log("wohoo ok! i joined the game");
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log("Failed to join game.");
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     checkIfGameExists();
@@ -107,12 +76,7 @@ export function Lobby({ name }) {
   }, []);
 
   const coolButtonPressed = () => {
-    console.log("sending packet");
-    const payload = {
-      name: "John Doe",
-      game: pin,
-      eventType: lobbyState.JOIN,
-    };
+    console.log("sending to join with a post request");
     joinGame();
   };
 

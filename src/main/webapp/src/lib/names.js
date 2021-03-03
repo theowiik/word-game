@@ -5,5 +5,5 @@ const prefix = ["Supersmart", "Wise", "Cool", "Sofisticated", "Happy", "Intellig
 export const getRandomName = () => {
   const randPrefix = prefix[Math.floor(Math.random() * prefix.length)];
   const randName = names[Math.floor(Math.random() * names.length)];
-  return `${randPrefix} ${randName}`;
+  return `${randPrefix}${randName}`;
 };
