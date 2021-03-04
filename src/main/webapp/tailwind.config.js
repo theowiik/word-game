@@ -4,11 +4,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        peach: '#ffadad',
-        beach: '#ffd6a5',
-        grass: '#caffbf',
-        ocean: '#9bf6ff'
-      }
+        peach: "#ffadad",
+        beach: "#ffd6a5",
+        grass: "#caffbf",
+        ocean: "#9bf6ff",
+      },
+      minWidth: {
+        xl: "16rem",
+      },
     },
   },
   variants: {

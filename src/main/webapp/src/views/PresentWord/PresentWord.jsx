@@ -1,10 +1,15 @@
-import { UserTile } from "components";
-import React, { useState } from "react";
+import { UserTile, Button } from "components";
+import React, { useState, useEffect } from "react";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import axios from "axios";
 
 export function PresentWord() {
   const [word, setWord] = useState("DEFAULTWORD");
+  const [progress, setProgress] = useState(100);
 
-  const users = [
+  const [hasPosted, setHasPosted] = useState(false);
+
+  const players = [
     { name: "Jesper", color: "peach" },
     { name: "Hentoo", color: "beach" },
     { name: "Sudo", color: "grass" },
@@ -14,6 +19,41 @@ export function PresentWord() {
     { name: "Sudo", color: "grass" },
     { name: "Theo", color: "ocean" },
   ];
+
+  function onMessageReceived(event) {
+    console.log("PResent word got a message");
+
+    //Update player status from msg
+
+    let eventPayload;
+    try {
+      console.log("Attempting to parse: ");
+      console.log(event.data);
+      eventPayload = JSON.parse(event.data.players);
+    } catch (error) {
+      console.log("Could not parse JSON");
+    }
+    console.log(eventPayload);
+  }
+
+  const { readyState } = useWebSocket("ws://localhost:8080/socialgame/game", {
+    onOpen: () => console.log("Connection with WebSocket opened"),
+    onMessage: (event) => onMessageReceived(event),
+  });
+
+  const postAnswer = (answer) => {
+    axios
+      .post(`/ws/games/12345/`, {answer: answer})
+      .then((res) => {
+        console.log("Posted answer for player");
+        console.log(res);
+        setHasPosted(true);
+      })
+      .catch((err) => {
+        console.log("Failed to post answer");
+        console.log(err);
+      });
+  };
 
   function getRandomWord() {
     const words = [
@@ -30,32 +70,68 @@ export function PresentWord() {
     setWord(getRandomWord().toUpperCase());
   };
 
+  const sessionStart = (interval) => {
+    interval = setInterval(() => {
+      setProgress((progress) => progress - 1);
+    }, 200);
+  };
+
+  useEffect(() => {
+    let interval;
+    sessionStart(interval);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleAnswerSubmit = (event) => {
+    event.preventDefault();
+    console.log("Post " + event.target.answer.value + " to Server");
+    //postAnswer(answer);
+  };
+
   return (
-    <div className="App">
-      <div className="grid grid-cols-12">
+    <div className="dark:bg-gray-800 w-full min-h-screen dark:text-white py-40">
+      <div className="h-full flex flex-col sm:flex-row">
+        {/* PLAYER LIST */}
+        <div className="h-10 sm:h-screen w-72  justify-center">
+          <p className="ml-5">{`6/${players.length} har svarat`}</p>
+          <div className="invisible sm:visible">
+            {players.map((player) => {
+              return <UserTile name={player.name} color={player.color} />;
+            })}
+          </div>
+        </div>
         {/* WORD */}
-        <div className="col-span-full lg:col-span-10">
+        <div className="h-screen w-full px-5 sm:px-20">
           <h1
-            className="text-5xl sm:text-8xl lg:text-9xl font-bold text-center break-all"
+            className="text-5xl sm:text-7xl lg:text-8xl font-bold text-center justify-center mb-10 "
             onClick={changeWord}
           >
             {word}
           </h1>{" "}
-          <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-pink-200">
+          <div className="w-full overflow-hidden h-6 mb-4 text-xs flex rounded-full bg-green-100">
             <div
-              style={{ width: "30%" }}
-              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-pink-500"
+              style={{ width: `${progress}%` }}
+              className="transition-all ease-linear duration-200 shadow-none whitespace-nowrap text-white justify-center bg-green-500"
             ></div>
           </div>
-          <p>XX sekunder kvar</p>
-          <p>6/6 har svarat</p>
-        </div>
+          {!hasPosted || progress == 0 ? (
+            <form
+              onSubmit={handleAnswerSubmit}
+              className="flex flex-col w-full"
+            >
+              <textarea
+                name="answer"
+                className="p-5 rounded-lg text-white dark:bg-gray-600  border-none h-72 my-10"
+                placeholder="Write your explanation.."
+              ></textarea>
 
-        {/* PLAYER LIST */}
-        <div className="col-span-full lg:col-span-2 lg:order-first">
-          {users.map((user) => {
-            return <UserTile name={user.name} color={user.color} />;
-          })}
+              <Button primary label="Submit your answer" />
+            </form>
+          ) : (
+            <div className="w-full p-10 rounded-lg bg-gray-600 text-center text-bold">
+              Your answer is submitted
+            </div>
+          )}
         </div>
       </div>
     </div>

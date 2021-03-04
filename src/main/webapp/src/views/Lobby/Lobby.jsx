@@ -27,8 +27,8 @@ export function Lobby({ name }) {
     let eventPayload;
     try {
       console.log("Attempting to parse: ");
-      console.log(event.data);
-      eventPayload = JSON.parse(event.data);
+      console.log(event.data); //VI FÅR EN STRÄNG HÄR! INTE ETT OBJECT
+      eventPayload = JSON.parse(event.data.players);
     } catch (error) {
       console.log("Could not parse JSON");
     }
@@ -43,9 +43,7 @@ export function Lobby({ name }) {
     }
   );
 
-  const colors = [
-    'grass', 'peach'
-  ]
+  const colors = ["grass", "peach"];
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
@@ -115,7 +113,14 @@ export function Lobby({ name }) {
 
         <div className="flex flex-wrap">
           {players.map((player, i) => {
-            return <UserTile name={player.name} color={colors[i % colors.length]} />;
+            return (
+              <div key={`player-${i}`}>
+                <UserTile
+                  name={player.name}
+                  color={colors[i % colors.length]}
+                />
+              </div>
+            );
           })}
         </div>
 
