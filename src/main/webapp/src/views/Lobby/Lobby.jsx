@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Button, Container, LobbyInfo, Navbar, UserTile } from "components";
+import { getRandomName } from "lib/names";
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
@@ -25,8 +26,6 @@ export function Lobby({ name }) {
       console.log("Attempting to parse: ");
       console.log(event.data);
       eventPayload = JSON.parse(event.data);
-
-      setPlayers(eventPayload.players);
     } catch (error) {
       console.log("Could not parse JSON");
     }
@@ -40,6 +39,10 @@ export function Lobby({ name }) {
       onMessage: (event) => onMessageReceived(event),
     }
   );
+
+  const colors = [
+    'grass', 'peach'
+  ]
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
@@ -57,14 +60,29 @@ export function Lobby({ name }) {
     }
   };
 
+  const fetchPlayers = () => {
+    axios
+      .get(`/ws/games/${pin}`, {
+        headers: { Accept: "application/json" },
+      })
+      .then((res) => {
+        if (Array.isArray(res?.data.players)) {
+          setPlayers(res.data.players);
+        }
+      })
+      .catch((err) => {
+        console.log("Failed to fetch players");
+        console.log(err);
+      });
+  };
+
   const joinGame = () => {
     axios
-      .post(
-        `/ws/games/${pin}/join/test`, {}
-      )
+      .post(`/ws/games/${pin}/join/${getRandomName()}`, {})
       .then((res) => {
         console.log("wohoo ok! i joined the game");
         console.log(res);
+        fetchPlayers();
       })
       .catch((err) => {
         console.log("Failed to join game.");
@@ -94,8 +112,8 @@ export function Lobby({ name }) {
         </p>
 
         <div className="flex flex-wrap">
-          {players.map((player) => {
-            return <UserTile name={player.name} color="peach" />;
+          {players.map((player, i) => {
+            return <UserTile name={player.name} color={colors[i % colors.length]} />;
           })}
         </div>
 
