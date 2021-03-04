@@ -59,7 +59,9 @@ export function Lobby({ name }) {
 
   const joinGame = () => {
     axios
-      .post(`http://localhost:8080/socialgame/ws/games/${pin}/join/test`)
+      .post(
+        `/ws/games/${pin}/join/test`, {}
+      )
       .then((res) => {
         console.log("wohoo ok! i joined the game");
         console.log(res);

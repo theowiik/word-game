@@ -1,8 +1,11 @@
+import axios from "axios";
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import "./main.css";
 import reportWebVitals from './reportWebVitals';
-import "./main.css"
+
+axios.defaults.baseURL = 'http://localhost:8080/socialgame';
 
 ReactDOM.render(
   <React.StrictMode>
