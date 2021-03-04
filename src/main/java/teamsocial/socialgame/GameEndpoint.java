@@ -9,7 +9,6 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-import javax.servlet.ServletContext;
 import javax.websocket.CloseReason;
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
@@ -32,10 +31,7 @@ public class GameEndpoint implements Serializable {
 
   @Inject
   private PlayerManager playerManager;
-  
-  @Inject
-  private ServletContext contextt;
-  
+
   private static final Set<Session> sessions = new HashSet<>();
   private static final String JOIN = "JOIN";
   private static final String CHANGE_NAME = "CHANGE_NAME";
@@ -70,7 +66,7 @@ public class GameEndpoint implements Serializable {
 
       playerManager.setPlayer(new Player(getPlayerName(), getRandomNumber(1000, 9999)));
       game.addPlayer(playerManager.getPlayer());
-      
+
       //game.addPlayer(new Player(getPlayerName(), getRandomNumber(1000, 9999)));
     } else if (message.contains(CHANGE_NAME)) {
     }
@@ -100,5 +96,12 @@ public class GameEndpoint implements Serializable {
             "WebSocket closed for " + session.getId() + " with reason " + closeReason.getCloseCode()
     );
     sessions.remove(session);
+  }
+
+  public void notifyPlayersChanged() {
+    Game game = gameManager.getGame("12345");
+    Jsonb jsonb = JsonbBuilder.create();
+    String result = jsonb.toJson(game);
+    broadcastMessage(result);
   }
 }

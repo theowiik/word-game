@@ -9,6 +9,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
+import teamsocial.socialgame.GameEndpoint;
 import teamsocial.socialgame.model.GameManagerBean;
 import teamsocial.socialgame.model.entity.Game;
 import teamsocial.socialgame.model.entity.Player;
@@ -23,6 +24,9 @@ public class GameResource implements Serializable {
 
   @Inject
   private PlayerManager playerManager;
+  
+  @Inject
+  private GameEndpoint gameEndpoint;
 
   @POST
   @Path("/{category}")
@@ -64,6 +68,8 @@ public class GameResource implements Serializable {
       playerManager.setPlayer(new Player(name, 0)); // TODO: Check if already exists.
       game.addPlayer(playerManager.getPlayer());
     }
+    
+    gameEndpoint.notifyPlayersChanged();
 
     return Response.ok().build();
   }

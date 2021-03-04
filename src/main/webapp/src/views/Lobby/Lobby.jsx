@@ -21,6 +21,9 @@ export function Lobby({ name }) {
   };
 
   function onMessageReceived(event) {
+    console.log("i got a message!!!!!!!");
+    fetchPlayers();
+
     let eventPayload;
     try {
       console.log("Attempting to parse: ");
@@ -82,7 +85,6 @@ export function Lobby({ name }) {
       .then((res) => {
         console.log("wohoo ok! i joined the game");
         console.log(res);
-        fetchPlayers();
       })
       .catch((err) => {
         console.log("Failed to join game.");

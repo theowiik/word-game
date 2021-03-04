@@ -1,8 +1,10 @@
 package teamsocial.socialgame.model.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Answer {
 
   private PlayerManager player;

@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Round implements Serializable {
 
   private Word word;
