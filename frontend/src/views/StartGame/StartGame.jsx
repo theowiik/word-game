@@ -6,7 +6,7 @@ export function StartGame() {
   const [categories, setCategories] = useState([]);
 
   const fetchCategories = () =>
-    Axios.get("/ws/categories")
+    Axios.get("/categories")
       .then((res) => {
         if (Array.isArray(res.data)) setCategories(res.data);
       })

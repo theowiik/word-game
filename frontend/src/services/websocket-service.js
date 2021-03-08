@@ -1,4 +1,4 @@
-const webSocket = new WebSocket("ws://localhost:8080/players");
+const webSocket = new WebSocket("ws://localhost:8080/ws/players");
 
 webSocket.onerror = function (event) {
   onError(event);

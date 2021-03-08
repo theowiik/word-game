@@ -5,7 +5,7 @@ import App from './App';
 import "./main.css";
 import reportWebVitals from './reportWebVitals';
 
-axios.defaults.baseURL = 'http://localhost:8080/socialgame';
+axios.defaults.baseURL = 'http://localhost:8080/api/v1';
 
 ReactDOM.render(
   <React.StrictMode>

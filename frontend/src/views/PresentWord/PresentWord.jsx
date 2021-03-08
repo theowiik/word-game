@@ -1,7 +1,7 @@
-import { UserTile, Button } from "components";
-import React, { useState, useEffect } from "react";
-import useWebSocket, { ReadyState } from "react-use-websocket";
 import axios from "axios";
+import { Button, UserTile } from "components";
+import React, { useEffect, useState } from "react";
+import useWebSocket from "react-use-websocket";
 
 export function PresentWord() {
   const [word, setWord] = useState("DEFAULTWORD");
@@ -36,14 +36,14 @@ export function PresentWord() {
     console.log(eventPayload);
   }
 
-  const { readyState } = useWebSocket("ws://localhost:8080/socialgame/game", {
+  const { readyState } = useWebSocket("ws://localhost:8080/ws/game", {
     onOpen: () => console.log("Connection with WebSocket opened"),
     onMessage: (event) => onMessageReceived(event),
   });
 
   const postAnswer = (answer) => {
     axios
-      .post(`/ws/games/12345/`, {answer: answer})
+      .post(`/games/12345/`, {answer: answer})
       .then((res) => {
         console.log("Posted answer for player");
         console.log(res);
