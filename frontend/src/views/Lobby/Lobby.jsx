@@ -36,7 +36,7 @@ export function Lobby({ name }) {
   }
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(
-    "ws://localhost:8080/socialgame/players",
+    "ws://localhost:8080/ws/players",
     {
       onOpen: () => console.log("Connection with WebSocket opened"),
       onMessage: (event) => onMessageReceived(event),
@@ -63,7 +63,7 @@ export function Lobby({ name }) {
 
   const fetchPlayers = () => {
     axios
-      .get(`/ws/games/${pin}`, {
+      .get(`/games/${pin}`, {
         headers: { Accept: "application/json" },
       })
       .then((res) => {
@@ -79,7 +79,7 @@ export function Lobby({ name }) {
 
   const joinGame = () => {
     axios
-      .post(`/ws/games/${pin}/join/${getRandomName()}`, {})
+      .post(`/games/${pin}/join/${getRandomName()}`, {})
       .then((res) => {
         console.log("wohoo ok! i joined the game");
         console.log(res);
