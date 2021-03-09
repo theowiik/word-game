@@ -1,1 +1,1 @@
-web: cd backend && mvnw spring-boot:run -Pprod
+web: java -Pprod -Dserver.port=$PORT $JAVA_OPTS -jar backend/target/*.jar
