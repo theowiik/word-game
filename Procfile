@@ -1,1 +1,1 @@
-web: cd backend && mvn spring-boot:run -Pprod
+web: cd backend && mvnw spring-boot:run -Pprod
