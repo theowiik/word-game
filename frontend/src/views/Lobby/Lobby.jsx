@@ -36,7 +36,7 @@ export function Lobby({ name }) {
   }
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(
-    "ws://localhost:8080/ws/players",
+    process.env.NODE_ENV == "production" ? "ws:///ws/players" : "ws://localhost:8080/ws/players",
     {
       onOpen: () => console.log("Connection with WebSocket opened"),
       onMessage: (event) => onMessageReceived(event),

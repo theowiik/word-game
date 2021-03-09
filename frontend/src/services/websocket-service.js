@@ -1,4 +1,8 @@
-const webSocket = new WebSocket("ws://localhost:8080/ws/players");
+const webSocket = new WebSocket(
+  process.env.NODE_ENV == "production"
+    ? "ws:///ws/players"
+    : "ws://localhost:8080/ws/players"
+);
 
 webSocket.onerror = function (event) {
   onError(event);
