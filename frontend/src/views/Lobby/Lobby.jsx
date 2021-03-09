@@ -28,15 +28,15 @@ export function Lobby({ name }) {
     const socket = new SockJS(websocketEndpointUrl);
     const stompClient = Stomp.over(socket);
 
-    stompClient.connect({}, function (frame) {
-      setConnected(true);
+    stompClient.connect({}, (frame) => {
+        setConnected(true);
 
-      console.log("Connected: " + frame);
-      stompClient.subscribe("/topic/messages", function (messageOutput) {
-        console.log("got response");
-        console.log(JSON.parse(messageOutput.body));
+        console.log("Connected: " + frame);
+        stompClient.subscribe("/topic/messages", (messageOutput) => {
+          console.log("got response");
+          console.log(JSON.parse(messageOutput.body));
+        });
       });
-    });
   };
 
   const colors = ["grass", "peach"];
