@@ -1,4 +1,4 @@
-package teamsocial.wordgame.websocket;
+package teamsocial.wordgame.websocket.response;
 
 public class OutputMessage {
 
