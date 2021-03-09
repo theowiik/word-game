@@ -7,6 +7,10 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import { gameExists } from "services/database-service";
 import SockJS from "sockjs-client";
 
+const websocketEndpointUrl = "http://localhost:8080/chat";
+let socket = new SockJS(websocketEndpointUrl);
+let stompClient = Stomp.over(socket);
+
 export function Lobby({ name }) {
   const params = useParams();
   const pin = params.pin;
@@ -16,7 +20,7 @@ export function Lobby({ name }) {
   const current = players.length;
   const history = useHistory();
   const [connected, setConnected] = useState(false);
-  const websocketEndpointUrl = "http://localhost:8080/chat"
+  const [messages, setMessages] = useState([]);
 
   const lobbyEvent = {
     JOIN: "JOIN",
@@ -25,18 +29,27 @@ export function Lobby({ name }) {
 
   const connectToWebsocket = () => {
     console.log("connecting to websocket");
-    const socket = new SockJS(websocketEndpointUrl);
-    const stompClient = Stomp.over(socket);
+    socket = new SockJS(websocketEndpointUrl);
+    stompClient = Stomp.over(socket);
 
     stompClient.connect({}, (frame) => {
-        setConnected(true);
+      setConnected(true);
 
-        console.log("Connected: " + frame);
-        stompClient.subscribe("/topic/messages", (messageOutput) => {
-          console.log("got response");
-          console.log(JSON.parse(messageOutput.body));
-        });
+      console.log("Connected: " + frame);
+      stompClient.subscribe("/topic/messages", (messageOutput) => {
+        console.log("got response");
+        console.log(JSON.parse(messageOutput.body));
       });
+    });
+  };
+
+  const sendMessageToWebsocket = () => {
+    console.log("sending message to websocket");
+    stompClient.send(
+      "/app/chat",
+      {},
+      JSON.stringify({ from: "me", text: "you" })
+    );
   };
 
   const colors = ["grass", "peach"];
@@ -93,14 +106,15 @@ export function Lobby({ name }) {
       <Navbar label="Lobby" onBackClickPath="/" />
       <Container>
         <LobbyInfo lobbyPin={pin} max={max} current={current} />
-        <p>
-          {`Game exists: ${gameFound ? "yaa" : "naa"} and websocket is: ${
-            connected ? "connected" : "not connected"
-          }`}{" "}
-        </p>
+        <p>{`Game exists: ${gameFound}`}</p>
+        <p>{`Websocket is: ${connected ? "connected" : "not connected"}`} </p>
 
         <button onClick={connectToWebsocket} className="font-bold">
           connect to websocket
+        </button>
+        <br />
+        <button onClick={sendMessageToWebsocket} className="font-bold">
+          send message
         </button>
 
         <div className="flex flex-wrap">
