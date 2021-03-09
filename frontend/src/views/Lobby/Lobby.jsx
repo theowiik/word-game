@@ -1,10 +1,11 @@
+import { Stomp } from "@stomp/stompjs";
 import axios from "axios";
 import { Button, Container, LobbyInfo, Navbar, UserTile } from "components";
 import { getRandomName } from "lib/names";
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import useWebSocket, { ReadyState } from "react-use-websocket";
 import { gameExists } from "services/database-service";
+import SockJS from "sockjs-client";
 
 export function Lobby({ name }) {
   const params = useParams();
@@ -14,46 +15,33 @@ export function Lobby({ name }) {
   const [gameFound, setGameFound] = useState(false);
   const current = players.length;
   const history = useHistory();
+  const [connected, setConnected] = useState(false);
+  const websocketEndpointUrl = "http://localhost:8080/chat"
 
-  const lobbyState = {
+  const lobbyEvent = {
     JOIN: "JOIN",
     CHANGE_NAME: "CHANGE_NAME",
   };
 
-  function onMessageReceived(event) {
-    console.log("i got a message!!!!!!!");
-    fetchPlayers();
+  const connectToWebsocket = () => {
+    console.log("connecting to websocket");
+    const socket = new SockJS(websocketEndpointUrl);
+    const stompClient = Stomp.over(socket);
 
-    let eventPayload;
-    try {
-      console.log("Attempting to parse: ");
-      console.log(event.data); //VI FÅR EN STRÄNG HÄR! INTE ETT OBJECT
-      eventPayload = JSON.parse(event.data.players);
-    } catch (error) {
-      console.log("Could not parse JSON");
-    }
-    console.log(eventPayload);
-  }
+    stompClient.connect({}, function (frame) {
+      setConnected(true);
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(
-    "ws://localhost:8080/ws/players",
-    {
-      onOpen: () => console.log("Connection with WebSocket opened"),
-      onMessage: (event) => onMessageReceived(event),
-    }
-  );
+      console.log("Connected: " + frame);
+      stompClient.subscribe("/topic/messages", function (messageOutput) {
+        console.log("got response");
+        console.log(JSON.parse(messageOutput.body));
+      });
+    });
+  };
 
   const colors = ["grass", "peach"];
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
-
-  const checkIfGameExists = async () => {
+  const authorizeGame = async () => {
     if (await gameExists(pin)) {
       setGameFound(true);
     } else {
@@ -91,7 +79,7 @@ export function Lobby({ name }) {
   };
 
   useEffect(() => {
-    checkIfGameExists();
+    authorizeGame();
     joinGame();
   }, []);
 
@@ -106,10 +94,14 @@ export function Lobby({ name }) {
       <Container>
         <LobbyInfo lobbyPin={pin} max={max} current={current} />
         <p>
-          {`Game exists: ${
-            gameFound ? "yaa" : "naa"
-          } and websocket is: ${connectionStatus}`}{" "}
+          {`Game exists: ${gameFound ? "yaa" : "naa"} and websocket is: ${
+            connected ? "connected" : "not connected"
+          }`}{" "}
         </p>
+
+        <button onClick={connectToWebsocket} className="font-bold">
+          connect to websocket
+        </button>
 
         <div className="flex flex-wrap">
           {players.map((player, i) => {

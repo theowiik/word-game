@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Button, UserTile } from "components";
 import React, { useEffect, useState } from "react";
-import useWebSocket from "react-use-websocket";
 
 export function PresentWord() {
   const [word, setWord] = useState("DEFAULTWORD");
@@ -35,11 +34,6 @@ export function PresentWord() {
     }
     console.log(eventPayload);
   }
-
-  const { readyState } = useWebSocket("ws://localhost:8080/ws/game", {
-    onOpen: () => console.log("Connection with WebSocket opened"),
-    onMessage: (event) => onMessageReceived(event),
-  });
 
   const postAnswer = (answer) => {
     axios
