@@ -13,7 +13,8 @@ export function Lobby({ name }) {
   const websocketEndpointUrl = "http://localhost:8080/chat";
   const subscribeToEndpoint = "/topic/messages";
   const handleMessage = (message) => {
-    setMessages((messages) => [...messages, JSON.parse(message.body)]);
+    const parsedMsg = JSON.parse(message.body);
+    setPlayers(parsedMsg.players);
   };
 
   const memoizedHandleMessage = useCallback(handleMessage, []);
@@ -33,9 +34,7 @@ export function Lobby({ name }) {
   const max = 10;
   const [players, setPlayers] = useState([]);
   const [gameFound, setGameFound] = useState(false);
-  const current = players.length;
   const history = useHistory();
-  const [messages, setMessages] = useState([]);
   const colors = ["grass", "peach"];
 
   const lobbyEvent = {
@@ -66,7 +65,7 @@ export function Lobby({ name }) {
       })
       .then((res) => {
         if (Array.isArray(res?.data.players)) {
-          setPlayers(res.data.players);
+          //setPlayers(res.data.players);
         }
       })
       .catch((err) => {
@@ -102,7 +101,7 @@ export function Lobby({ name }) {
     <div className="w-full min-h-screen bg-white dark:bg-gray-800 dark:text-white">
       <Navbar label="Lobby" onBackClickPath="/" />
       <Container>
-        <LobbyInfo lobbyPin={pin} max={max} current={current} />
+        <LobbyInfo lobbyPin={pin} max={max} current={players.length} />
         <p>{`Game exists: ${gameFound}`}</p>
 
         <br />
@@ -110,15 +109,6 @@ export function Lobby({ name }) {
         <button onClick={sendMessageToWebsocket} className="font-bold">
           send message
         </button>
-
-        <br />
-        <br />
-        <p className="font-bold">Messages</p>
-        <div>
-          {messages.map((msg) => {
-            return <p>{msg.state}</p>;
-          })}
-        </div>
 
         <div className="flex flex-wrap">
           {players.map((player, i) => {
