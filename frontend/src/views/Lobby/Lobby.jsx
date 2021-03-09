@@ -1,17 +1,34 @@
-import { Stomp } from "@stomp/stompjs";
 import axios from "axios";
 import { Button, Container, LobbyInfo, Navbar, UserTile } from "components";
 import { getRandomName } from "lib/names";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { gameExists } from "services/database-service";
-import SockJS from "sockjs-client";
-
-const websocketEndpointUrl = "http://localhost:8080/chat";
-let socket = new SockJS(websocketEndpointUrl);
-let stompClient = Stomp.over(socket);
+import { createStompClient } from "services/websocketService";
 
 export function Lobby({ name }) {
+  const websocketEndpointUrl = "http://localhost:8080/chat";
+  const subscribeToEndpoint = "/topic/messages";
+  const handleMessage = (message) => {
+    setMessages((messages) => [...messages, JSON.parse(message.body)]);
+  };
+
+  const memoizedHandleMessage = useCallback(handleMessage, []);
+
+  const stompClient = useMemo(
+    () =>
+      createStompClient(
+        websocketEndpointUrl,
+        subscribeToEndpoint,
+        memoizedHandleMessage
+      ),
+    [websocketEndpointUrl, subscribeToEndpoint, memoizedHandleMessage]
+  );
+
+  useEffect(() => {
+    console.log("i just shat myself");
+  }, [stompClient]);
+
   const params = useParams();
   const pin = params.pin;
   const max = 10;
@@ -19,28 +36,11 @@ export function Lobby({ name }) {
   const [gameFound, setGameFound] = useState(false);
   const current = players.length;
   const history = useHistory();
-  const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState([]);
 
   const lobbyEvent = {
     JOIN: "JOIN",
     CHANGE_NAME: "CHANGE_NAME",
-  };
-
-  const connectToWebsocket = () => {
-    console.log("connecting to websocket");
-    socket = new SockJS(websocketEndpointUrl);
-    stompClient = Stomp.over(socket);
-
-    stompClient.connect({}, (frame) => {
-      setConnected(true);
-
-      console.log("Connected: " + frame);
-      stompClient.subscribe("/topic/messages", (messageOutput) => {
-        console.log("got response");
-        console.log(JSON.parse(messageOutput.body));
-      });
-    });
   };
 
   const sendMessageToWebsocket = () => {
@@ -107,15 +107,21 @@ export function Lobby({ name }) {
       <Container>
         <LobbyInfo lobbyPin={pin} max={max} current={current} />
         <p>{`Game exists: ${gameFound}`}</p>
-        <p>{`Websocket is: ${connected ? "connected" : "not connected"}`} </p>
 
-        <button onClick={connectToWebsocket} className="font-bold">
-          connect to websocket
-        </button>
         <br />
+
         <button onClick={sendMessageToWebsocket} className="font-bold">
           send message
         </button>
+
+        <br />
+        <br />
+        <p className="font-bold">Messages</p>
+        <div>
+          {messages.map((msg) => {
+            return <p>{msg.state}</p>;
+          })}
+        </div>
 
         <div className="flex flex-wrap">
           {players.map((player, i) => {
