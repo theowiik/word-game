@@ -4,7 +4,10 @@ import { getRandomName } from "lib/names";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { gameExists } from "services/database-service";
-import { createStompClient, sendWebsocketMessage } from "services/websocketService";
+import {
+  createStompClient,
+  sendWebsocketMessage
+} from "services/websocketService";
 
 export function Lobby({ name }) {
   const websocketEndpointUrl = "http://localhost:8080/chat";
@@ -46,7 +49,10 @@ export function Lobby({ name }) {
 
   const sendMessageToWebsocket = () => {
     console.log("sending message to websocket");
-    sendWebsocketMessage(stompClient, "/app/chat", {from:"me", text: "hi bitch"})
+    sendWebsocketMessage(stompClient, "/app/chat", {
+      from: "me",
+      text: "hi bitch",
+    });
   };
 
   const authorizeGame = async () => {
