@@ -28,10 +28,6 @@ export function Lobby({ name }) {
     [websocketEndpointUrl, subscribeToEndpoint, memoizedHandleMessage]
   );
 
-  useEffect(() => {
-    console.log("i just shat myself");
-  }, [stompClient]);
-
   const params = useParams();
   const pin = params.pin;
   const max = 10;
