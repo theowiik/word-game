@@ -4,7 +4,7 @@ import { getRandomName } from "lib/names";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { gameExists } from "services/database-service";
-import { createStompClient } from "services/websocketService";
+import { createStompClient, sendWebsocketMessage } from "services/websocketService";
 
 export function Lobby({ name }) {
   const websocketEndpointUrl = "http://localhost:8080/chat";
@@ -37,6 +37,7 @@ export function Lobby({ name }) {
   const current = players.length;
   const history = useHistory();
   const [messages, setMessages] = useState([]);
+  const colors = ["grass", "peach"];
 
   const lobbyEvent = {
     JOIN: "JOIN",
@@ -45,14 +46,8 @@ export function Lobby({ name }) {
 
   const sendMessageToWebsocket = () => {
     console.log("sending message to websocket");
-    stompClient.send(
-      "/app/chat",
-      {},
-      JSON.stringify({ from: "me", text: "you" })
-    );
+    sendWebsocketMessage(stompClient, "/app/chat", {from:"me", text: "hi bitch"})
   };
-
-  const colors = ["grass", "peach"];
 
   const authorizeGame = async () => {
     if (await gameExists(pin)) {

@@ -12,6 +12,15 @@ export const createStompClient = (endpoint, subscribeTo, handleMessage) => {
     });
     return stompClient;
   } catch (error) {
-    throw new Error("Could not connect to the websocket")
+    throw new Error("Could not connect to the websocket");
   }
+};
+
+export const sendWebsocketMessage = (
+  stompClient,
+  endpoint,
+  message,
+  headers = {}
+) => {
+  stompClient.send(endpoint, headers, JSON.stringify(message));
 };
