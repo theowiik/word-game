@@ -25,25 +25,13 @@ import teamsocial.wordgame.model.game.Player;
 @ServerEndpoint(value = "/ws/players")
 public class GameEndpoint implements Serializable, Game.GameObserver {
 
-  @Autowired
-  private PlayerManagerBean playerManager;
-
-  @Autowired
-  private GameManagerBean gameManager;
-
   private static final Set<Session> sessions = new HashSet<>();
   private static final String JOIN = "JOIN";
   private static final String CHANGE_NAME = "CHANGE_NAME";
-
-  @SneakyThrows
-  public void onGameChange() {
-    var game = gameManager.getGame("12345");
-
-    var mapper = new ObjectMapper();
-    var gameJson = mapper.writeValueAsString(game);
-
-    broadcastMessage(gameJson);
-  }
+  @Autowired
+  private PlayerManagerBean playerManager;
+  @Autowired
+  private GameManagerBean gameManager;
 
   public static void broadcastMessage(String message) {
     sessions.forEach(session -> {
@@ -53,6 +41,16 @@ public class GameEndpoint implements Serializable, Game.GameObserver {
         e.printStackTrace();
       }
     });
+  }
+
+  @SneakyThrows
+  public void onGameChange() {
+    var game = gameManager.getGame("12345");
+
+    var mapper = new ObjectMapper();
+    var gameJson = mapper.writeValueAsString(game);
+
+    broadcastMessage(gameJson);
   }
 
   @OnOpen

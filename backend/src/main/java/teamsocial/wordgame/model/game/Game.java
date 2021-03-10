@@ -11,9 +11,9 @@ import teamsocial.wordgame.model.entity.Category;
 @Data
 public class Game implements Serializable {
 
+  private final static int ROUNDS = 3;
   @Getter(onMethod = @__(@JsonIgnore))
   private final Set<GameObserver> observers = new HashSet<>();
-  private final static int ROUNDS = 3;
   private final Category category;
   private final Set<Player> players;
   private final String pin;

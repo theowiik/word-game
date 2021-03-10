@@ -46,7 +46,7 @@ export function Lobby({ name }) {
     console.log("sending message to websocket");
     sendWebsocketMessage(stompClient, "/app/chat", {
       from: "me",
-      text: "hi bitch",
+      text: "message text",
     });
   };
 
