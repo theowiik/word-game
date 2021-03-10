@@ -1,4 +1,4 @@
-package teamsocial.wordgame.websocket.response;
+package teamsocial.wordgame.websocket;
 
 import java.util.ArrayList;
 import java.util.List;

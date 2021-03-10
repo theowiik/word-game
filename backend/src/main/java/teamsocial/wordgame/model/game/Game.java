@@ -48,13 +48,11 @@ public class Game implements Serializable {
 
   public void addPlayer(Player player) {
     players.add(player);
-    System.out.println("add player");
     notifyObservers();
   }
 
   public void notifyObservers() {
     for (var o : observers) {
-      System.out.println("notifying an observer");
       o.onGameChange();
     }
   }

@@ -4,18 +4,22 @@ import { getRandomName } from "lib/names";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { gameExists } from "services/database-service";
-import {
-  createStompClient
-} from "services/websocketService";
+import { createStompClient } from "services/websocketService";
 
 export function Lobby({ name }) {
   const websocketEndpointUrl = "http://localhost:8080/chat";
   const subscribeToEndpoint = "/topic/messages";
   const handleMessage = (message) => {
-    console.log("----------------------- I GOT A MESSAGE ------------------");
-    const parsedMsg = JSON.parse(message.body);
-    console.log(parsedMsg);
-    //setPlayers(parsedMsg.players);
+    console.log("Recieved updated game state");
+
+    const gameState = JSON.parse(message.body);
+
+    if (Array.isArray(gameState.players)) {
+      console.log(`New game state: ${gameState}`);
+      setPlayers(gameState.players);
+    } else {
+      console.log("Game state is in a illegal form");
+    }
   };
 
   const memoizedHandleMessage = useCallback(handleMessage, []);
@@ -43,10 +47,6 @@ export function Lobby({ name }) {
     CHANGE_NAME: "CHANGE_NAME",
   };
 
-  const sendMessageToWebsocket = () => {
-    console.log("NOT sending message to websocket!!!");
-  };
-
   const authorizeGame = async () => {
     if (await gameExists(pin)) {
       setGameFound(true);
@@ -55,31 +55,15 @@ export function Lobby({ name }) {
     }
   };
 
-  const fetchPlayers = () => {
-    axios
-      .get(`/games/${pin}`, {
-        headers: { Accept: "application/json" },
-      })
-      .then((res) => {
-        if (Array.isArray(res?.data.players)) {
-          //setPlayers(res.data.players);
-        }
-      })
-      .catch((err) => {
-        console.log("Failed to fetch players");
-        console.log(err);
-      });
-  };
-
   const joinGame = () => {
     axios
       .post(`/games/${pin}/join/${getRandomName()}`, {})
       .then((res) => {
-        console.log("wohoo ok! i joined the game");
+        console.log("Joined game");
         console.log(res);
       })
       .catch((err) => {
-        console.log("Failed to join game.");
+        console.log("Failed to join game");
         console.log(err);
       });
   };
@@ -88,23 +72,12 @@ export function Lobby({ name }) {
     authorizeGame();
   }, []);
 
-  const coolButtonPressed = () => {
-    console.log("sending to join with a post request");
-    joinGame();
-  };
-
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-800 dark:text-white">
       <Navbar label="Lobby" onBackClickPath="/" />
       <Container>
         <LobbyInfo lobbyPin={pin} max={max} current={players.length} />
         <p>{`Game exists: ${gameFound}`}</p>
-
-        <br />
-
-        <button onClick={sendMessageToWebsocket} className="font-bold">
-          send message
-        </button>
 
         <div className="flex flex-wrap">
           {players.map((player, i) => {

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.repository.ICategoryRepository;
-import teamsocial.wordgame.websocket.GameNotificationController;
+import teamsocial.wordgame.websocket.GameChangedPushService;
 
 @ApplicationScope
 @Component
@@ -21,7 +21,7 @@ public class GameManagerBean {
   private ICategoryRepository categoryRepository;
 
   @Autowired
-  private GameNotificationController chatController;
+  private GameChangedPushService pushService;
 
   @PostConstruct
   private void init() {
@@ -38,9 +38,8 @@ public class GameManagerBean {
     var cat = categoryRepository.findById(category).get(); // TODO: Throw error.
     var pin = getUnusedPin();
     var game = new Game(cat, pin);
-    game.addObserver(chatController);
+    game.addObserver(pushService);
     games.put(pin, game);
-    System.out.println("created a game");
     return game;
   }
 

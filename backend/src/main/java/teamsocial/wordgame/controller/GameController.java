@@ -15,7 +15,7 @@ import teamsocial.wordgame.model.GameManagerBean;
 import teamsocial.wordgame.model.PlayerManagerBean;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.model.game.Player;
-import teamsocial.wordgame.websocket.WebSocketPushService;
+import teamsocial.wordgame.websocket.GameChangedPushService;
 
 @RestController
 @RequestMapping("/api/v1/games")
@@ -27,9 +27,6 @@ public class GameController implements Serializable {
 
   @Autowired
   private PlayerManagerBean playerManager;
-
-  @Autowired
-  private WebSocketPushService pushService;
 
   @PostMapping("/{category}")
   public Game create(@PathVariable("category") String category) {
@@ -72,9 +69,6 @@ public class GameController implements Serializable {
       playerManager.setPlayer(new Player(name, 0)); // TODO: Check if already exists.
       game.addPlayer(playerManager.getPlayer());
     }
-
-    System.out.println("player joined (game controller), notifying");
-    pushService.notifyGameChanged();
 
     return ResponseEntity.ok().build();
   }
