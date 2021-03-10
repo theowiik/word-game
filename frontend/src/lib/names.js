@@ -1,4 +1,4 @@
-const names = ["Adams", "Gerdes", "Von Hacht"];
+const names = ["Koala", "Mouse", "Frasse", "Cat", "Alligator", "Unicorn"];
 
 const prefix = ["Supersmart", "Wise", "Cool", "Sofisticated", "Happy", "Intelligent"];
 

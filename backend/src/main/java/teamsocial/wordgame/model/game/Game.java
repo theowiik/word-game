@@ -30,6 +30,7 @@ public class Game implements Serializable {
   }
 
   public void startGame() {
+    currentRound.start();
   }
 
   public void addObserver(GameObserver go) {

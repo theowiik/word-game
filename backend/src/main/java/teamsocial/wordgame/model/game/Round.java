@@ -57,24 +57,38 @@ public class Round implements Serializable {
     return string.length() > 1 && string.length() < 50;
   }
 
+  public void start() {
+    enterPresentWordInputExplanation();
+  }
+
   private void enterPresentWordInputExplanation() {
     this.state = State.PRESENT_WORD_INPUT_EXPLANATION;
-    callAfter(this::enterPresentAnswer, state.getDurationSeconds());
+    roundChangedImpl.performOnRoundStateChanged();
+    callAfter(this::enterEnterExplanation, state.getDurationSeconds());
+  }
+
+  private void enterEnterExplanation() {
+    this.state = State.PRESENT_WORD_INPUT_EXPLANATION;
+    roundChangedImpl.performOnRoundStateChanged();
+    callAfter(this::enterSelectExplanation, state.getDurationSeconds());
   }
 
   private void enterSelectExplanation() {
     this.state = State.SELECT_EXPLANATION;
+    roundChangedImpl.performOnRoundStateChanged();
     callAfter(this::enterPresentAnswer, state.getDurationSeconds());
   }
 
   private void enterPresentAnswer() {
     state = State.PRESENT_ANSWER;
-    callAfter(this::enterSelectExplanation, state.getDurationSeconds());
+    roundChangedImpl.performOnRoundStateChanged();
+    callAfter(this::enterPresentScore, state.getDurationSeconds());
   }
 
   private void enterPresentScore() {
     state = State.PRESENT_SCORE;
-    callAfter(this::enterSelectExplanation, state.getDurationSeconds());
+    roundChangedImpl.performOnRoundStateChanged();
+    System.out.println("round ended!");
   }
 
   /**
@@ -88,11 +102,11 @@ public class Round implements Serializable {
     exec.schedule(invokable::perform, delayInSeconds, TimeUnit.SECONDS);
   }
 
-  private enum State {
-    PRESENT_WORD_INPUT_EXPLANATION(60),
-    SELECT_EXPLANATION(15),
-    PRESENT_ANSWER(10),
-    PRESENT_SCORE(10);
+  public enum State {
+    PRESENT_WORD_INPUT_EXPLANATION(4),
+    SELECT_EXPLANATION(4),
+    PRESENT_ANSWER(4),
+    PRESENT_SCORE(4);
 
     private final int durationSeconds;
 

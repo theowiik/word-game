@@ -72,4 +72,17 @@ public class GameController implements Serializable {
 
     return ResponseEntity.ok().build();
   }
+
+  @PostMapping("/{pin}/start")
+  public ResponseEntity startGame(@PathVariable("pin") String pin) {
+    var game = gameManager.getGame(pin);
+
+    if (game == null) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find game");
+    }
+
+    game.startGame(); // TODO: Dont start game if already started
+
+    return ResponseEntity.ok().build();
+  }
 }

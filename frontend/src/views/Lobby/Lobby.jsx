@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { Button, Container, LobbyInfo, Navbar, UserTile } from 'components';
+import { Container, LobbyInfo, Navbar, UserTile } from 'components';
 import { getRandomName } from 'lib/names';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { gameExists } from 'services/database-service';
 import { createStompClient } from 'services/websocketService';
 
@@ -65,6 +65,19 @@ export function Lobby({ name }) {
       });
   };
 
+  const startGame = () => {
+    axios
+    .post(`/games/${pin}/start`, {})
+    .then((res) => {
+      console.log('Started game');
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log('Failed to start game');
+      console.log(err);
+    });
+  }
+
   useEffect(() => {
     authorizeGame();
   }, []);
@@ -98,9 +111,9 @@ export function Lobby({ name }) {
 
           <br></br>
 
-          <Link to="/present-word">
-            <Button label="Start game" primary />
-          </Link>
+          <button onClick={startGame} className="font-bold">
+            Start Game
+          </button>
         </div>
       </Container>
     </div>
