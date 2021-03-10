@@ -11,21 +11,22 @@ import teamsocial.wordgame.websocket.response.GameResponse;
 
 @Controller
 @ApplicationScope
-public class ChatController implements Game.GameObserver {
+public class GameNotificationController implements Game.GameObserver {
 
   @Autowired
   private GameManagerBean gameManager;
 
-  @MessageMapping("/chat")
-  @SendTo("/topic/messages")
-  public GameResponse send(Message message) {
-    var game = gameManager.getGame("12345");
-    return new GameResponse(game);
-  }
+  //@MessageMapping("/chat")
+  //@SendTo("/topic/messages")
+  //public GameResponse send(MessageRemoveMe message) {
+  //  var game = gameManager.getGame("12345");
+  //  return new GameResponse(game);
+  //}
 
   @Override
   public void onGameChange() {
-    System.out.println("---------- game changed! ----------");
-    send(new Message());
+    System.out.println("game notif contrl notified, but i dont do anything");
+
+    //send(new MessageRemoveMe());
   }
 }

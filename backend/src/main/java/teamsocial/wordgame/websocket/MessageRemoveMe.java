@@ -3,7 +3,7 @@ package teamsocial.wordgame.websocket;
 import lombok.Data;
 
 @Data
-public class Message {
+public class MessageRemoveMe {
 
   private String from;
   private String text;

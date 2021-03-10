@@ -5,16 +5,17 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { gameExists } from "services/database-service";
 import {
-  createStompClient,
-  sendWebsocketMessage
+  createStompClient
 } from "services/websocketService";
 
 export function Lobby({ name }) {
   const websocketEndpointUrl = "http://localhost:8080/chat";
   const subscribeToEndpoint = "/topic/messages";
   const handleMessage = (message) => {
+    console.log("----------------------- I GOT A MESSAGE ------------------");
     const parsedMsg = JSON.parse(message.body);
-    setPlayers(parsedMsg.players);
+    console.log(parsedMsg);
+    //setPlayers(parsedMsg.players);
   };
 
   const memoizedHandleMessage = useCallback(handleMessage, []);
@@ -43,11 +44,7 @@ export function Lobby({ name }) {
   };
 
   const sendMessageToWebsocket = () => {
-    console.log("sending message to websocket");
-    sendWebsocketMessage(stompClient, "/app/chat", {
-      from: "me",
-      text: "message text",
-    });
+    console.log("NOT sending message to websocket!!!");
   };
 
   const authorizeGame = async () => {
@@ -89,7 +86,6 @@ export function Lobby({ name }) {
 
   useEffect(() => {
     authorizeGame();
-    joinGame();
   }, []);
 
   const coolButtonPressed = () => {
@@ -124,7 +120,7 @@ export function Lobby({ name }) {
         </div>
 
         <div className="fixed bottom-0 left-0 right-0 w-full flex justify-center mb-16 sm:mb-20 md:mb-32">
-          <button onClick={coolButtonPressed}>hello : )</button>
+          <button onClick={joinGame}>Join Game</button>
           <Link to="/present-word">
             <Button label="Start game" primary />
           </Link>

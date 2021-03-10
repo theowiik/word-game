@@ -6,10 +6,9 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
-import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.repository.ICategoryRepository;
-import teamsocial.wordgame.websocket.ChatController;
+import teamsocial.wordgame.websocket.GameNotificationController;
 
 @ApplicationScope
 @Component
@@ -22,7 +21,7 @@ public class GameManagerBean {
   private ICategoryRepository categoryRepository;
 
   @Autowired
-  private ChatController chatController;
+  private GameNotificationController chatController;
 
   @PostConstruct
   private void init() {
