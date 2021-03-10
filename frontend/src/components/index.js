@@ -6,3 +6,4 @@ export * from "./Input";
 export * from "./UserTile";
 export * from "./Navbar";
 export * from "./PresentAnswerTile";
+export * from "./Timer";

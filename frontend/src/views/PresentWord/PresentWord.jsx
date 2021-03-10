@@ -1,11 +1,10 @@
 import axios from "axios";
-import { Button, UserTile } from "components";
-import React, { useEffect, useState } from "react";
+import { Button, UserTile, Timer } from "components";
+import React, { useState } from "react";
 import useWebSocket from "react-use-websocket";
 
 export function PresentWord() {
   const [word, setWord] = useState("DEFAULTWORD");
-  const [progress, setProgress] = useState(100);
 
   const [hasPosted, setHasPosted] = useState(false);
 
@@ -43,7 +42,7 @@ export function PresentWord() {
 
   const postAnswer = (answer) => {
     axios
-      .post(`/games/12345/`, {answer: answer})
+      .post(`/games/12345/`, { answer: answer })
       .then((res) => {
         console.log("Posted answer for player");
         console.log(res);
@@ -69,18 +68,6 @@ export function PresentWord() {
   const changeWord = () => {
     setWord(getRandomWord().toUpperCase());
   };
-
-  const sessionStart = (interval) => {
-    interval = setInterval(() => {
-      setProgress((progress) => progress - 1);
-    }, 200);
-  };
-
-  useEffect(() => {
-    let interval;
-    sessionStart(interval);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleAnswerSubmit = (event) => {
     event.preventDefault();
@@ -108,13 +95,8 @@ export function PresentWord() {
           >
             {word}
           </h1>{" "}
-          <div className="w-full overflow-hidden h-6 mb-4 text-xs flex rounded-full bg-green-100">
-            <div
-              style={{ width: `${progress}%` }}
-              className="transition-all ease-linear duration-200 shadow-none whitespace-nowrap text-white justify-center bg-green-500"
-            ></div>
-          </div>
-          {!hasPosted || progress == 0 ? (
+          <Timer duration={200} />
+          {!hasPosted ? (
             <form
               onSubmit={handleAnswerSubmit}
               className="flex flex-col w-full"
