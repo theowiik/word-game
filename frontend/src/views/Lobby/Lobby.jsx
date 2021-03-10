@@ -1,16 +1,16 @@
-import axios from "axios";
-import { Button, Container, LobbyInfo, Navbar, UserTile } from "components";
-import { getRandomName } from "lib/names";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
-import { gameExists } from "services/database-service";
-import { createStompClient } from "services/websocketService";
+import axios from 'axios';
+import { Button, Container, LobbyInfo, Navbar, UserTile } from 'components';
+import { getRandomName } from 'lib/names';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Link, useHistory, useParams } from 'react-router-dom';
+import { gameExists } from 'services/database-service';
+import { createStompClient } from 'services/websocketService';
 
 export function Lobby({ name }) {
-  const websocketEndpointUrl = "http://localhost:8080/chat";
-  const subscribeToEndpoint = "/topic/messages";
+  const websocketEndpointUrl = 'http://localhost:8080/chat';
+  const subscribeToEndpoint = '/topic/messages';
   const handleMessage = (message) => {
-    console.log("Recieved updated game state");
+    console.log('Recieved updated game state');
 
     const gameState = JSON.parse(message.body);
 
@@ -18,7 +18,7 @@ export function Lobby({ name }) {
       console.log(`New game state: ${gameState}`);
       setPlayers(gameState.players);
     } else {
-      console.log("Game state is in a illegal form");
+      console.log('Game state is in a illegal form');
     }
   };
 
@@ -40,18 +40,13 @@ export function Lobby({ name }) {
   const [players, setPlayers] = useState([]);
   const [gameFound, setGameFound] = useState(false);
   const history = useHistory();
-  const colors = ["grass", "peach"];
-
-  const lobbyEvent = {
-    JOIN: "JOIN",
-    CHANGE_NAME: "CHANGE_NAME",
-  };
+  const colors = ['grass', 'peach'];
 
   const authorizeGame = async () => {
     if (await gameExists(pin)) {
       setGameFound(true);
     } else {
-      history.push("/");
+      history.push('/');
     }
   };
 
@@ -59,11 +54,11 @@ export function Lobby({ name }) {
     axios
       .post(`/games/${pin}/join/${getRandomName()}`, {})
       .then((res) => {
-        console.log("Joined game");
+        console.log('Joined game');
         console.log(res);
       })
       .catch((err) => {
-        console.log("Failed to join game");
+        console.log('Failed to join game');
         console.log(err);
       });
   };
@@ -93,7 +88,12 @@ export function Lobby({ name }) {
         </div>
 
         <div className="fixed bottom-0 left-0 right-0 w-full flex justify-center mb-16 sm:mb-20 md:mb-32">
-          <button onClick={joinGame}>Join Game</button>
+          <button onClick={joinGame} className="font-bold mr-5">
+            Join Game
+          </button>
+
+          <br></br>
+
           <Link to="/present-word">
             <Button label="Start game" primary />
           </Link>

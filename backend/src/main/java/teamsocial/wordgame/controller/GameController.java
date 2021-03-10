@@ -15,7 +15,6 @@ import teamsocial.wordgame.model.GameManagerBean;
 import teamsocial.wordgame.model.PlayerManagerBean;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.model.game.Player;
-import teamsocial.wordgame.websocket.GameChangedPushService;
 
 @RestController
 @RequestMapping("/api/v1/games")
@@ -56,17 +55,19 @@ public class GameController implements Serializable {
   }
 
   @PostMapping("/{pin}/join/{name}")
-  public ResponseEntity joinGame(@PathVariable("pin") String pin,
-      @PathVariable("name") String name) {
+  public ResponseEntity joinGame(
+      @PathVariable("pin") String pin,
+      @PathVariable("name") String name
+  ) {
     var game = gameManager.getGame(pin);
-    var player = playerManager.getPlayer();
 
     if (game == null) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find game");
     }
 
-    if (player == null) {
-      playerManager.setPlayer(new Player(name, 0)); // TODO: Check if already exists.
+    if (playerManager.getPlayer() == null) {
+      System.out.println(playerManager);
+      playerManager.setPlayer(new Player(name, 0));
       game.addPlayer(playerManager.getPlayer());
     }
 
