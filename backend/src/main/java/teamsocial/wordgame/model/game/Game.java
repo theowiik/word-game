@@ -32,12 +32,8 @@ public class Game implements Serializable {
   public void startGame() {
   }
 
-  public void observe(GameObserver go) {
+  public void addObserver(GameObserver go) {
     observers.add(go);
-  }
-
-  public void stopObserving(GameObserver go) {
-    observers.remove(go);
   }
 
   private void nextRound() {
@@ -52,11 +48,13 @@ public class Game implements Serializable {
 
   public void addPlayer(Player player) {
     players.add(player);
+    System.out.println("add player");
     notifyObservers();
   }
 
   public void notifyObservers() {
-    for (GameObserver o : observers) {
+    for (var o : observers) {
+      System.out.println("notifying an observer");
       o.onGameChange();
     }
   }
