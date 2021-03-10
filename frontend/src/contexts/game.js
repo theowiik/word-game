@@ -15,40 +15,20 @@ const roundStates = {
 };
 
 const initialGameState = {
-  lobby: true,
-  playing: false,
-  end: false,
+  globalGameState: gameStates.OPEN_LOBBY,
   players: [],
 };
 
 const initialRoundState = {
-  presentWordInputExplaination: true,
-  selectExplaination: false,
-  presentAnswer: false,
-  presentScore: false,
+  globalRoundState: roundStates.PRESENT_WORD_INPUT_EXPLANATION,
 };
 
 function gameReducer(state, action) {
   switch (action.type) {
-    case gameStates.OPEN_LOBBY: {
+    case "SET_GLOBAL_STATE": {
       return {
-        lobby: true,
-        playing: false,
-        end: false,
-      };
-    }
-    case gameStates.START_GAME: {
-      return {
-        lobby: false,
-        playing: true,
-        end: false,
-      };
-    }
-    case gameStates.END_GAME: {
-      return {
-        lobby: false,
-        playing: false,
-        end: true,
+        ...state,
+        globalGameState: action.state,
       };
     }
     case "SET_PLAYERS": {
@@ -59,9 +39,7 @@ function gameReducer(state, action) {
     }
     default: {
       return {
-        lobby: true,
-        playing: false,
-        end: false,
+        ...state,
       };
     }
   }
@@ -69,19 +47,15 @@ function gameReducer(state, action) {
 
 function roundReducer(state, action) {
   switch (action.type) {
-    case gameStates.OPEN_LOBBY: {
+    case "SET_GLOBAL_STATE": {
       return {
-        lobby: true,
-        playing: false,
-        end: false,
+        ...state,
+        globalGameState: action.state,
       };
     }
-
     default: {
       return {
-        lobby: true,
-        playing: false,
-        end: false,
+        ...state,
       };
     }
   }
@@ -94,33 +68,22 @@ export const GameProvider = (props) => {
     initialRoundState
   );
 
-  const openLobby = () => dispatch({ type: gameStates.OPEN_LOBBY });
-  const startGame = () => dispatch({ type: gameStates.START_GAME });
-  const endGame = () => dispatch({ type: gameStates.END_GAME });
+  const setGlobalGameState = (state) => {
+    dispatch({ type: "SET_GLOBAL_STATE", state: state });
+  };
   const setPlayers = (players) =>
     dispatch({ type: "SET_PLAYERS", players: players });
-
-  const openPresentWordAndInput = () =>
-    roundDispatch({ type: roundStates.PRESENT_WORD_INPUT_EXPLANATION });
-  const openSelectExplaination = () =>
-    roundDispatch({ type: roundStates.SELECT_EXPLANATION });
-  const openPresentAnswer = () =>
-    roundDispatch({ type: roundStates.PRESENT_ANSWER });
-  const openPresentScore = () =>
-    roundDispatch({ type: roundStates.PRESENT_SCORE });
+  const setGlobalRoundState = (state) => {
+    roundDispatch({ type: "SET_GLOBAL_STATE", state: state });
+  };
 
   const value = useMemo(
     () => ({
       ...gameState,
       ...roundState,
-      openLobby,
-      startGame,
-      endGame,
+      setGlobalGameState,
       setPlayers,
-      openPresentWordAndInput,
-      openSelectExplaination,
-      openPresentAnswer,
-      openPresentScore,
+      setGlobalRoundState,
     }),
     [gameState, roundState]
   );
@@ -131,7 +94,7 @@ export const GameProvider = (props) => {
 export const useGame = () => {
   const context = React.useContext(GameContext);
   if (context === undefined) {
-    throw new Error(`useGame must be used within a UIProvider`);
+    throw new Error(`useGame must be used within a GameProvider`);
   }
   return context;
 };
