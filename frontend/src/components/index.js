@@ -1,5 +1,6 @@
 export * from "./Button";
 export * from "./Layout";
+export * from "./GameLayout";
 export * from "./LobbyInfo";
 export * from "./Logo";
 export * from "./Input";
