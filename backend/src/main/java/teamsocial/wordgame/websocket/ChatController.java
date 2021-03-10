@@ -5,10 +5,11 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import teamsocial.wordgame.model.GameManagerBean;
+import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.websocket.response.GameResponse;
 
 @Controller
-public class ChatController {
+public class ChatController implements Game.GameObserver {
 
   @Autowired
   private GameManagerBean gameManager;
@@ -19,5 +20,10 @@ public class ChatController {
     var game = gameManager.getGame("12345");
     var response = new GameResponse(game);
     return response;
+  }
+
+  @Override
+  public void onGameChange() {
+
   }
 }
