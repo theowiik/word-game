@@ -17,6 +17,7 @@ export function Lobby({ name }) {
     if (Array.isArray(gameState.players)) {
       console.log(`New game state: ${gameState}`);
       setPlayers(gameState.players);
+      setGame(gameState);
     } else {
       console.log('Game state is in a illegal form');
     }
@@ -41,6 +42,7 @@ export function Lobby({ name }) {
   const [gameFound, setGameFound] = useState(false);
   const history = useHistory();
   const colors = ['grass', 'peach'];
+  const [game, setGame] = useState(null);
 
   const authorizeGame = async () => {
     if (await gameExists(pin)) {
@@ -73,6 +75,8 @@ export function Lobby({ name }) {
       <Container>
         <LobbyInfo lobbyPin={pin} max={max} current={players.length} />
         <p>{`Game exists: ${gameFound}`}</p>
+
+        <p className="font-bold">Latest game state: {JSON.stringify(game)}</p>
 
         <div className="flex flex-wrap">
           {players.map((player, i) => {
