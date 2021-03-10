@@ -1,29 +1,49 @@
 import React, { useMemo } from "react";
 const GameContext = React.createContext();
 
-const initialState = {
+const gameStates = {
+  OPEN_LOBBY: "OPEN_LOBBY",
+  START_GAME: "START_GAME",
+  END_GAME: "END_GAME",
+};
+
+const roundStates = {
+  PRESENT_WORD_INPUT_EXPLANATION: "PRESENT_WORD_INPUT_EXPLANATION",
+  SELECT_EXPLANATION: "SELECT_EXPLANATION",
+  PRESENT_ANSWER: "PRESENT_ANSWER",
+  PRESENT_SCORE: "PRESENT_SCORE",
+};
+
+const initialGameState = {
   lobby: true,
   playing: false,
   end: false,
 };
 
-function reducer(state, action) {
+const initialRoundState = {
+  presentWordInputExplaination: true,
+  selectExplaination: false,
+  presentAnswer: false,
+  presentScore: false
+}
+
+function gameReducer(state, action) {
   switch (action.type) {
-    case "OPEN_LOBBY": {
+    case gameStates.OPEN_LOBBY: {
       return {
         lobby: true,
         playing: false,
         end: false,
       };
     }
-    case "START_GAME": {
+    case gameStates.START_GAME: {
       return {
         lobby: false,
         playing: true,
         end: false,
       };
     }
-    case "END_GAME": {
+    case gameStates.END_GAME: {
       return {
         lobby: false,
         playing: false,
@@ -39,21 +59,68 @@ function reducer(state, action) {
     }
   }
 }
-export const GameProvider = (props) => {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const openLobby = () => dispatch({ type: "OPEN_LOBBY" });
-  const startGame = () => dispatch({ type: "START_GAME" });
-  const endGame = () => dispatch({ type: "END_GAME" });
+function roundReducer(state, action) {
+  switch (action.type) {
+    case gameStates.OPEN_LOBBY: {
+      return {
+        lobby: true,
+        playing: false,
+        end: false,
+      };
+    }
+    case gameStates.START_GAME: {
+      return {
+        lobby: false,
+        playing: true,
+        end: false,
+      };
+    }
+    case gameStates.END_GAME: {
+      return {
+        lobby: false,
+        playing: false,
+        end: true,
+      };
+    }
+    default: {
+      return {
+        lobby: true,
+        playing: false,
+        end: false,
+      };
+    }
+  }
+}
+
+export const GameProvider = (props) => {
+  const [gameState, dispatch] = React.useReducer(gameReducer, initialGameState);
+  const [roundState, roundDispatch] = React.useReducer(roundReducer, initialRoundState);
+
+  const openLobby = () => dispatch({ type: gameStates.OPEN_LOBBY });
+  const startGame = () => dispatch({ type: gameStates.START_GAME });
+  const endGame = () => dispatch({ type: gameStates.END_GAME });
+
+  const openPresentWordAndInput = () => roundDispatch({ type: roundStates.PRESENT_WORD_INPUT_EXPLANATION})
+  const openSelectExplaination = () => roundDispatch({ type: roundStates.SELECT_EXPLANATION})
+  const openPresentAnswer = () => roundDispatch({ type: roundStates.PRESENT_ANSWER})
+  const openPresentScore = () => roundDispatch({ type: roundStates.PRESENT_SCORE})
+
 
   const value = useMemo(
     () => ({
-      ...state,
+      ...gameState,
+      ...roundState,
       openLobby,
       startGame,
       endGame,
+      openPresentWordAndInput,
+      openSelectExplaination,
+      openPresentAnswer,
+      openPresentScore
+
     }),
-    [state]
+    [gameState, roundState]
   );
 
   return <GameContext.Provider value={value} {...props} />;
