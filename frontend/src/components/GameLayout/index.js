@@ -1,1 +1,1 @@
-export * from './GameLayout'
+export * from './GameLayout.jsx'

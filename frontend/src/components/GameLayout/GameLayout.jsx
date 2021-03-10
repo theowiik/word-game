@@ -1,13 +1,13 @@
 import React from "react";
 import { Navbar } from "components/Navbar/Navbar";
 
-function GameLayout({ children }) {
+export const GameLayout = ({ children }) => {
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-gray-800 flex justify-center items-center">
-      <Navbar />
-      {children}
+    <div className=" bg-white text-gray-800 dark:text-white dark:bg-gray-800">
+      <Navbar label="Rappakalja" />
+      <div className="w-full min-h-screen flex justify-center items-center">
+        {children}
+      </div>
     </div>
   );
-}
-
-export default GameLayout;
+};
