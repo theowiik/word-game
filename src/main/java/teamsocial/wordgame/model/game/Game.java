@@ -58,7 +58,11 @@ public class Game implements Serializable {
     }
   }
 
-  public enum State {
+    public void blablabla() {
+      notifyObservers();
+    }
+
+    public enum State {
     LOBBY, PLAYING, END
   }
 
