@@ -1,18 +1,15 @@
 import React from 'react';
 import { Timer, PresentAnswerTile } from 'components';
+import { useGame } from 'contexts/game';
 
 export const PresentAnswers = () => {
-  const answers = [
-    { answer: 'Theo e king' },
-    { answer: 'Sudo e king' },
-    { answer: 'Jopsidop e king' },
-    { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
-    { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
-  ];
+
+
+  const { currentWord, answers } = useGame()
 
   return (
     <>
-      <h1 className="text-center mt-14 text-6xl font-semibold">Resonabel</h1>
+      <h1 className="text-center mt-14 text-6xl font-semibold">{currentWord}</h1>
 
       <div className="mt-14 w-150">
         <Timer duration={200} />
