@@ -4,11 +4,13 @@ import { getRandomName } from 'lib/names';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { gameExists } from 'services/database-service';
+import { websocketBaseUrl } from 'services/urlConstants';
 import { createStompClient } from 'services/websocketService';
 
 export function Lobby({ name }) {
-  const websocketEndpointUrl = 'http://localhost:8080/chat';
+  const websocketEndpointUrl = `${websocketBaseUrl}/chat`;
   const subscribeToEndpoint = '/topic/messages';
+
   const handleMessage = (message) => {
     console.log('Recieved updated game state');
 
@@ -44,44 +46,6 @@ export function Lobby({ name }) {
   const colors = ['grass', 'peach'];
   const [game, setGame] = useState(null);
 
-  const lobbyState = {
-    JOIN: "JOIN",
-    CHANGE_NAME: "CHANGE_NAME",
-  };
-
-  function onMessageReceived(event) {
-    console.log("i got a message!!!!!!!");
-    fetchPlayers();
-
-    let eventPayload;
-    try {
-      console.log("Attempting to parse: ");
-      console.log(event.data); //VI FÅR EN STRÄNG HÄR! INTE ETT OBJECT
-      eventPayload = JSON.parse(event.data.players);
-    } catch (error) {
-      console.log("Could not parse JSON");
-    }
-    console.log(eventPayload);
-  }
-
-  const { sendMessage, lastMessage, readyState } = useWebSocket(
-    process.env.NODE_ENV == "production" ? "ws:///ws/players" : "ws://localhost:8080/ws/players",
-    {
-      onOpen: () => console.log("Connection with WebSocket opened"),
-      onMessage: (event) => onMessageReceived(event),
-    }
-  );
-
-  const colors = ["grass", "peach"];
-
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
-
   const authorizeGame = async () => {
     if (await gameExists(pin)) {
       setGameFound(true);
@@ -105,16 +69,16 @@ export function Lobby({ name }) {
 
   const startGame = () => {
     axios
-    .post(`/games/${pin}/start`, {})
-    .then((res) => {
-      console.log('Started game');
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log('Failed to start game');
-      console.log(err);
-    });
-  }
+      .post(`/games/${pin}/start`, {})
+      .then((res) => {
+        console.log('Started game');
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log('Failed to start game');
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     authorizeGame();

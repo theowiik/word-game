@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 export function PresentWord() {
   const [word, setWord] = useState("DEFAULTWORD");
   const [progress, setProgress] = useState(100);
-
   const [hasPosted, setHasPosted] = useState(false);
 
   const players = [
@@ -20,7 +19,7 @@ export function PresentWord() {
   ];
 
   function onMessageReceived(event) {
-    console.log("PResent word got a message");
+    console.log("Present word got a message");
 
     //Update player status from msg
 
@@ -34,11 +33,6 @@ export function PresentWord() {
     }
     console.log(eventPayload);
   }
-
-  const { readyState } = useWebSocket(process.env.NODE_ENV == "production" ? "ws:///ws/game" : "ws://localhost:8080/ws/game", {
-    onOpen: () => console.log("Connection with WebSocket opened"),
-    onMessage: (event) => onMessageReceived(event),
-  });
 
   const postAnswer = (answer) => {
     axios
