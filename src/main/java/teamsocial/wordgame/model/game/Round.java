@@ -81,12 +81,6 @@ public class Round implements Serializable {
   private void enterPresentWordInputExplanation() {
     this.state = State.PRESENT_WORD_INPUT_EXPLANATION;
     roundChangedImpl.performOnRoundStateChanged();
-    callAfter(this::enterEnterExplanation, state.getDurationSeconds());
-  }
-
-  private void enterEnterExplanation() {
-    this.state = State.PRESENT_WORD_INPUT_EXPLANATION;
-    roundChangedImpl.performOnRoundStateChanged();
     callAfter(this::enterSelectExplanation, state.getDurationSeconds());
   }
 
