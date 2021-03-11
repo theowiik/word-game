@@ -6,9 +6,9 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
-import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.repository.ICategoryRepository;
+import teamsocial.wordgame.websocket.GameChangedPushService;
 
 @ApplicationScope
 @Component
@@ -20,12 +20,13 @@ public class GameManagerBean {
   @Autowired
   private ICategoryRepository categoryRepository;
 
+  @Autowired
+  private GameChangedPushService pushService;
+
   @PostConstruct
   private void init() {
     games = new HashMap<>();
-    var category = getDummyCategory();
-    var pin = getUnusedPin();
-    games.put(pin, new Game(category, pin));
+    createGame("cat1");
   }
 
   public Game getGame(String pin) {
@@ -37,6 +38,7 @@ public class GameManagerBean {
     var cat = categoryRepository.findById(category).get(); // TODO: Throw error.
     var pin = getUnusedPin();
     var game = new Game(cat, pin);
+    game.addObserver(pushService);
     games.put(pin, game);
     return game;
   }
@@ -44,10 +46,6 @@ public class GameManagerBean {
   public void setExplanation(String pin, PlayerManagerBean player, String description) {
     Game game = getGame(pin);
     game.setExplanation(player.getPlayer(), description);
-  }
-
-  private Category getDummyCategory() {
-    return categoryRepository.findById("cat1").get();
   }
 
   private String getUnusedPin() {
