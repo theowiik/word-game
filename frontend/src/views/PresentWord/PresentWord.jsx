@@ -1,36 +1,35 @@
-import axios from "axios";
-import { Button, UserTile, Timer } from "components";
-import React, { useState } from "react";
-import useWebSocket from "react-use-websocket";
+import axios from 'axios';
+import { Button, UserTile, Timer } from 'components';
+import React, { useState } from 'react';
 
 export function PresentWord() {
-  const [word, setWord] = useState("DEFAULTWORD");
+  const [word, setWord] = useState('DEFAULTWORD');
 
   const [hasPosted, setHasPosted] = useState(false);
 
   const players = [
-    { name: "Jesper", color: "peach" },
-    { name: "Hentoo", color: "beach" },
-    { name: "Sudo", color: "grass" },
-    { name: "Theo", color: "ocean" },
-    { name: "Jesper", color: "peach" },
-    { name: "Hentoo", color: "beach" },
-    { name: "Sudo", color: "grass" },
-    { name: "Theo", color: "ocean" },
+    { name: 'Jesper', color: 'peach' },
+    { name: 'Hentoo', color: 'beach' },
+    { name: 'Sudo', color: 'grass' },
+    { name: 'Theo', color: 'ocean' },
+    { name: 'Jesper', color: 'peach' },
+    { name: 'Hentoo', color: 'beach' },
+    { name: 'Sudo', color: 'grass' },
+    { name: 'Theo', color: 'ocean' },
   ];
 
   function onMessageReceived(event) {
-    console.log("Present word got a message");
+    console.log('Present word got a message');
 
     //Update player status from msg
 
     let eventPayload;
     try {
-      console.log("Attempting to parse: ");
+      console.log('Attempting to parse: ');
       console.log(event.data);
       eventPayload = JSON.parse(event.data.players);
     } catch (error) {
-      console.log("Could not parse JSON");
+      console.log('Could not parse JSON');
     }
     console.log(eventPayload);
   }
@@ -39,21 +38,21 @@ export function PresentWord() {
     axios
       .post(`/games/12345/`, { answer: answer })
       .then((res) => {
-        console.log("Posted answer for player");
+        console.log('Posted answer for player');
         console.log(res);
         setHasPosted(true);
       })
       .catch((err) => {
-        console.log("Failed to post answer");
+        console.log('Failed to post answer');
         console.log(err);
       });
   };
 
   function getRandomWord() {
     const words = [
-      "February",
-      "May",
-      "pneumonoultramicroscopicsilicovolcanoconiosis",
+      'February',
+      'May',
+      'pneumonoultramicroscopicsilicovolcanoconiosis',
     ];
 
     const random = Math.floor(Math.random() * words.length);
@@ -66,7 +65,7 @@ export function PresentWord() {
 
   const handleAnswerSubmit = (event) => {
     event.preventDefault();
-    console.log("Post " + event.target.answer.value + " to Server");
+    console.log('Post ' + event.target.answer.value + ' to Server');
     //postAnswer(answer);
   };
 
@@ -89,7 +88,7 @@ export function PresentWord() {
             onClick={changeWord}
           >
             {word}
-          </h1>{" "}
+          </h1>{' '}
           <Timer duration={200} />
           {!hasPosted ? (
             <form
