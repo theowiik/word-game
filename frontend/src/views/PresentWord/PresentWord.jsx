@@ -35,6 +35,11 @@ export function PresentWord() {
     console.log(eventPayload);
   }
 
+  const { readyState } = useWebSocket(process.env.NODE_ENV == "production" ? "ws:///ws/game" : "ws://localhost:8080/ws/game", {
+    onOpen: () => console.log("Connection with WebSocket opened"),
+    onMessage: (event) => onMessageReceived(event),
+  });
+
   const postAnswer = (answer) => {
     axios
       .post(`/games/12345/`, {answer: answer})

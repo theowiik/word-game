@@ -44,6 +44,44 @@ export function Lobby({ name }) {
   const colors = ['grass', 'peach'];
   const [game, setGame] = useState(null);
 
+  const lobbyState = {
+    JOIN: "JOIN",
+    CHANGE_NAME: "CHANGE_NAME",
+  };
+
+  function onMessageReceived(event) {
+    console.log("i got a message!!!!!!!");
+    fetchPlayers();
+
+    let eventPayload;
+    try {
+      console.log("Attempting to parse: ");
+      console.log(event.data); //VI FÅR EN STRÄNG HÄR! INTE ETT OBJECT
+      eventPayload = JSON.parse(event.data.players);
+    } catch (error) {
+      console.log("Could not parse JSON");
+    }
+    console.log(eventPayload);
+  }
+
+  const { sendMessage, lastMessage, readyState } = useWebSocket(
+    process.env.NODE_ENV == "production" ? "ws:///ws/players" : "ws://localhost:8080/ws/players",
+    {
+      onOpen: () => console.log("Connection with WebSocket opened"),
+      onMessage: (event) => onMessageReceived(event),
+    }
+  );
+
+  const colors = ["grass", "peach"];
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
+
   const authorizeGame = async () => {
     if (await gameExists(pin)) {
       setGameFound(true);
