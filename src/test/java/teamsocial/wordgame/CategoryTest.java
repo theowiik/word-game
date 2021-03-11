@@ -1,8 +1,6 @@
 package teamsocial.wordgame;
 
-import java.util.Arrays;
 import java.util.UUID;
-import org.hibernate.id.IdentifierGenerationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +27,10 @@ class CategoryTest {
 
   @Test
   void nameNotEmpty() {
-    var category1 = new Category("");
-    var category2 = new Category("          ");
-    var emptyCategories = Arrays.asList(category1, category2);
+    String[] illegalNames = {"", "   "};
 
-    for (var category : emptyCategories) {
+    for (var name : illegalNames) {
+      var category = new Category(name);
       Assertions.assertThrows(
           Exception.class,
           () -> categoryRepository.save(category)
