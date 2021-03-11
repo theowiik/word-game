@@ -14,8 +14,15 @@ const roundStates = {
   PRESENT_SCORE: "PRESENT_SCORE",
 };
 
+const actions = {
+  SET_GLOBAL_STATE: "SET_GLOBAL_STATE",
+  SET_PIN: "SET_PIN",
+  SET_PLAYERS: "SET_PLAYERS"
+}
+
 const initialGameState = {
   globalGameState: gameStates.OPEN_LOBBY,
+  pin: '12345',
   players: [],
 };
 
@@ -25,13 +32,19 @@ const initialRoundState = {
 
 function gameReducer(state, action) {
   switch (action.type) {
-    case "SET_GLOBAL_STATE": {
+    case actions.SET_GLOBAL_STATE: {
       return {
         ...state,
         globalGameState: action.state,
       };
     }
-    case "SET_PLAYERS": {
+    case actions.SET_PIN: {
+      return {
+        ...state,
+        pin: action.pin,
+      };
+    }
+    case actions.SET_PLAYERS: {
       return {
         ...state,
         players: action.players,
@@ -47,7 +60,7 @@ function gameReducer(state, action) {
 
 function roundReducer(state, action) {
   switch (action.type) {
-    case "SET_GLOBAL_STATE": {
+    case actions.SET_GLOBAL_STATE: {
       return {
         ...state,
         globalGameState: action.state,
@@ -69,12 +82,13 @@ export const GameProvider = (props) => {
   );
 
   const setGlobalGameState = (state) => {
-    dispatch({ type: "SET_GLOBAL_STATE", state: state });
+    dispatch({ type: actions.SET_GLOBAL_STATE, state: state });
   };
+  const setPin = (pin) => dispatch({type: actions.SET_PIN, pin: pin})
   const setPlayers = (players) =>
-    dispatch({ type: "SET_PLAYERS", players: players });
+    dispatch({ type: actions.SET_PLAYERS, players: players });
   const setGlobalRoundState = (state) => {
-    roundDispatch({ type: "SET_GLOBAL_STATE", state: state });
+    roundDispatch({ type: actions.SET_GLOBAL_STATE, state: state });
   };
 
   const value = useMemo(
@@ -82,6 +96,7 @@ export const GameProvider = (props) => {
       ...gameState,
       ...roundState,
       setGlobalGameState,
+      setPin,
       setPlayers,
       setGlobalRoundState,
     }),
