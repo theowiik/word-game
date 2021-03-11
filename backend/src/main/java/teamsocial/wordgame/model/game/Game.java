@@ -11,9 +11,9 @@ import teamsocial.wordgame.model.entity.Category;
 @Data
 public class Game implements Serializable {
 
+  private final static int ROUNDS = 3;
   @Getter(onMethod = @__(@JsonIgnore))
   private final Set<GameObserver> observers = new HashSet<>();
-  private final static int ROUNDS = 3;
   private final Category category;
   private final Set<Player> players;
   private final String pin;
@@ -30,14 +30,11 @@ public class Game implements Serializable {
   }
 
   public void startGame() {
+    currentRound.start();
   }
 
-  public void observe(GameObserver go) {
+  public void addObserver(GameObserver go) {
     observers.add(go);
-  }
-
-  public void stopObserving(GameObserver go) {
-    observers.remove(go);
   }
 
   private void nextRound() {
@@ -56,12 +53,12 @@ public class Game implements Serializable {
   }
 
   public void notifyObservers() {
-    for (GameObserver o : observers) {
+    for (var o : observers) {
       o.onGameChange();
     }
   }
 
-  private enum State {
+  public enum State {
     LOBBY, PLAYING, END
   }
 

@@ -20,7 +20,7 @@ export function PresentWord() {
   ];
 
   function onMessageReceived(event) {
-    console.log("PResent word got a message");
+    console.log("Present word got a message");
 
     //Update player status from msg
 
@@ -34,11 +34,6 @@ export function PresentWord() {
     }
     console.log(eventPayload);
   }
-
-  const { readyState } = useWebSocket("ws://localhost:8080/ws/game", {
-    onOpen: () => console.log("Connection with WebSocket opened"),
-    onMessage: (event) => onMessageReceived(event),
-  });
 
   const postAnswer = (answer) => {
     axios
