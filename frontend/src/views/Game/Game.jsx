@@ -71,12 +71,15 @@ export const Game = () => {
 
   useEffect(() => {
     checkIfGameExists();
+
+    //Test player
     setPlayers([{name: "Jesper", color: "grass"}])
 
     //Test data
     const answers = [
       { answer: 'Theo e king' },
       { answer: 'Sudo e king' },
+      { answer: 'Hentoo e king'},
       { answer: 'Jopsidop e king' },
       { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
       { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
