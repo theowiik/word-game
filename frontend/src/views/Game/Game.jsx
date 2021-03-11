@@ -1,34 +1,71 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { gameExists } from "services/database-service";
-import { GameLayout, Round, Lobby } from "components";
-import { useGame } from "contexts/game";
-import { Button } from "components/Button/Button";
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import axios from 'axios';
+import { useHistory, useParams } from 'react-router-dom';
+import { gameExists } from 'services/database-service';
+import { GameLayout, Round, Lobby, Summary, Button } from 'components';
+import { useGame } from 'contexts/game';
+import { websocketBaseUrl } from 'services/urlConstants';
+import { createStompClient } from 'services/websocketService';
+import { getRandomName } from 'lib/names';
 
-const gameStates = {
-  OPEN_LOBBY: "OPEN_LOBBY",
-  START_GAME: "START_GAME",
-  END_GAME: "END_GAME",
-};
 
-const roundStates = {
-  PRESENT_WORD_INPUT_EXPLANATION: "PRESENT_WORD_INPUT_EXPLANATION",
-  SELECT_EXPLANATION: "SELECT_EXPLANATION",
-  PRESENT_ANSWER: "PRESENT_ANSWER",
-  PRESENT_SCORE: "PRESENT_SCORE",
-};
-
-{/** Temp to trigger statechanges */}
+{
+  /** Temp to trigger statechanges */
+}
 var selectedIndex = 0;
-const tempGameStatesList = ["OPEN_LOBBY", "START_GAME", "END_GAME"]
+const tempGameStatesList = ['LOBBY', 'PLAYING', 'END'];
 var selectedRoundIndex = 0;
-const tempRoundStatesList = ["PRESENT_WORD_INPUT_EXPLANATION", "SELECT_EXPLANATION", "PRESENT_ANSWER","PRESENT_SCORE",]
-
-
+const tempRoundStatesList = [
+  'PRESENT_WORD_INPUT_EXPLANATION',
+  'SELECT_EXPLANATION',
+  'PRESENT_ANSWER',
+  'PRESENT_SCORE',
+];
+ 
 export const Game = () => {
+
+  const websocketEndpointUrl = `${websocketBaseUrl}/chat`;
+  const subscribeToEndpoint = '/topic/messages';
+
+  const joinGame = () => {
+    axios
+      .post(`/games/${pin}/join/${getRandomName()}`, {})
+      .then((res) => {
+        console.log('Joined game');
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log('Failed to join game');
+        console.log(err);
+      });
+  };
+
+  const handleOnConnected = () => {
+    joinGame()
+  }
+
+
+  const memoizedHandleMessage = useCallback(onMessageReceived, []);
+  const memoizedHandleOnConnected = useCallback(handleOnConnected, []);
+
+  const stompClient = useMemo(
+    () =>
+      createStompClient(
+        websocketEndpointUrl,
+        subscribeToEndpoint,
+        memoizedHandleMessage,
+        memoizedHandleOnConnected,
+      ),
+    [websocketEndpointUrl, subscribeToEndpoint, memoizedHandleMessage, memoizedHandleOnConnected]
+  );
+
+
+  
+
   const params = useParams();
   const pin = params.pin;
   const [gameFound, setGameFound] = useState(false);
+  const history = useHistory()
 
   const {
     globalGameState,
@@ -36,36 +73,36 @@ export const Game = () => {
     setGlobalRoundState,
     setPlayers,
     setCurrentWord,
-    setAnswers
+    setAnswers,
   } = useGame();
-
 
   const checkIfGameExists = async () => {
     if (await gameExists(pin)) {
       setGameFound(true);
     } else {
-      //history.push("/");
+      history.push("/");
     }
   };
 
-  function onMessageReceived(event) {
-    let eventPayload;
+  function onMessageReceived(message) {
+    let game;
     try {
-      console.log("Attempting to parse: ");
-      console.log(event.data);
-      eventPayload = JSON.parse(event.data);
-      
-      setGlobalGameState(eventPayload.gameState);
-      setGlobalRoundState(eventPayload.roundState);
+      console.log('Attempting to parse: ');
+      console.log(message.body);
+      game = JSON.parse(message.body);
+      console.log('RECIEVED GAMESTATE -----------')
+      console.log(game.gameState)
+      console.log(game)
+      setGlobalGameState(game.gameState);
+      setGlobalRoundState(game.roundState);
 
-      const game = eventPayload.game;
-      setPlayers(game.players)
-      setCurrentWord(game.word)
-      setAnswers(game.answers)
       
-    
+      setPlayers(game.players);
+      //setCurrentWord(game.word);
+      //setAnswers(game.answers);
+
     } catch (error) {
-      console.log("Could not parse JSON");
+      console.log('Could not parse JSON');
     }
   }
 
@@ -73,18 +110,18 @@ export const Game = () => {
     checkIfGameExists();
 
     //Test player
-    setPlayers([{name: "Jesper", color: "grass", score: 100}])
+    setPlayers([{ name: 'Jesper', color: 'grass', score: 100 }]);
 
     //Test data
     const answers = [
       { answer: 'Theo e king' },
       { answer: 'Sudo e king' },
-      { answer: 'Hentoo e king'},
+      { answer: 'Hentoo e king' },
       { answer: 'Jopsidop e king' },
       { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
       { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
     ];
-    setAnswers(answers)
+    setAnswers(answers);
     //TODO: make sure to give the context the right state from websocket on reload
   }, []);
 
@@ -92,13 +129,31 @@ export const Game = () => {
     <GameLayout>
       {
         {
-          OPEN_LOBBY: <Lobby />,
-          START_GAME: <Round />,
-          END_GAME: <h1>Game ended</h1>,
+          LOBBY: <Lobby />,
+          PLAYING: <Round />,
+          END: <Summary />,
         }[globalGameState]
       }
-      <Button onClick={() => setGlobalGameState(tempGameStatesList[selectedIndex++ % tempGameStatesList.length])} label='Byt gamestate' secondary />
-      <Button onClick={() => setGlobalRoundState(tempRoundStatesList[selectedRoundIndex++ % tempRoundStatesList.length])} label='Byt roundstate' secondary />
+      <Button
+        onClick={() =>
+          setGlobalGameState(
+            tempGameStatesList[selectedIndex++ % tempGameStatesList.length]
+          )
+        }
+        label="Byt gamestate"
+        secondary
+      />
+      <Button
+        onClick={() =>
+          setGlobalRoundState(
+            tempRoundStatesList[
+              selectedRoundIndex++ % tempRoundStatesList.length
+            ]
+          )
+        }
+        label="Byt roundstate"
+        secondary
+      />
     </GameLayout>
   );
 };
