@@ -11,3 +11,4 @@ export * from "./Navbar";
 export * from "./PresentAnswers";
 export * from "./PresentAnswerTile";
 export * from "./Timer";
+export * from './PresentWord';
