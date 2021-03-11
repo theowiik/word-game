@@ -10,5 +10,6 @@ export * from "./UserTile";
 export * from "./Navbar";
 export * from "./PresentAnswers";
 export * from "./PresentAnswerTile";
+export * from "./PresentScore";
 export * from "./Timer";
 export * from './PresentWord';

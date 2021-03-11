@@ -73,7 +73,7 @@ export const Game = () => {
     checkIfGameExists();
 
     //Test player
-    setPlayers([{name: "Jesper", color: "grass"}])
+    setPlayers([{name: "Jesper", color: "grass", score: 100}])
 
     //Test data
     const answers = [

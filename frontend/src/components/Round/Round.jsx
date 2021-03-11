@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGame } from 'contexts/game';
-import { PresentAnswers, PresentWord } from 'components';
+import { PresentAnswers, PresentWord, PresentScore } from 'components';
 import { UserTile } from 'components/UserTile/UserTile';
 
 export const Round = () => {
@@ -23,7 +23,7 @@ export const Round = () => {
             PRESENT_WORD_INPUT_EXPLANATION: <PresentWord />,
             SELECT_EXPLANATION: <PresentAnswers />,
             PRESENT_ANSWER: <h1>PRESENT_ANSWER</h1>,
-            PRESENT_SCORE: <h1>PRESENT_SCORE</h1>,
+            PRESENT_SCORE: <PresentScore />,
           }[globalRoundState]
         }
       </div>
