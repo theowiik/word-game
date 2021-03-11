@@ -13,3 +13,4 @@ export * from "./PresentAnswerTile";
 export * from "./PresentScore";
 export * from "./Timer";
 export * from './PresentWord';
+export * from './Summary'
