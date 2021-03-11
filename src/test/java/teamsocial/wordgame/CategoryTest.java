@@ -35,12 +35,13 @@ class CategoryTest {
           Exception.class,
           () -> categoryRepository.save(category)
       );
+
     }
   }
 
   @Test
   void nameUnique() {
-    var notUniqueName = UUID.randomUUID().toString();
+    var notUniqueName = createUnusedName();
 
     var category1 = new Category(notUniqueName);
     var category2 = new Category(notUniqueName);
@@ -50,5 +51,9 @@ class CategoryTest {
 
     Assert.notNull(saved1, "Category one should be successfully saved");
     Assert.isNull(saved2, "Category two should not be able to be saved");
+  }
+
+  private String createUnusedName() {
+    return UUID.randomUUID().toString().replace("-", "");
   }
 }

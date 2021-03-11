@@ -60,15 +60,15 @@ class GameTest {
   }
 
   private Category createNewUniqueCategoryWithWords() {
-    var category = new Category(getUuid());
+    var category = new Category(createUnusedName());
 
-    var word = new Word(getUuid(), getUuid(), category);
+    var word = new Word(createUnusedName(), createUnusedName(), category);
     category.setWords(new ArrayList<>(Arrays.asList(word)));
 
     return category;
   }
 
-  private String getUuid() {
-    return UUID.randomUUID().toString();
+  private String createUnusedName() {
+    return UUID.randomUUID().toString().replace("-", "");
   }
 }
