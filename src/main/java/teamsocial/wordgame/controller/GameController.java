@@ -73,7 +73,6 @@ public class GameController implements Serializable {
       System.out.println("GAMMAL SPELARE");
     }
 
-
     game.blablabla();
 
     return ResponseEntity.ok().build();

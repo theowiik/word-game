@@ -1,15 +1,15 @@
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
-export const createStompClient = (endpoint, subscribeTo, handleMessage, handleOnConnected) => {
+export const createStompClient = (endpoint, subscribeTo, messageCallback, connectCallback) => {
   const socket = new SockJS(endpoint);
   const stompClient = Stomp.over(socket);
 
   try {
     stompClient.connect({}, (frame) => {
       console.log("Connected: " + frame);
-      stompClient.subscribe(subscribeTo, handleMessage);
-      handleOnConnected()
+      stompClient.subscribe(subscribeTo, messageCallback);
+      connectCallback()
     });
     return stompClient;
   } catch (error) {

@@ -1,13 +1,12 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import axios from 'axios';
+import { Button, GameLayout, Lobby, Round, Summary } from 'components';
+import { useGame } from 'contexts/game';
+import { getRandomName } from 'lib/names';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { gameExists } from 'services/database-service';
-import { GameLayout, Round, Lobby, Summary, Button } from 'components';
-import { useGame } from 'contexts/game';
 import { websocketBaseUrl } from 'services/urlConstants';
 import { createStompClient } from 'services/websocketService';
-import { getRandomName } from 'lib/names';
-
 
 {
   /** Temp to trigger statechanges */
@@ -21,13 +20,16 @@ const tempRoundStatesList = [
   'PRESENT_ANSWER',
   'PRESENT_SCORE',
 ];
- 
-export const Game = () => {
 
+export const Game = () => {
   const websocketEndpointUrl = `${websocketBaseUrl}/chat`;
   const subscribeToEndpoint = '/topic/messages';
 
   const joinGame = () => {
+    console.log(
+      '---------------------------------- JDSSDSDAOINING GAME ----------------------'
+    );
+
     axios
       .post(`/games/${pin}/join/${getRandomName()}`, {})
       .then((res) => {
@@ -40,32 +42,53 @@ export const Game = () => {
       });
   };
 
-  const handleOnConnected = () => {
-    joinGame()
-  }
+  const connectedCallback = () => {
+    joinGame();
+  };
 
+  const messageCallback = (message) => {
+    let game;
+    try {
+      console.log('Attempting to parse: ');
+      console.log(message.body);
+      game = JSON.parse(message.body);
+      console.log('RECIEVED GAMESTATE -----------');
+      console.log(game.gameState);
+      console.log(game);
+      setGlobalGameState(game.gameState);
+      setGlobalRoundState(game.roundState);
 
-  const memoizedHandleMessage = useCallback(onMessageReceived, []);
-  const memoizedHandleOnConnected = useCallback(handleOnConnected, []);
+      setPlayers(game.players);
+      //setCurrentWord(game.word);
+      //setAnswers(game.answers);
+    } catch (error) {
+      console.log('Could not parse JSON');
+    }
+  };
 
-  const stompClient = useMemo(
-    () =>
-      createStompClient(
-        websocketEndpointUrl,
-        subscribeToEndpoint,
-        memoizedHandleMessage,
-        memoizedHandleOnConnected,
-      ),
-    [websocketEndpointUrl, subscribeToEndpoint, memoizedHandleMessage, memoizedHandleOnConnected]
-  );
+  const memoizedMessageCallback = useCallback(messageCallback, []);
+  const memoizedConnectedCallback = useCallback(connectedCallback, []);
 
+  const stompClient = useMemo(() => {
+    createStompClient(
+      websocketEndpointUrl,
+      subscribeToEndpoint,
+      memoizedMessageCallback,
+      memoizedConnectedCallback
+    );
 
-  
+    console.log('CREATED ONE STOMP CLIENT');
+  }, [
+    websocketEndpointUrl,
+    subscribeToEndpoint,
+    memoizedMessageCallback,
+    memoizedConnectedCallback,
+  ]);
 
   const params = useParams();
   const pin = params.pin;
   const [gameFound, setGameFound] = useState(false);
-  const history = useHistory()
+  const history = useHistory();
 
   const {
     globalGameState,
@@ -80,31 +103,9 @@ export const Game = () => {
     if (await gameExists(pin)) {
       setGameFound(true);
     } else {
-      history.push("/");
+      history.push('/');
     }
   };
-
-  function onMessageReceived(message) {
-    let game;
-    try {
-      console.log('Attempting to parse: ');
-      console.log(message.body);
-      game = JSON.parse(message.body);
-      console.log('RECIEVED GAMESTATE -----------')
-      console.log(game.gameState)
-      console.log(game)
-      setGlobalGameState(game.gameState);
-      setGlobalRoundState(game.roundState);
-
-      
-      setPlayers(game.players);
-      //setCurrentWord(game.word);
-      //setAnswers(game.answers);
-
-    } catch (error) {
-      console.log('Could not parse JSON');
-    }
-  }
 
   useEffect(() => {
     checkIfGameExists();
