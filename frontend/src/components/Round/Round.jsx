@@ -1,5 +1,6 @@
 import React from "react";
 import { useGame } from "contexts/game";
+import { PresentAnswers } from 'components'
 
 export const Round = () => {
   const { players, globalRoundState } = useGame();
@@ -14,8 +15,8 @@ export const Round = () => {
       {
         {
           PRESENT_WORD_INPUT_EXPLANATION: <h1>PRESENT_WORD_INPUT_EXPLANATION</h1>,
-          SELECT_EXPLANATION: <h1>SELECT_EXPLANATION</h1>,
-          PRESENT_ANSWER: <h1>PRESENT_ANSWER</h1>,
+          SELECT_EXPLANATION: <PresentAnswers />,
+          PRESENT_ANSWER: <h1>Present answer</h1>,
           PRESENT_SCORE: <h1>PRESENT_SCORE</h1>,
         }[globalRoundState]
       }

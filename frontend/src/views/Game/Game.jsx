@@ -3,12 +3,18 @@ import { useParams, useHistory } from "react-router-dom";
 import { gameExists } from "services/database-service";
 import { GameLayout, Round, Lobby } from "components";
 import { useGame } from "contexts/game";
+import { Button } from "components/Button/Button";
 
 const gameStates = {
   OPEN_LOBBY: "OPEN_LOBBY",
   START_GAME: "START_GAME",
   END_GAME: "END_GAME",
 };
+
+var selectedIndex = 0;
+const tempGameStatesList = ["OPEN_LOBBY", "START_GAME", "END_GAME"]
+var selectedRoundIndex = 0;
+const tempRoundStatesList = ["PRESENT_WORD_INPUT_EXPLANATION", "SELECT_EXPLANATION", "PRESENT_ANSWER","PRESENT_SCORE",]
 
 const roundStates = {
   PRESENT_WORD_INPUT_EXPLANATION: "PRESENT_WORD_INPUT_EXPLANATION",
@@ -25,6 +31,7 @@ export const Game = () => {
   const {
     globalGameState,
     setGlobalGameState,
+    setGlobalRoundState,
     players,
     setPlayers,
   } = useGame();
@@ -66,6 +73,8 @@ export const Game = () => {
           END_GAME: <h1>Game ended</h1>,
         }[globalGameState]
       }
+      <Button onClick={() => setGlobalGameState(tempGameStatesList[selectedIndex++ % tempGameStatesList.length])} label='Byt gamestate' secondary />
+      <Button onClick={() => setGlobalRoundState(tempRoundStatesList[selectedRoundIndex++ % tempRoundStatesList.length])} label='Byt roundstate' secondary />
     </GameLayout>
   );
 };
