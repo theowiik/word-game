@@ -26,6 +26,11 @@ public class Round implements Serializable {
     this.roundChangedImpl = roundChangedImpl;
     var rand = new java.util.Random();
     var words = category.getWords();
+
+    if (words == null || words.isEmpty()) {
+      throw new IllegalStateException("Can not start a game with a category with no words");
+    }
+
     word = words.get(rand.nextInt(words.size()));
     explanations = new HashMap<>();
   }
