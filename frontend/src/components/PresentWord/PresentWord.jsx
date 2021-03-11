@@ -54,17 +54,9 @@ export const PresentWord = () => {
     //postAnswer(answer);
   };
   return (
-    <div className="dark:bg-gray-800 w-full min-h-screen dark:text-white py-40">
+    
       <div className="h-full flex flex-col sm:flex-row">
-        {/* PLAYER LIST */}
-        <div className="h-10 sm:h-screen w-72  justify-center">
-          <p className="ml-5">{`6/${players.length} har svarat`}</p>
-          <div className="invisible sm:visible">
-            {players.map((player) => {
-              return <UserTile name={player.name} color={player.color} />;
-            })}
-          </div>
-        </div>
+     
         {/* WORD */}
         <div className="h-screen w-full px-5 sm:px-20">
           <h1
@@ -94,6 +86,6 @@ export const PresentWord = () => {
           )}
         </div>
       </div>
-    </div>
+  
   );
 };
