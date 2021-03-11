@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export function PresentAnswerTile({ answer }) {
+export function PresentAnswerTile({ answer , onClick}) {
   const [isChosen, setChosen] = useState(false);
 
   function handleSetChosen() {
