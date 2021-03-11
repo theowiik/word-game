@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 const GameContext = React.createContext();
 
 const gameStates = {
-  OPEN_LOBBY: 'OPEN_LOBBY',
-  START_GAME: 'START_GAME',
-  END_GAME: 'END_GAME',
+  OPEN_LOBBY: 'LOBBY',
+  START_GAME: 'PLAYING',
+  END_GAME: 'END',
 };
 
 const roundStates = {
