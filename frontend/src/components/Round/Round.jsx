@@ -1,6 +1,6 @@
 import React from "react";
 import { useGame } from "contexts/game";
-import { PresentAnswers } from 'components'
+import { PresentAnswers, PresentWord } from 'components'
 
 export const Round = () => {
   const { players, globalRoundState } = useGame();
