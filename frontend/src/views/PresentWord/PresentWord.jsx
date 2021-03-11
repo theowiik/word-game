@@ -1,58 +1,58 @@
-import axios from "axios";
-import { Button, UserTile } from "components";
-import React, { useEffect, useState } from "react";
+import axios from 'axios';
+import { Button, UserTile, Timer } from 'components';
+import React, { useState } from 'react';
 
 export function PresentWord() {
-  const [word, setWord] = useState("DEFAULTWORD");
-  const [progress, setProgress] = useState(100);
+  const [word, setWord] = useState('DEFAULTWORD');
+
   const [hasPosted, setHasPosted] = useState(false);
 
   const players = [
-    { name: "Jesper", color: "peach" },
-    { name: "Hentoo", color: "beach" },
-    { name: "Sudo", color: "grass" },
-    { name: "Theo", color: "ocean" },
-    { name: "Jesper", color: "peach" },
-    { name: "Hentoo", color: "beach" },
-    { name: "Sudo", color: "grass" },
-    { name: "Theo", color: "ocean" },
+    { name: 'Jesper', color: 'peach' },
+    { name: 'Hentoo', color: 'beach' },
+    { name: 'Sudo', color: 'grass' },
+    { name: 'Theo', color: 'ocean' },
+    { name: 'Jesper', color: 'peach' },
+    { name: 'Hentoo', color: 'beach' },
+    { name: 'Sudo', color: 'grass' },
+    { name: 'Theo', color: 'ocean' },
   ];
 
   function onMessageReceived(event) {
-    console.log("Present word got a message");
+    console.log('Present word got a message');
 
     //Update player status from msg
 
     let eventPayload;
     try {
-      console.log("Attempting to parse: ");
+      console.log('Attempting to parse: ');
       console.log(event.data);
       eventPayload = JSON.parse(event.data.players);
     } catch (error) {
-      console.log("Could not parse JSON");
+      console.log('Could not parse JSON');
     }
     console.log(eventPayload);
   }
 
   const postAnswer = (answer) => {
     axios
-      .post(`/games/12345/`, {answer: answer})
+      .post(`/games/12345/`, { answer: answer })
       .then((res) => {
-        console.log("Posted answer for player");
+        console.log('Posted answer for player');
         console.log(res);
         setHasPosted(true);
       })
       .catch((err) => {
-        console.log("Failed to post answer");
+        console.log('Failed to post answer');
         console.log(err);
       });
   };
 
   function getRandomWord() {
     const words = [
-      "February",
-      "May",
-      "pneumonoultramicroscopicsilicovolcanoconiosis",
+      'February',
+      'May',
+      'pneumonoultramicroscopicsilicovolcanoconiosis',
     ];
 
     const random = Math.floor(Math.random() * words.length);
@@ -63,21 +63,9 @@ export function PresentWord() {
     setWord(getRandomWord().toUpperCase());
   };
 
-  const sessionStart = (interval) => {
-    interval = setInterval(() => {
-      setProgress((progress) => progress - 1);
-    }, 200);
-  };
-
-  useEffect(() => {
-    let interval;
-    sessionStart(interval);
-    return () => clearInterval(interval);
-  }, []);
-
   const handleAnswerSubmit = (event) => {
     event.preventDefault();
-    console.log("Post " + event.target.answer.value + " to Server");
+    console.log('Post ' + event.target.answer.value + ' to Server');
     //postAnswer(answer);
   };
 
@@ -100,14 +88,9 @@ export function PresentWord() {
             onClick={changeWord}
           >
             {word}
-          </h1>{" "}
-          <div className="w-full overflow-hidden h-6 mb-4 text-xs flex rounded-full bg-green-100">
-            <div
-              style={{ width: `${progress}%` }}
-              className="transition-all ease-linear duration-200 shadow-none whitespace-nowrap text-white justify-center bg-green-500"
-            ></div>
-          </div>
-          {!hasPosted || progress == 0 ? (
+          </h1>{' '}
+          <Timer duration={200} />
+          {!hasPosted ? (
             <form
               onSubmit={handleAnswerSubmit}
               className="flex flex-col w-full"

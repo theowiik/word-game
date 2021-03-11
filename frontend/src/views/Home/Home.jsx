@@ -1,7 +1,7 @@
 import { Button, Input, Logo } from "components";
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { gameExists } from 'services/database-service';
+import { gameExists } from "services/database-service";
 
 
 export function Home() {
@@ -29,7 +29,7 @@ export function Home() {
   return (
     <div className="w-full h-screen bg-white dark:bg-gray-800 flex justify-center items-center">
       <div className="flex flex-col items-center">
-        <Logo />
+        <Logo height="139" width="342" />
 
         {message && (
           <div className="h-10 bg-red-700 bg-opacity-50 text-white w-full mb-4 flex items-center justify-center rounded-lg">
