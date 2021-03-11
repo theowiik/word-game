@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { gameExists } from "services/database-service";
-import { GameLayout, Round } from "components";
+import { GameLayout, Round, Lobby } from "components";
 import { useGame } from "contexts/game";
 
 const gameStates = {
@@ -21,7 +21,6 @@ export const Game = () => {
   const params = useParams();
   const pin = params.pin;
   const [gameFound, setGameFound] = useState(false);
-  
 
   const {
     globalGameState,
@@ -62,11 +61,7 @@ export const Game = () => {
     <GameLayout>
       {
         {
-          OPEN_LOBBY: (
-            <h1 onClick={() => setGlobalGameState(gameStates.START_GAME)}>
-              Lobby
-            </h1>
-          ),
+          OPEN_LOBBY: <Lobby />,
           START_GAME: <Round />,
           END_GAME: <h1>Game ended</h1>,
         }[globalGameState]
