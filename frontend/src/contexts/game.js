@@ -19,6 +19,7 @@ const actions = {
   SET_PIN: 'SET_PIN',
   SET_PLAYERS: 'SET_PLAYERS',
   SET_CURRENT_WORD: 'SET_CURRENT_WORD',
+  SET_ANSWERS: 'SET_ANSWERS'
 };
 
 const initialGameState = {
@@ -29,7 +30,8 @@ const initialGameState = {
 
 const initialRoundState = {
   globalRoundState: roundStates.PRESENT_WORD_INPUT_EXPLANATION,
-  currentWord: '',
+  currentWord: 'Default',
+  answers: []
 };
 
 function gameReducer(state, action) {
@@ -74,6 +76,12 @@ function roundReducer(state, action) {
         currentWord: action.word,
       };
     }
+    case actions.SET_ANSWERS: {
+      return {
+        ...state,
+        answers: action.answers,
+      };
+    }
     default: {
       return {
         ...state,
@@ -101,6 +109,7 @@ export const GameProvider = (props) => {
   const setCurrentword = (word) => {
     roundDispatch({ type: actions.SET_CURRENT_WORD, word: word });
   };
+  const setAnswers = (answers) => roundDispatch({type: actions.SET_ANSWERS, answers: answers})
 
   const value = useMemo(
     () => ({
@@ -110,7 +119,8 @@ export const GameProvider = (props) => {
       setPin,
       setPlayers,
       setGlobalRoundState,
-      setCurrentword
+      setCurrentword,
+      setAnswers
     }),
     [gameState, roundState]
   );

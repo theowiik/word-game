@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { gameExists } from "services/database-service";
 import { GameLayout, Round, Lobby } from "components";
 import { useGame } from "contexts/game";
@@ -11,17 +11,19 @@ const gameStates = {
   END_GAME: "END_GAME",
 };
 
-var selectedIndex = 0;
-const tempGameStatesList = ["OPEN_LOBBY", "START_GAME", "END_GAME"]
-var selectedRoundIndex = 0;
-const tempRoundStatesList = ["PRESENT_WORD_INPUT_EXPLANATION", "SELECT_EXPLANATION", "PRESENT_ANSWER","PRESENT_SCORE",]
-
 const roundStates = {
   PRESENT_WORD_INPUT_EXPLANATION: "PRESENT_WORD_INPUT_EXPLANATION",
   SELECT_EXPLANATION: "SELECT_EXPLANATION",
   PRESENT_ANSWER: "PRESENT_ANSWER",
   PRESENT_SCORE: "PRESENT_SCORE",
 };
+
+{/** Temp to trigger statechanges */}
+var selectedIndex = 0;
+const tempGameStatesList = ["OPEN_LOBBY", "START_GAME", "END_GAME"]
+var selectedRoundIndex = 0;
+const tempRoundStatesList = ["PRESENT_WORD_INPUT_EXPLANATION", "SELECT_EXPLANATION", "PRESENT_ANSWER","PRESENT_SCORE",]
+
 
 export const Game = () => {
   const params = useParams();
@@ -32,11 +34,11 @@ export const Game = () => {
     globalGameState,
     setGlobalGameState,
     setGlobalRoundState,
-    players,
     setPlayers,
+    setCurrentWord,
+    setAnswers
   } = useGame();
 
-  const history = useHistory();
 
   const checkIfGameExists = async () => {
     if (await gameExists(pin)) {
@@ -52,8 +54,16 @@ export const Game = () => {
       console.log("Attempting to parse: ");
       console.log(event.data);
       eventPayload = JSON.parse(event.data);
-      const currentState = eventPayload.state;
-      setGlobalGameState(currentState);
+      
+      setGlobalGameState(eventPayload.gameState);
+      setGlobalRoundState(eventPayload.roundState);
+
+      const game = eventPayload.game;
+      setPlayers(game.players)
+      setCurrentWord(game.word)
+      setAnswers(game.answers)
+      
+    
     } catch (error) {
       console.log("Could not parse JSON");
     }
@@ -61,6 +71,17 @@ export const Game = () => {
 
   useEffect(() => {
     checkIfGameExists();
+    setPlayers([{name: "Jesper", color: "grass"}])
+
+    //Test data
+    const answers = [
+      { answer: 'Theo e king' },
+      { answer: 'Sudo e king' },
+      { answer: 'Jopsidop e king' },
+      { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
+      { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
+    ];
+    setAnswers(answers)
     //TODO: make sure to give the context the right state from websocket on reload
   }, []);
 
