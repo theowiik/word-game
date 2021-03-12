@@ -9,7 +9,7 @@ import teamsocial.wordgame.model.game.Player;
 @Data
 @SessionScope
 @Component
-public class PlayerManagerBean implements Serializable {
+public class UserBean implements Serializable {
 
   private Player player;
 }

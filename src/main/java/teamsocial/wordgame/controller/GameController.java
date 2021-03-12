@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.server.ResponseStatusException;
 import teamsocial.wordgame.model.GameManagerBean;
-import teamsocial.wordgame.model.PlayerManagerBean;
+import teamsocial.wordgame.model.UserBean;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.model.game.Player;
 
@@ -25,7 +25,7 @@ public class GameController implements Serializable {
   private GameManagerBean gameManager;
 
   @Autowired
-  private PlayerManagerBean playerManager;
+  private UserBean userBean;
 
   @PostMapping("/{category}")
   public Game create(@PathVariable("category") String category) {
@@ -45,7 +45,7 @@ public class GameController implements Serializable {
   ) {
     try {
       var game = getGame(pin);
-      game.setExplanation(playerManager.getPlayer(), description);
+      game.setExplanation(userBean.getPlayer(), description);
       return ResponseEntity.ok().build();
     } catch (IllegalStateException e) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not save explanation");
@@ -59,10 +59,10 @@ public class GameController implements Serializable {
   ) {
     var game = getGame(pin);
 
-    if (playerManager.getPlayer() == null) {
+    if (userBean.getPlayer() == null) {
       System.out.println("NY SPELARE");
-      playerManager.setPlayer(new Player(name));
-      game.addPlayer(playerManager.getPlayer());
+      userBean.setPlayer(new Player(name));
+      game.addPlayer(userBean.getPlayer());
     } else {
       System.out.println("GAMMAL SPELARE");
     }
@@ -92,4 +92,5 @@ public class GameController implements Serializable {
 
     return game;
   }
+
 }
