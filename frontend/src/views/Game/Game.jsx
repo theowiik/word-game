@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Button, GameLayout, Lobby, Summary } from 'components';
+import { Button, GameLayout, Lobby, Summary, Round } from 'components';
 import { useGame } from 'contexts/game';
 import { getRandomName } from 'lib/names';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -135,6 +135,8 @@ export const Game = () => {
           return <Lobby />;
         } else if (globalGameState == 'END') {
           return <Summary />;
+        } else {
+          return <Round />
         }
       })()}
       <Button
