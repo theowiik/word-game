@@ -74,8 +74,6 @@ public class GameController implements Serializable {
       System.out.println("GAMMAL SPELARE");
     }
 
-    game.notifyGameChangedObservers();
-
     return ResponseEntity.ok().build();
   }
 

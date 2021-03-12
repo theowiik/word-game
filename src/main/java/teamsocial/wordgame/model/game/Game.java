@@ -113,7 +113,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     notifyGameChangedObservers();
   }
 
-  public void notifyGameChangedObservers() {
+  private void notifyGameChangedObservers() {
     for (var o : observers) {
       o.onGameChange();
     }
