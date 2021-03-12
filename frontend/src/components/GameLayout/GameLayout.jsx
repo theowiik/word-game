@@ -12,15 +12,11 @@ export const GameLayout = ({ children }) => {
         setLabel("Lobby");
         break;
 
-      case "PLAYING":
-        setLabel("");
-        break;
-
       case "END":
         setLabel("Summary");
         break;
       default:
-        setLabel("Rappakalja");
+        setLabel("");
         break;
     }
   }, [globalGameState]);
