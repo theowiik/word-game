@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import lombok.Data;
@@ -19,7 +21,8 @@ import teamsocial.wordgame.model.entity.Word;
 public class Round implements Serializable {
 
   private Word word;
-  private Map<Player, String> explanations;
+  private Map<Player, String> explanations; // The explanations the players come up with
+  private Map<Player, String> chosenExplanations; // The explanation the players think is the correct answer
   private State state;
   @Getter(onMethod = @__(@JsonIgnore))
   private RoundChanged roundChangedImpl;
@@ -40,6 +43,7 @@ public class Round implements Serializable {
   }
 
   public interface RoundFinishedListeners {
+
     void roundChanged();
   }
 
@@ -62,6 +66,37 @@ public class Round implements Serializable {
     }
     explanations.put(player, description);
   }
+
+
+  public String correctAnswer(){
+    return word.getDescription();
+  }
+
+
+  /**
+   *
+   * @return The list of players who guessed correctly
+   */
+
+  public Set<Player> correctPlayers() {
+    var correctExplanation = this.word.getDescription();
+    Set<Player> correctPlayers = new HashSet<>();
+    for(Map.Entry<Player, String> e : chosenExplanations.entrySet()){
+      if(e.getValue().equals(correctAnswer())){
+        correctPlayers.add(e.getKey());
+      }
+    }
+    return correctPlayers;
+  }
+
+  public void setChosenExplanation(Player player, String chosenExplanation) {
+    if (state != State.SELECT_EXPLANATION
+    ) {
+      throw new IllegalStateException();
+    }
+    chosenExplanations.put(player, chosenExplanation);
+  }
+
 
   private boolean validDescription(String string) {
 
