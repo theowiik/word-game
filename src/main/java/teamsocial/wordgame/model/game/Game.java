@@ -2,8 +2,12 @@ package teamsocial.wordgame.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -34,12 +38,13 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
       throw new IllegalArgumentException("Invalid pin, must be 5 integer");
     }
 
+    rounds = new ArrayList<>();
     observers = new HashSet<>();
     this.category = category;
     state = State.LOBBY;
-    nextRound();
     players = new HashSet<>();
     this.pin = pin;
+    nextRound();
   }
 
   /**
@@ -57,16 +62,18 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     return pin.matches(regexString);
   }
 
-  public Map<Player, Integer> getPlayerScores(){
+  public Map<Player, Integer> getPlayerScores() {
     Map<Player, Integer> scores = new HashMap<>();
-    for(Player player : this.players){
+    for (var player : this.players) {
       scores.put(player, 0);
     }
-    for(Round round : this.rounds){
-      for(Player player : round.correctPlayers()) {
+
+    for (var round : this.rounds) {
+      for (var player : round.correctPlayers()) {
         scores.put(player, scores.get(player) + 1);
       }
     }
+
     return scores;
   }
 
