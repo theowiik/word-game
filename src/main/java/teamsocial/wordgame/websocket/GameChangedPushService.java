@@ -16,12 +16,8 @@ public class GameChangedPushService implements Game.GameObserver {
   private GameManagerBean gameManager;
 
   @Override
-  public void onGameChange() {
-    var game = gameManager.getGame("12345");
-
-    simpMessagingTemplate.convertAndSend(
-        "/topic/messages",
-        new GameResponse(game)
-    );
+  public void onGameChange(Game game) {
+    var pin = game.getPin();
+    simpMessagingTemplate.convertAndSend("/topic/messages/" + pin, new GameResponse(game));
   }
 }
