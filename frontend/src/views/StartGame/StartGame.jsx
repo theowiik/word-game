@@ -22,8 +22,11 @@ export function StartGame() {
     event.preventDefault();
     const chosenCategory = event.target.category.value;
     console.log(chosenCategory);
+
+    const form = new FormData();
+    form.append('category', chosenCategory) 
     //Post start game with new pin
-    Axios.post(`/games/${chosenCategory}`, {})
+    Axios.post(`/games/`, form)
       .then((res) => {
         console.log('Created a new game with category ' + chosenCategory);
         console.log(res);

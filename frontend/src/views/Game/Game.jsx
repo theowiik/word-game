@@ -24,8 +24,10 @@ export const Game = () => {
       '---------------------------------- JDSSDSDAOINING GAME ----------------------'
     );
 
+    const form = new FormData();
+    form.append('name', getRandomName()) 
     axios
-      .post(`/games/${pin}/join/${getRandomName()}`, {})
+      .post(`/games/${pin}/join/`, form)
       .then((res) => {
         console.log('Joined game');
         console.log(res);

@@ -9,7 +9,11 @@ export const PresentWord = () => {
   const { currentWord, pin } = useGame();
 
   const postAnswer = (answer) => {
-    axios.post(`/games/${pin}/answer/${answer}`, {}).then((res) => {
+
+    const form = new FormData();
+    form.append('answer', answer) 
+
+    axios.post(`/games/${pin}/answer`, form).then((res) => {
       console.log('Answer submitted');
       console.log(res);
     }).catch((err) => {

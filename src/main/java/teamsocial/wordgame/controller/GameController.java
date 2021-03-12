@@ -4,11 +4,7 @@ import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.server.ResponseStatusException;
 import teamsocial.wordgame.model.GameManagerBean;
@@ -27,8 +23,8 @@ public class GameController implements Serializable {
   @Autowired
   private UserBean userBean;
 
-  @PostMapping("/{category}")
-  public Game create(@PathVariable("category") String category) {
+  @PostMapping("/")
+  public Game create(@RequestParam("category") String category) {
     return gameManager.createGame(category);
   }
 
@@ -38,10 +34,10 @@ public class GameController implements Serializable {
     return ResponseEntity.ok(game);
   }
 
-  @PostMapping("/{pin}/answer/{description}")
+  @PostMapping("/{pin}/answer")
   public ResponseEntity setAnswer(
       @PathVariable("pin") String pin,
-      @PathVariable("description") String description
+      @RequestParam("description") String description
   ) {
     try {
       var game = getGame(pin);
@@ -52,10 +48,10 @@ public class GameController implements Serializable {
     }
   }
 
-  @PostMapping("/{pin}/join/{name}")
+  @PostMapping("/{pin}/join/")
   public ResponseEntity joinGame(
       @PathVariable("pin") String pin,
-      @PathVariable("name") String name
+      @RequestParam("name") String name
   ) {
     var game = getGame(pin);
 
