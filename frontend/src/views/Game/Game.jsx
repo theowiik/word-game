@@ -52,6 +52,7 @@ export const Game = () => {
       setGlobalGameState(game.state);
       setPlayers(game.players);
       setCurrentWord(game.word);
+      setCorrectAnswer(game.correctAnswer)
       //setAnswers(game.answers);
     } catch (error) {
       console.log('Could not parse JSON');
@@ -85,6 +86,7 @@ export const Game = () => {
     setGlobalGameState,
     setPlayers,
     setCurrentWord,
+    setCorrectAnswer,
     setAnswers,
     setPin,
   } = useGame();

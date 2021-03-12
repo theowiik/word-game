@@ -16,6 +16,7 @@ const actions = {
   SET_PLAYERS: 'SET_PLAYERS',
   SET_CURRENT_WORD: 'SET_CURRENT_WORD',
   SET_ANSWERS: 'SET_ANSWERS',
+  SET_CORRECT_ANSWER: 'SET_CORRECT_ANSWER',
 };
 
 const initialState = {
@@ -23,6 +24,7 @@ const initialState = {
   pin: '12345',
   players: [],
   currentWord: 'Default',
+  correctAnswer: '',
   answers: [],
 };
 
@@ -52,6 +54,12 @@ function reducer(state, action) {
         currentWord: action.word,
       };
     }
+    case actions.SET_CORRECT_ANSWER: {
+      return {
+        ...state,
+        correctAnswer: action.description,
+      };
+    }
     case actions.SET_ANSWERS: {
       return {
         ...state,
@@ -70,9 +78,9 @@ export const GameProvider = (props) => {
   const [gameState, dispatch] = React.useReducer(reducer, initialState);
 
   const setGlobalGameState = (state) => {
-    console.log("im here!!!!!");
+    console.log('im here!!!!!');
     dispatch({ type: actions.SET_GLOBAL_STATE, state: state });
-  }
+  };
 
   const setPin = (pin) => dispatch({ type: actions.SET_PIN, pin: pin });
 
@@ -81,6 +89,9 @@ export const GameProvider = (props) => {
 
   const setCurrentWord = (word) =>
     dispatch({ type: actions.SET_CURRENT_WORD, word: word });
+
+  const setCorrectAnswer = (description) =>
+    dispatch({ type: actions.SET_CORRECT_ANSWER, description: description });
 
   const setAnswers = (answers) =>
     dispatch({ type: actions.SET_ANSWERS, answers: answers });
@@ -92,6 +103,7 @@ export const GameProvider = (props) => {
       setPin,
       setPlayers,
       setCurrentWord,
+      setCorrectAnswer,
       setAnswers,
     }),
     [gameState]
