@@ -21,12 +21,35 @@ public class Game implements Serializable {
   private int round;
   private Round currentRound;
 
+  /**
+   * @param category the category for the game.
+   * @param pin      the pin for the game. Must be 5 numbers without any whitespaces.
+   */
   public Game(Category category, String pin) {
+    if (!validPin(pin)) {
+      throw new IllegalArgumentException("Invalid pin, must be 5 integer");
+    }
+
     this.category = category;
     state = State.LOBBY;
     nextRound();
     players = new HashSet<>();
     this.pin = pin;
+  }
+
+  /**
+   * Checks whether the pin is five numbers without any whitespaces.
+   *
+   * @param pin the pin to check.
+   * @return true if it matches.
+   */
+  private boolean validPin(String pin) {
+    if (pin == null || pin.isEmpty()) {
+      return false;
+    }
+
+    var regexString = "[\\d]{5}";
+    return pin.matches(regexString);
   }
 
   public void startGame() {
