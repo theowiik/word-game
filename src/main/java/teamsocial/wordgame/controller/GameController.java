@@ -73,7 +73,7 @@ public class GameController implements Serializable {
       System.out.println("GAMMAL SPELARE");
     }
 
-    game.blablabla();
+    game.notifyGameChangedObservers();
 
     return ResponseEntity.ok().build();
   }
@@ -86,7 +86,11 @@ public class GameController implements Serializable {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find game");
     }
 
-    game.startGame(); // TODO: Dont start game if already started
+    if (game.isStarted()) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Game already started");
+    }
+
+    game.startGame();
 
     return ResponseEntity.ok().build();
   }

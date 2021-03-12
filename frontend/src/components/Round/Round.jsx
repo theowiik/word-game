@@ -4,7 +4,7 @@ import { PresentAnswers, PresentWord, PresentScore, PresentCorrectAnswer } from 
 import { UserTile } from 'components/UserTile/UserTile';
 
 export const Round = () => {
-  const { players, globalRoundState } = useGame();
+  const { players, globalGameState } = useGame();
 
   return (
     <div className="grid grid-cols-5 gap-4 ">
@@ -24,7 +24,7 @@ export const Round = () => {
             SELECT_EXPLANATION: <PresentAnswers />,
             PRESENT_ANSWER: <PresentCorrectAnswer/>,
             PRESENT_SCORE: <PresentScore />,
-          }[globalRoundState]
+          }[globalGameState]
         }
       </div>
     </div>

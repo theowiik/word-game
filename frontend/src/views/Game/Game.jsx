@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Button, GameLayout, Lobby, Round, Summary } from 'components';
+import { Button, GameLayout, Lobby, Summary, Round } from 'components';
 import { useGame } from 'contexts/game';
 import { getRandomName } from 'lib/names';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -53,11 +53,9 @@ export const Game = () => {
       console.log(message.body);
       game = JSON.parse(message.body);
       console.log('RECIEVED GAMESTATE -----------');
-      console.log(game.gameState);
+      console.log(game.state);
       console.log(game);
-      setGlobalGameState(game.gameState);
-      setGlobalRoundState(game.roundState);
-
+      setGlobalGameState(game.state);
       setPlayers(game.players);
       setCurrentWord(game.word);
       //setAnswers(game.answers);
@@ -76,8 +74,6 @@ export const Game = () => {
       memoizedMessageCallback,
       memoizedConnectedCallback
     );
-
-    console.log('CREATED ONE STOMP CLIENT');
   }, [
     websocketEndpointUrl,
     subscribeToEndpoint,
@@ -97,13 +93,13 @@ export const Game = () => {
     setPlayers,
     setCurrentWord,
     setAnswers,
-    setPin
+    setPin,
   } = useGame();
 
   const checkIfGameExists = async () => {
     if (await gameExists(pin)) {
       setGameFound(true);
-      setPin(pin)
+      setPin(pin);
     } else {
       history.push('/');
     }
@@ -113,7 +109,11 @@ export const Game = () => {
     checkIfGameExists();
 
     //Test player
-    setPlayers([{ name: 'Jesper', color: 'grass', score: 100 }, { name: 'Hentoo', color: 'grass', score: 10 }, { name: 'Jonathan', color: 'grass', score: 300 }]);
+    setPlayers([
+      { name: 'Jesper', color: 'grass', score: 100 },
+      { name: 'Hentoo', color: 'grass', score: 10 },
+      { name: 'Jonathan', color: 'grass', score: 300 },
+    ]);
 
     //Test data
     const answers = [
@@ -130,13 +130,15 @@ export const Game = () => {
 
   return (
     <GameLayout>
-      {
-        {
-          LOBBY: <Lobby />,
-          PLAYING: <Round />,
-          END: <Summary />,
-        }[globalGameState]
-      }
+      {(() => {
+        if (globalGameState == 'LOBBY') {
+          return <Lobby />;
+        } else if (globalGameState == 'END') {
+          return <Summary />;
+        } else {
+          return <Round />
+        }
+      })()}
       <Button
         onClick={() =>
           setGlobalGameState(
@@ -157,6 +159,7 @@ export const Game = () => {
         label="Byt roundstate"
         secondary
       />
+      <h1 className="text-3xl">Debug: Current state -> {globalGameState || 'null/undefined'}</h1>
     </GameLayout>
   );
 };
