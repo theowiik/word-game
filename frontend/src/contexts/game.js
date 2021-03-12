@@ -106,7 +106,7 @@ export const GameProvider = (props) => {
   const setGlobalRoundState = (state) => {
     roundDispatch({ type: actions.SET_GLOBAL_STATE, state: state });
   };
-  const setCurrentword = (word) => {
+  const setCurrentWord = (word) => {
     roundDispatch({ type: actions.SET_CURRENT_WORD, word: word });
   };
   const setAnswers = (answers) => roundDispatch({type: actions.SET_ANSWERS, answers: answers})
@@ -119,7 +119,7 @@ export const GameProvider = (props) => {
       setPin,
       setPlayers,
       setGlobalRoundState,
-      setCurrentword,
+      setCurrentWord,
       setAnswers
     }),
     [gameState, roundState]
