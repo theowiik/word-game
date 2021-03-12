@@ -27,7 +27,6 @@ public class Category implements Serializable {
 
   @OneToMany(mappedBy = "category")
   @Getter(onMethod = @__(@JsonIgnore))
-  @Column(name = "words")
   private List<Word> words;
 
   public Category(String name) {
