@@ -21,12 +21,12 @@ import teamsocial.wordgame.model.entity.Word;
 public class Round implements Serializable {
 
   private Word word;
-  private Map<Player, String> explanations; // The explanations the players come up with
-  private Map<Player, String> chosenExplanations; // The explanation the players think is the correct answer
+  private Map<Player, String> explanations = new HashMap<>(); // The explanations the players come up with
+  private Map<Player, String> chosenExplanations = new HashMap<>(); // The explanation the players think is the correct answer
   private State state;
   @Getter(onMethod = @__(@JsonIgnore))
   private RoundChanged roundChangedImpl;
-  private List<RoundFinishedListeners> roundFinishedListeners;
+  private List<RoundFinishedListeners> roundFinishedListeners = new ArrayList<>();
 
   public Round(Category category, RoundChanged roundChangedImpl) {
     roundFinishedListeners = new ArrayList<>();
