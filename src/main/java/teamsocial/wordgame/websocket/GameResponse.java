@@ -28,19 +28,19 @@ public class GameResponse {
 
   private State getResponseState(Game game) {
     var output = State.LOBBY;
-    var gameIsActive = game.getState() != Game.State.PLAYING;
+    var gameIsActive = game.getState() == Game.State.PLAYING;
 
     if (gameIsActive) {
-      switch (game.getState()) {
-        case LOBBY -> output = State.LOBBY;
-        case END -> output = State.END;
-      }
-    } else {
       switch (game.getCurrentRound().getState()) {
         case PRESENT_SCORE -> output = State.PRESENT_SCORE;
         case PRESENT_ANSWER -> output = State.PRESENT_ANSWER;
         case PRESENT_WORD_INPUT_EXPLANATION -> output = State.PRESENT_WORD_INPUT_EXPLANATION;
         case SELECT_EXPLANATION -> output = State.SELECT_EXPLANATION;
+      }
+    } else {
+      switch (game.getState()) {
+        case LOBBY -> output = State.LOBBY;
+        case END -> output = State.END;
       }
     }
 
