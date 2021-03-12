@@ -8,25 +8,25 @@ export const PresentWord = () => {
 
   const { currentWord, pin } = useGame();
 
-  const postAnswer = (answer) => {
+  const postExplanation = (explanation) => {
 
     const form = new FormData();
-    form.append('answer', answer) 
+    form.append('explanation', explanation) 
 
-    axios.post(`/games/${pin}/answer`, form).then((res) => {
-      console.log('Answer submitted');
+    axios.post(`/games/${pin}/explanation`, form).then((res) => {
+      console.log('explanation submitted');
       console.log(res);
     }).catch((err) => {
-      console.log('Failed to send answer');
+      console.log('Failed to send explanation');
         console.log(err);
     });
   };
 
-  const handleAnswerSubmit = (event) => {
+  const handleExplanationSubmit = (event) => {
     event.preventDefault();
-    console.log('Post ' + event.target.answer.value + ' to Server');
-    const answer = event.target.answer.value;
-    postAnswer(answer);
+    console.log('Post ' + event.target.explanation.value + ' to Server');
+    const explanation = event.target.explanation.value;
+    postExplanation(explanation);
   };
 
   return (
@@ -38,18 +38,18 @@ export const PresentWord = () => {
         </h1>{' '}
         <Timer duration={200} />
         {!hasPosted ? (
-          <form onSubmit={handleAnswerSubmit} className="flex flex-col w-full">
+          <form onSubmit={handleExplanationSubmit} className="flex flex-col w-full">
             <textarea
-              name="answer"
+              name="explanation"
               className="p-5 rounded-lg text-white bg-gray-600  border-none h-72 my-10"
               placeholder="Write your explanation.."
             ></textarea>
 
-            <Button primary label="Submit your answer" />
+            <Button primary label="Submit your explanation" />
           </form>
         ) : (
           <div className="w-full p-10 rounded-lg bg-gray-600 text-center text-bold">
-            Your answer is submitted
+            Your explanation is submitted
           </div>
         )}
       </div>
