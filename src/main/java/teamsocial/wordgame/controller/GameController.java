@@ -18,7 +18,7 @@ import teamsocial.wordgame.model.game.Player;
 
 @RestController
 @RequestMapping("/api/v1/games")
-@SessionScope
+@SessionScope // TODO Can this be ApplicationScope?
 public class GameController implements Serializable {
 
   @Autowired
