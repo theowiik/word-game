@@ -63,6 +63,12 @@ public class Round implements Serializable {
     explanations.put(player, description);
   }
 
+
+  public String correctAnswer(){
+    return word.getDescription();
+  }
+
+
   /**
    *
    * @return The list of players who guessed correctly
@@ -72,7 +78,7 @@ public class Round implements Serializable {
     var correctExplanation = this.word.getDescription();
     Set<Player> correctPlayers = new HashSet<>();
     for(Map.Entry<Player, String> e : chosenExplanations.entrySet()){
-      if(e.getValue().equals(word.getDescription())){
+      if(e.getValue().equals(correctAnswer())){
         correctPlayers.add(e.getKey());
       }
     }
