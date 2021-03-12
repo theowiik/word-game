@@ -8,16 +8,16 @@ export const GameLayout = ({ children }) => {
 
   useEffect(() => {
     switch (globalGameState) {
-      case "OPEN_LOBBY":
+      case "LOBBY":
         setLabel("Lobby");
         break;
 
-      case "START_GAME":
+      case "PLAYING":
         setLabel("");
         break;
 
-      case "END_GAME":
-        setLabel("Result");
+      case "END":
+        setLabel("Summary");
         break;
       default:
         setLabel("Rappakalja");

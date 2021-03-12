@@ -24,7 +24,7 @@ export function Button({
   const classes = getButtonClassNames({ primary, secondary, danger, success, large });
 
   return (
-    <button type={type} className={classes}>
+    <button onClick={onClick} type={type} className={classes}>
       {label}
     </button>
   );

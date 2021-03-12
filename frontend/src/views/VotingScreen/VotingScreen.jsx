@@ -1,5 +1,6 @@
 import { PresentAnswerTile, Logo } from "components";
 import { Timer } from "components/Timer/Timer";
+import { useGame } from "contexts/game";
 
 export function VotingScreen() {
   const answers = [
@@ -10,11 +11,13 @@ export function VotingScreen() {
     { answer: "Behöver ett långt svar så att dehär får bli ett långt svar" },
   ];
 
+  const { currentWord } = useGame()
+
   return (
     <div className="min-h-screen w-full bg-white dark:bg-gray-800 dark:text-white flex flex-col items-center">
       <Logo width="250" height="80"></Logo>
       <div>
-        <h1 className="text-center mt-14 text-6xl font-semibold">Resonabel</h1>
+        <h1 className="text-center mt-14 text-6xl font-semibold">{currentWord}</h1>
       </div>
 
       <div className="mt-14 w-150">

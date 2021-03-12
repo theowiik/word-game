@@ -54,18 +54,18 @@ export function Lobby({ name }) {
     }
   };
 
-  const joinGame = () => {
-    axios
-      .post(`/games/${pin}/join/${getRandomName()}`, {})
-      .then((res) => {
-        console.log('Joined game');
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log('Failed to join game');
-        console.log(err);
-      });
-  };
+  // const joinGame = () => {
+  //   axios
+  //     .post(`/games/${pin}/join/${getRandomName()}`, {})
+  //     .then((res) => {
+  //       console.log('Joined game');
+  //       console.log(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log('Failed to join game');
+  //       console.log(err);
+  //     });
+  // };
 
   const startGame = () => {
     axios
@@ -107,7 +107,7 @@ export function Lobby({ name }) {
         </div>
 
         <div className="fixed bottom-0 left-0 right-0 w-full flex justify-center mb-16 sm:mb-20 md:mb-32">
-          <button onClick={joinGame} className="font-bold mr-5">
+          <button  className="font-bold mr-5">
             Join Game
           </button>
 

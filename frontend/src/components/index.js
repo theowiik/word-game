@@ -8,5 +8,10 @@ export * from "./Logo";
 export * from "./Input";
 export * from "./UserTile";
 export * from "./Navbar";
+export * from "./PresentAnswers";
 export * from "./PresentAnswerTile";
+export * from "./PresentScore";
+export * from "./PresentCorrectAnswer";
 export * from "./Timer";
+export * from './PresentWord';
+export * from './Summary'
