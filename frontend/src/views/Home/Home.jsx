@@ -14,11 +14,10 @@ export function Home() {
     e.preventDefault();
     setLoading(true);
     const pin = e.target.pin.value;
-    const name = e.target.name.value;
-
+    
     if (await gameExists(pin)) {
       setMessage("Joining lobby");
-      history.push(`/lobby/${pin}`);
+      history.push(`/game/${pin}`);
     } else {
       setMessage(`Failed to find game with pin: ${pin}`);
     }
@@ -38,7 +37,7 @@ export function Home() {
         )}
         <form className="w-full" onSubmit={handleSubmit}>
           <Input id="pin" name="pin" placeholder="Game PIN" />
-          <Input id="name" name="name" placeholder="Your name" />
+          
           <div className="w-full mt-4">
             <Button label="Move to Lobby" primary large type="submit" />
           </div>
