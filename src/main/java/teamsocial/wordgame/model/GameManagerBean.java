@@ -26,7 +26,7 @@ public class GameManagerBean {
   @PostConstruct
   private void init() {
     games = new HashMap<>();
-    createGame("cat1");
+    createGame("cat1"); // TODO Remove this
   }
 
   public Game getGame(String pin) {
