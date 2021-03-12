@@ -38,7 +38,7 @@ public class GameManagerBean {
     var cat = categoryRepository.findById(category).get(); // TODO: Throw error.
     var pin = getUnusedPin();
     var game = new Game(cat, pin);
-    game.addObserver(pushService);
+    game.addGameChangedObserver(pushService);
     games.put(pin, game);
     return game;
   }

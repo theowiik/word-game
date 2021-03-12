@@ -1,13 +1,9 @@
 import React, { useMemo } from 'react';
 const GameContext = React.createContext();
 
-const gameStates = {
-  OPEN_LOBBY: 'LOBBY',
-  START_GAME: 'PLAYING',
-  END_GAME: 'END',
-};
-
-const roundStates = {
+const states = {
+  LOBBY: 'LOBBY',
+  END: 'END',
   PRESENT_WORD_INPUT_EXPLANATION: 'PRESENT_WORD_INPUT_EXPLANATION',
   SELECT_EXPLANATION: 'SELECT_EXPLANATION',
   PRESENT_ANSWER: 'PRESENT_ANSWER',
@@ -19,22 +15,18 @@ const actions = {
   SET_PIN: 'SET_PIN',
   SET_PLAYERS: 'SET_PLAYERS',
   SET_CURRENT_WORD: 'SET_CURRENT_WORD',
-  SET_ANSWERS: 'SET_ANSWERS'
+  SET_ANSWERS: 'SET_ANSWERS',
 };
 
-const initialGameState = {
-  globalGameState: gameStates.OPEN_LOBBY,
+const initialState = {
+  state: states.LOBBY,
   pin: '12345',
   players: [],
-};
-
-const initialRoundState = {
-  globalRoundState: roundStates.PRESENT_WORD_INPUT_EXPLANATION,
   currentWord: 'Default',
-  answers: []
+  answers: [],
 };
 
-function gameReducer(state, action) {
+function reducer(state, action) {
   switch (action.type) {
     case actions.SET_GLOBAL_STATE: {
       return {
@@ -52,22 +44,6 @@ function gameReducer(state, action) {
       return {
         ...state,
         players: action.players,
-      };
-    }
-    default: {
-      return {
-        ...state,
-      };
-    }
-  }
-}
-
-function roundReducer(state, action) {
-  switch (action.type) {
-    case actions.SET_GLOBAL_STATE: {
-      return {
-        ...state,
-        globalRoundState: action.state,
       };
     }
     case actions.SET_CURRENT_WORD: {
@@ -91,38 +67,34 @@ function roundReducer(state, action) {
 }
 
 export const GameProvider = (props) => {
-  const [gameState, dispatch] = React.useReducer(gameReducer, initialGameState);
-  const [roundState, roundDispatch] = React.useReducer(
-    roundReducer,
-    initialRoundState
-  );
+  const [gameState, dispatch] = React.useReducer(reducer, initialState);
 
   const setGlobalGameState = (state) => {
+    console.log("im here!!!!!");
     dispatch({ type: actions.SET_GLOBAL_STATE, state: state });
-  };
+  }
+
   const setPin = (pin) => dispatch({ type: actions.SET_PIN, pin: pin });
+
   const setPlayers = (players) =>
     dispatch({ type: actions.SET_PLAYERS, players: players });
-  const setGlobalRoundState = (state) => {
-    roundDispatch({ type: actions.SET_GLOBAL_STATE, state: state });
-  };
-  const setCurrentWord = (word) => {
-    roundDispatch({ type: actions.SET_CURRENT_WORD, word: word });
-  };
-  const setAnswers = (answers) => roundDispatch({type: actions.SET_ANSWERS, answers: answers})
+
+  const setCurrentWord = (word) =>
+    dispatch({ type: actions.SET_CURRENT_WORD, word: word });
+
+  const setAnswers = (answers) =>
+    dispatch({ type: actions.SET_ANSWERS, answers: answers });
 
   const value = useMemo(
     () => ({
       ...gameState,
-      ...roundState,
       setGlobalGameState,
       setPin,
       setPlayers,
-      setGlobalRoundState,
       setCurrentWord,
-      setAnswers
+      setAnswers,
     }),
-    [gameState, roundState]
+    [gameState]
   );
 
   return <GameContext.Provider value={value} {...props} />;

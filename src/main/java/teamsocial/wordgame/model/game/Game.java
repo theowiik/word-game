@@ -4,22 +4,26 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import teamsocial.wordgame.model.entity.Category;
 
 @Data
-public class Game implements Serializable {
+public class Game implements Serializable, Round.RoundFinishedListeners {
 
-  private final static int ROUNDS = 3;
+  private final static int ROUNDS = 2;
   @Getter(onMethod = @__(@JsonIgnore))
-  private final Set<GameObserver> observers = new HashSet<>();
+  private final Set<GameObserver> observers;
   private final Category category;
   private final Set<Player> players;
   private final String pin;
-  private final State state;
+  private State state;
   private int round;
   private Round currentRound;
+  @Setter(AccessLevel.PRIVATE)
+  private boolean started;
 
   /**
    * @param category the category for the game.
@@ -30,6 +34,7 @@ public class Game implements Serializable {
       throw new IllegalArgumentException("Invalid pin, must be 5 integer");
     }
 
+    observers = new HashSet<>();
     this.category = category;
     state = State.LOBBY;
     nextRound();
@@ -53,39 +58,57 @@ public class Game implements Serializable {
   }
 
   public void startGame() {
-    currentRound.start();
+    if (!started) {
+      state = State.PLAYING;
+      setStarted(true);
+      currentRound.start();
+    }
   }
 
-  public void addObserver(GameObserver go) {
+  public void addGameChangedObserver(GameObserver go) {
     observers.add(go);
   }
 
+  /**
+   * Inits and creates a new round. Does not start the round.
+   */
   private void nextRound() {
+    System.out.println("creating a new round");
     round++;
-    currentRound = new Round(category, this::notifyObservers);
+    currentRound = new Round(category, this::notifyGameChangedObservers);
+    currentRound.addRoundFinishedListener(this);
   }
 
   public void setExplanation(Player player, String description) {
     currentRound.setExplanation(player, description);
-    notifyObservers();
+    notifyGameChangedObservers();
   }
 
   public void addPlayer(Player player) {
     players.add(player);
-    notifyObservers();
+    notifyGameChangedObservers();
   }
 
-  public void notifyObservers() {
+  public void notifyGameChangedObservers() {
     for (var o : observers) {
       o.onGameChange();
     }
   }
 
-    public void blablabla() {
-      notifyObservers();
+  @Override
+  public void roundChanged() {
+    if (round >= ROUNDS) {
+      System.out.println("finished all rounds");
+      state = State.END;
+      notifyGameChangedObservers();
+    } else {
+      System.out.println("ayy");
+      nextRound();
+      currentRound.start();
     }
+  }
 
-    public enum State {
+  public enum State {
     LOBBY, PLAYING, END
   }
 

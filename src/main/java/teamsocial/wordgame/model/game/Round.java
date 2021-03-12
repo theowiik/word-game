@@ -2,7 +2,9 @@ package teamsocial.wordgame.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -21,8 +23,10 @@ public class Round implements Serializable {
   private State state;
   @Getter(onMethod = @__(@JsonIgnore))
   private RoundChanged roundChangedImpl;
+  private List<RoundFinishedListeners> roundFinishedListeners;
 
   public Round(Category category, RoundChanged roundChangedImpl) {
+    roundFinishedListeners = new ArrayList<>();
     this.roundChangedImpl = roundChangedImpl;
     var rand = new java.util.Random();
     var words = category.getWords();
@@ -33,6 +37,14 @@ public class Round implements Serializable {
 
     word = words.get(rand.nextInt(words.size()));
     explanations = new HashMap<>();
+  }
+
+  public interface RoundFinishedListeners {
+    void roundChanged();
+  }
+
+  public void addRoundFinishedListener(RoundFinishedListeners listener) {
+    roundFinishedListeners.add(listener);
   }
 
   /**
@@ -94,6 +106,10 @@ public class Round implements Serializable {
     state = State.PRESENT_SCORE;
     roundChangedImpl.performOnRoundStateChanged();
     System.out.println("round ended!");
+
+    for (var o : roundFinishedListeners) {
+      o.roundChanged();
+    }
   }
 
   /**
