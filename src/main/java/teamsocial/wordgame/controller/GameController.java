@@ -34,10 +34,7 @@ public class GameController implements Serializable {
 
   @GetMapping("/{pin}")
   public ResponseEntity<Game> get(@PathVariable("pin") String pin) {
-    var game = gameManager.getGameByPin(pin);
-    if (game == null) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find game");
-    }
+    var game = getGame(pin);
     return ResponseEntity.ok(game);
   }
 
@@ -47,7 +44,7 @@ public class GameController implements Serializable {
       @PathVariable("description") String description
   ) {
     try {
-      Game game = gameManager.getGameByPin(pin);
+      var game = getGame(pin);
       game.setExplanation(playerManager.getPlayer(), description);
       return ResponseEntity.ok().build();
     } catch (IllegalStateException e) {
@@ -60,11 +57,7 @@ public class GameController implements Serializable {
       @PathVariable("pin") String pin,
       @PathVariable("name") String name
   ) {
-    var game = gameManager.getGameByPin(pin);
-
-    if (game == null) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find game");
-    }
+    var game = getGame(pin);
 
     if (playerManager.getPlayer() == null) {
       System.out.println("NY SPELARE");
@@ -79,11 +72,7 @@ public class GameController implements Serializable {
 
   @PostMapping("/{pin}/start")
   public ResponseEntity startGame(@PathVariable("pin") String pin) {
-    var game = gameManager.getGameByPin(pin);
-
-    if (game == null) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find game");
-    }
+    var game = getGame(pin);
 
     if (game.isStarted()) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Game already started");
@@ -92,5 +81,15 @@ public class GameController implements Serializable {
     game.startGame();
 
     return ResponseEntity.ok().build();
+  }
+
+  private Game getGame(String pin) {
+    var game = gameManager.getGameByPin(pin);
+
+    if (game == null) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find game");
+    }
+
+    return game;
   }
 }
