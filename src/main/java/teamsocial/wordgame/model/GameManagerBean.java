@@ -29,7 +29,7 @@ public class GameManagerBean {
     createGame("cat1"); // TODO Remove this
   }
 
-  public Game getGame(String pin) {
+  public Game getGameByPin(String pin) {
     var game = games.get(pin);
     return game;
   }
@@ -41,11 +41,6 @@ public class GameManagerBean {
     game.addGameChangedObserver(pushService);
     games.put(pin, game);
     return game;
-  }
-
-  public void setExplanation(String pin, PlayerManagerBean player, String description) {
-    Game game = getGame(pin);
-    game.setExplanation(player.getPlayer(), description);
   }
 
   private String getUnusedPin() {

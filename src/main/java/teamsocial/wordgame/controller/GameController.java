@@ -34,7 +34,7 @@ public class GameController implements Serializable {
 
   @GetMapping("/{pin}")
   public ResponseEntity<Game> get(@PathVariable("pin") String pin) {
-    var game = gameManager.getGame(pin);
+    var game = gameManager.getGameByPin(pin);
     if (game == null) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find game");
     }
@@ -47,7 +47,8 @@ public class GameController implements Serializable {
       @PathVariable("description") String description
   ) {
     try {
-      gameManager.setExplanation(pin, playerManager, description);
+      Game game = gameManager.getGameByPin(pin);
+      game.setExplanation(playerManager.getPlayer(), description);
       return ResponseEntity.ok().build();
     } catch (IllegalStateException e) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not save explanation");
@@ -59,7 +60,7 @@ public class GameController implements Serializable {
       @PathVariable("pin") String pin,
       @PathVariable("name") String name
   ) {
-    var game = gameManager.getGame(pin);
+    var game = gameManager.getGameByPin(pin);
 
     if (game == null) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find game");
@@ -80,7 +81,7 @@ public class GameController implements Serializable {
 
   @PostMapping("/{pin}/start")
   public ResponseEntity startGame(@PathVariable("pin") String pin) {
-    var game = gameManager.getGame(pin);
+    var game = gameManager.getGameByPin(pin);
 
     if (game == null) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find game");
