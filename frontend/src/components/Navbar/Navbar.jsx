@@ -9,7 +9,7 @@ export function Navbar({ label, onBackClickPath }) {
           <Button label='Go back' secondary/>
         </Link>
       </div>
-      <h1 className="text-gray-800 dark:text-gray-50 text-4xl font-bold">{label}</h1>
+      <h1 className="text-gray-50 text-4xl font-bold">{label}</h1>
     </div>
   );
 }

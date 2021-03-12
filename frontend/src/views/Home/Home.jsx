@@ -26,7 +26,7 @@ export function Home() {
   };
 
   return (
-    <div className="w-full h-screen bg-white dark:bg-gray-800 flex justify-center items-center">
+    <div className="w-full h-screen bg-gray-800 flex justify-center items-center">
       <div className="flex flex-col items-center">
         <Logo height="139" width="342" />
 

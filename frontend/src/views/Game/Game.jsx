@@ -12,14 +12,8 @@ import { createStompClient } from 'services/websocketService';
   /** Temp to trigger statechanges */
 }
 var selectedIndex = 0;
-const tempGameStatesList = ['LOBBY', 'PLAYING', 'END'];
-var selectedRoundIndex = 0;
-const tempRoundStatesList = [
-  'PRESENT_WORD_INPUT_EXPLANATION',
-  'SELECT_EXPLANATION',
-  'PRESENT_ANSWER',
-  'PRESENT_SCORE',
-];
+const tempGameStatesList = ['LOBBY', 'PRESENT_WORD_INPUT_EXPLANATION','SELECT_EXPLANATION','PRESENT_ANSWER','PRESENT_SCORE', 'END'];
+
 
 export const Game = () => {
   const websocketEndpointUrl = `${websocketBaseUrl}/chat`;
@@ -58,6 +52,7 @@ export const Game = () => {
       setGlobalGameState(game.state);
       setPlayers(game.players);
       setCurrentWord(game.word);
+      setCorrectAnswer(game.correctAnswer)
       //setAnswers(game.answers);
     } catch (error) {
       console.log('Could not parse JSON');
@@ -89,9 +84,9 @@ export const Game = () => {
   const {
     globalGameState,
     setGlobalGameState,
-    setGlobalRoundState,
     setPlayers,
     setCurrentWord,
+    setCorrectAnswer,
     setAnswers,
     setPin,
   } = useGame();
@@ -146,17 +141,6 @@ export const Game = () => {
           )
         }
         label="Byt gamestate"
-        secondary
-      />
-      <Button
-        onClick={() =>
-          setGlobalRoundState(
-            tempRoundStatesList[
-              selectedRoundIndex++ % tempRoundStatesList.length
-            ]
-          )
-        }
-        label="Byt roundstate"
         secondary
       />
       <h1 className="text-3xl">Debug: Current state -> {globalGameState || 'null/undefined'}</h1>

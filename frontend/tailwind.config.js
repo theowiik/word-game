@@ -1,6 +1,6 @@
 module.exports = {
   purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
-  darkMode: "media", // or 'media' or 'class'
+  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
@@ -13,6 +13,7 @@ module.exports = {
         xl: "16rem",
       },
       width: {
+        120: "40rem",
         150: "50rem",
       },
     },

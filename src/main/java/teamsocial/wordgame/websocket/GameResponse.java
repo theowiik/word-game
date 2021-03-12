@@ -20,10 +20,19 @@ public class GameResponse {
 
   private List<Player> players;
   private State state;
+  private String word;
+  private String correctAnswer;
 
   public GameResponse(Game game) {
     setPlayers(new ArrayList<>(game.getPlayers()));
     state = getResponseState(game);
+    word = game.getCurrentRound().getWord().getWord();
+    var description = "Hidden";
+    if (state == State.PRESENT_ANSWER) {
+      description = game.getCurrentRound().getWord().getDescription();
+    }
+    correctAnswer = description;
+
   }
 
   private State getResponseState(Game game) {

@@ -12,21 +12,17 @@ export const GameLayout = ({ children }) => {
         setLabel("Lobby");
         break;
 
-      case "PLAYING":
-        setLabel("");
-        break;
-
       case "END":
         setLabel("Summary");
         break;
       default:
-        setLabel("Rappakalja");
+        setLabel("");
         break;
     }
   }, [globalGameState]);
 
   return (
-    <div className=" bg-white text-gray-800 dark:text-white dark:bg-gray-800">
+    <div className=" text-white bg-gray-800">
       <Navbar label={label} />
       <div className="w-full min-h-screen">{children}</div>
     </div>
