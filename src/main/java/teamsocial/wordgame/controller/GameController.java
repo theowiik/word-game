@@ -67,7 +67,7 @@ public class GameController implements Serializable {
 
     if (playerManager.getPlayer() == null) {
       System.out.println("NY SPELARE");
-      playerManager.setPlayer(new Player(name, 0));
+      playerManager.setPlayer(new Player(name));
       game.addPlayer(playerManager.getPlayer());
     } else {
       System.out.println("GAMMAL SPELARE");

@@ -52,7 +52,7 @@ class GameTest {
   void addPlayerTest() {
     var category = createNewUniqueCategoryWithWords();
     var game = new Game(category, "00000");
-    var player = new Player("Billy", 0);
+    var player = new Player("Billy");
 
     game.addPlayer(player);
 
