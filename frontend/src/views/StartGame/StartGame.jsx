@@ -43,7 +43,7 @@ export function StartGame() {
   }, []);
 
   return (
-    <div className="w-full min-h-screen  bg-white dark:text-white dark:bg-gray-800 justify-center">
+    <div className="w-full min-h-screen  text-white bg-gray-800 justify-center">
       <Navbar label="Game Settings" onBackClickPath="/" />
 
       <Container>

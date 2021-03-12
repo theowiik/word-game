@@ -23,7 +23,7 @@
 }
 
 .btn-secondary {
-  @apply btn bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-white;
+  @apply btn bg-gray-600 text-white;
 }
 
 .large {

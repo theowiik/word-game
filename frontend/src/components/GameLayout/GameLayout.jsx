@@ -26,7 +26,7 @@ export const GameLayout = ({ children }) => {
   }, [globalGameState]);
 
   return (
-    <div className=" bg-white text-gray-800 dark:text-white dark:bg-gray-800">
+    <div className=" text-white bg-gray-800">
       <Navbar label={label} />
       <div className="w-full min-h-screen">{children}</div>
     </div>

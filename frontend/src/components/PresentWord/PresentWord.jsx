@@ -37,7 +37,7 @@ export const PresentWord = () => {
           <form onSubmit={handleAnswerSubmit} className="flex flex-col w-full">
             <textarea
               name="answer"
-              className="p-5 rounded-lg text-white dark:bg-gray-600  border-none h-72 my-10"
+              className="p-5 rounded-lg text-white bg-gray-600  border-none h-72 my-10"
               placeholder="Write your explanation.."
             ></textarea>
 
