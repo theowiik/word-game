@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGame } from 'contexts/game';
-import { PresentAnswers, PresentWord, PresentScore } from 'components';
+import { PresentAnswers, PresentWord, PresentScore, PresentCorrectAnswer } from 'components';
 import { UserTile } from 'components/UserTile/UserTile';
 
 export const Round = () => {
@@ -12,7 +12,7 @@ export const Round = () => {
         {/** Display players to the left */}
         <h2 className="text-gray-300 font-bold ml-2">Players:</h2>
         {players.map((player) => {
-          return <UserTile {...player} />;
+          return <UserTile {...player} color='peach' />;
         })}
       </div>
 
@@ -22,7 +22,7 @@ export const Round = () => {
           {
             PRESENT_WORD_INPUT_EXPLANATION: <PresentWord />,
             SELECT_EXPLANATION: <PresentAnswers />,
-            PRESENT_ANSWER: <h1>PRESENT_ANSWER</h1>,
+            PRESENT_ANSWER: <PresentCorrectAnswer/>,
             PRESENT_SCORE: <PresentScore />,
           }[globalRoundState]
         }

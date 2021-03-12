@@ -59,7 +59,7 @@ export const Game = () => {
       setGlobalRoundState(game.roundState);
 
       setPlayers(game.players);
-      //setCurrentWord(game.word);
+      setCurrentWord(game.word);
       //setAnswers(game.answers);
     } catch (error) {
       console.log('Could not parse JSON');
@@ -97,11 +97,13 @@ export const Game = () => {
     setPlayers,
     setCurrentWord,
     setAnswers,
+    setPin
   } = useGame();
 
   const checkIfGameExists = async () => {
     if (await gameExists(pin)) {
       setGameFound(true);
+      setPin(pin)
     } else {
       history.push('/');
     }
@@ -111,7 +113,7 @@ export const Game = () => {
     checkIfGameExists();
 
     //Test player
-    setPlayers([{ name: 'Jesper', color: 'grass', score: 100 }]);
+    setPlayers([{ name: 'Jesper', color: 'grass', score: 100 }, { name: 'Hentoo', color: 'grass', score: 10 }, { name: 'Jonathan', color: 'grass', score: 300 }]);
 
     //Test data
     const answers = [
