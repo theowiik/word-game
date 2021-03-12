@@ -2,8 +2,8 @@ package teamsocial.wordgame.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -21,6 +21,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
   private final String pin;
   private State state;
   private int round;
+  private List<Round> rounds;
   private Round currentRound;
   @Setter(AccessLevel.PRIVATE)
   private boolean started;
@@ -57,6 +58,19 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     return pin.matches(regexString);
   }
 
+  public Map<Player, Integer> getPlayerScores(){
+    Map<Player, Integer> scores = new HashMap<>();
+    for(Player player : this.players){
+      scores.put(player, 0);
+    }
+    for(Round round : this.rounds){
+      for(Player player : round.correctPlayers()) {
+        scores.put(player, scores.get(player) + 1);
+      }
+    }
+    return scores;
+  }
+
   public void startGame() {
     if (!started) {
       state = State.PLAYING;
@@ -69,18 +83,22 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     observers.add(go);
   }
 
+  public Round getCurrentRound() {
+    return rounds.get(round);
+  }
+
   /**
    * Inits and creates a new round. Does not start the round.
    */
   private void nextRound() {
     System.out.println("creating a new round");
+    rounds.add(new Round(category, this::notifyGameChangedObservers));
     round++;
-    currentRound = new Round(category, this::notifyGameChangedObservers);
-    currentRound.addRoundFinishedListener(this);
+    getCurrentRound().addRoundFinishedListener(this);
   }
 
   public void setExplanation(Player player, String description) {
-    currentRound.setExplanation(player, description);
+    getCurrentRound().setExplanation(player, description);
     notifyGameChangedObservers();
   }
 
@@ -104,7 +122,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     } else {
       System.out.println("ayy");
       nextRound();
-      currentRound.start();
+      getCurrentRound().start();
     }
   }
 
