@@ -1,4 +1,5 @@
 CREATE TABLE categories
 (
-  name TEXT UNIQUE PRIMARY KEY
+  name TEXT UNIQUE PRIMARY KEY,
+  CHECK (name ~* '^(\w+\s?)+$')
 )
