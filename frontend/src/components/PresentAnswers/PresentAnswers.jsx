@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Timer, PresentAnswerTile } from 'components';
 import { useGame } from 'contexts/game';
 
@@ -6,6 +6,8 @@ export const PresentAnswers = () => {
 
 
   const { currentWord, answers } = useGame()
+
+  const [ hasSelected, setHasSelected ] = useState(false)
 
   return (
     <>
@@ -19,7 +21,7 @@ export const PresentAnswers = () => {
         <div className="grid grid-cols-3">
           {answers.map((answer) => {
             return (
-              <PresentAnswerTile answer={answer.answer}></PresentAnswerTile>
+              <PresentAnswerTile clickable={!hasSelected} answer={answer.answer} onClick={() => setHasSelected(true)}></PresentAnswerTile>
             );
           })}
         </div>
