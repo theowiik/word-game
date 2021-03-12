@@ -1,17 +1,28 @@
+import axios from 'axios';
 import { Button, UserTile, Timer } from 'components';
 import React, { useState } from 'react';
 import { useGame } from 'contexts/game';
 
 export const PresentWord = () => {
-
   const [hasPosted, setHasPosted] = useState(false);
 
-  const { currentWord } = useGame();
+  const { currentWord, pin } = useGame();
+
+  const postAnswer = (answer) => {
+    axios.post(`/games/${pin}/answer/${answer}`, {}).then((res) => {
+      console.log('Answer submitted');
+      console.log(res);
+    }).catch((err) => {
+      console.log('Failed to send answer');
+        console.log(err);
+    });
+  };
 
   const handleAnswerSubmit = (event) => {
     event.preventDefault();
     console.log('Post ' + event.target.answer.value + ' to Server');
-    //postAnswer(answer);
+    const answer = event.target.answer.value;
+    postAnswer(answer);
   };
 
   return (
