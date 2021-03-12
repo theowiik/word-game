@@ -22,7 +22,6 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
   private State state;
   private int round;
   private List<Round> rounds;
-  private Round currentRound;
   @Setter(AccessLevel.PRIVATE)
   private boolean started;
 
@@ -75,7 +74,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     if (!started) {
       state = State.PLAYING;
       setStarted(true);
-      currentRound.start();
+      getCurrentRound().start();
     }
   }
 
