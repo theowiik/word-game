@@ -61,7 +61,7 @@ public class Round implements Serializable {
 
   public interface RoundFinishedListeners {
 
-    void roundChanged();
+    void notifyRoundFinished();
   }
 
   public void addRoundFinishedListener(RoundFinishedListeners listener) {
@@ -154,9 +154,12 @@ public class Round implements Serializable {
     state = State.PRESENT_SCORE;
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
+    callAfter(this::notifyRoundFinishedListeners, state.getDurationSeconds());
+  }
 
+  private void notifyRoundFinishedListeners() {
     for (var o : roundFinishedListeners) {
-      o.roundChanged();
+      o.notifyRoundFinished();
     }
   }
 
@@ -172,10 +175,10 @@ public class Round implements Serializable {
   }
 
   public enum State {
-    PRESENT_WORD_INPUT_EXPLANATION(4),
-    SELECT_EXPLANATION(4),
-    PRESENT_ANSWER(4),
-    PRESENT_SCORE(4);
+    PRESENT_WORD_INPUT_EXPLANATION(10),
+    SELECT_EXPLANATION(10),
+    PRESENT_ANSWER(10),
+    PRESENT_SCORE(6);
 
     private final int durationSeconds;
 

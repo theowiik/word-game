@@ -125,7 +125,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
   }
 
   @Override
-  public void roundChanged() {
+  public void notifyRoundFinished() {
     if (round >= ROUNDS) {
       state = State.END;
       notifyGameChangedObservers();
