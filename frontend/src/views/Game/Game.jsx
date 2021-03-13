@@ -52,7 +52,7 @@ export const Game = () => {
       setGlobalGameState(game.state);
       setPlayers(game.players);
       setCurrentWord(game.word);
-      setCorrectExplanation(game.correctAnswer);
+      setCorrectExplanation(game.correctExplanation);
       //setExplanations(game.answers);
     } catch (error) {
       console.log(error);
