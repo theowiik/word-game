@@ -18,7 +18,6 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
 
   @Getter(onMethod = @__(@JsonIgnore))
   private final Set<GameObserver> observers;
-
   private final static int ROUNDS = 2;
   @Getter(onMethod = @__(@JsonIgnore))
   private final Set<Player> players;
@@ -119,9 +118,9 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     notifyGameChangedObservers();
   }
 
-  private void notifyGameChangedObservers() {
+  public void notifyGameChangedObservers() {
     for (var o : observers) {
-      o.onGameChange(this);
+      o.notifyGameChanged(this);
     }
   }
 
@@ -144,6 +143,6 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
 
   public interface GameObserver {
 
-    void onGameChange(Game game);
+    void notifyGameChanged(Game game);
   }
 }
