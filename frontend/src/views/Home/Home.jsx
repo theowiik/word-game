@@ -28,10 +28,15 @@ export function Home() {
         <Logo height="139" width="342" />
 
         <form className="w-full" onSubmit={handleSubmit}>
-          <Input id="pin" name="pin" placeholder="Game PIN" />
+          <Input
+            id="pin"
+            name="pin"
+            placeholder="Game PIN"
+            regex={/^\d{0,5}$/}
+          />
 
           <div className="w-full mt-4">
-            <Button label="Move to Lobby" primary large type="submit" />
+            <Button label="Join Game" primary large type="submit" />
           </div>
         </form>
 
