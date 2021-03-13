@@ -6,3 +6,5 @@ export const states = {
   PRESENT_ANSWER: 'PRESENT_ANSWER',
   PRESENT_SCORE: 'PRESENT_SCORE',
 };
+
+export const colors = ['peach', 'grass', 'beach', 'ocean'];

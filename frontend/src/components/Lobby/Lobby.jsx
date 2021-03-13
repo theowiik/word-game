@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { Button, Container, LobbyInfo, UserTile } from 'components';
 import { useGame } from 'contexts/game';
+import { colors } from 'lib/constants'
 import React from 'react';
 
 export const Lobby = () => {
   const { players, pin } = useGame();
-  const colors = ['grass', 'peach'];
 
   const startGame = () => {
     axios

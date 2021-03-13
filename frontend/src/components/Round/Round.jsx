@@ -7,7 +7,8 @@ import {
   PresentCorrectAnswer,
 } from 'components';
 import { UserTile } from 'components/UserTile/UserTile';
-import { states } from 'lib/constants';
+import { states, colors } from 'lib/constants';
+
 
 export const Round = () => {
   const { players, globalGameState } = useGame();
@@ -20,7 +21,7 @@ export const Round = () => {
         {players.map((player, index) => {
           return (
             <div key={`player-${index}`}>
-              <UserTile {...player} color="peach" />
+              <UserTile {...player} color={colors[index % colors.length]} />
             </div>
           );
         })}
