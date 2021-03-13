@@ -18,7 +18,7 @@ export const PresentScore = () => {
   const handleClick = () => {
     //TODO: Post new word from db.
     //TODO: post change roundState to PRESENT_WORD
-  }
+  };
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -26,10 +26,13 @@ export const PresentScore = () => {
         Current score
       </h2>
       <div className="p-20 w-full">
-        {players.sort(compare).map((player,index) => {
+        {players.sort(compare).map((player, index) => {
           return (
-            <div key={`player-${index}`} className="w-full p-5 bg-gray-700 rounded-lg font-bold mb-2 flex justify-between">
-              <span>{player.name}</span>
+            <div
+              key={`player-${index}`}
+              className="w-full p-5 bg-gray-700 rounded-lg font-bold mb-2 flex justify-between"
+            >
+              <span className="mr-10">{player.name}</span>
               <span>{`${player.score} points`}</span>
             </div>
           );
