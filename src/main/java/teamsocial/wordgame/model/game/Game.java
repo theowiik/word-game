@@ -1,29 +1,35 @@
 package teamsocial.wordgame.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import teamsocial.wordgame.model.entity.Category;
-
-import java.io.Serializable;
-import java.util.*;
-
-@Data
+@Getter
+@Setter
 public class Game implements Serializable, Round.RoundFinishedListeners {
+
+  @Getter(onMethod = @__(@JsonIgnore))
+  private final Set<GameObserver> observers;
 
   private final static int ROUNDS = 2;
   @Getter(onMethod = @__(@JsonIgnore))
-  private final Set<GameObserver> observers;
-  private final Category category;
   private final Set<Player> players;
+  private final Category category;
   private final String pin;
-  private State state;
-  private int round;
-  private List<Round> rounds;
   @Setter(AccessLevel.PRIVATE)
   private boolean started;
+  @Getter(onMethod = @__(@JsonIgnore))
+  private List<Round> rounds;
+  private State state;
+  private int round;
 
   /**
    * @param category the category for the game.

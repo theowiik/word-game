@@ -1,7 +1,6 @@
 package teamsocial.wordgame.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,24 +10,35 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.model.entity.Word;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Round implements Serializable {
 
-  private Word word;
-  private Map<Player, String> explanations = new HashMap<>(); // The explanations the players come up with
-  private Map<Player, String> chosenExplanations = new HashMap<>(); // The explanation the players think is the correct answer
-  private State state;
   @Getter(onMethod = @__(@JsonIgnore))
   private RoundChanged roundChangedImpl;
-  private List<RoundFinishedListeners> roundFinishedListeners = new ArrayList<>();
+
+  @Getter(onMethod = @__(@JsonIgnore))
+  private List<RoundFinishedListeners> roundFinishedListeners;
+
+  /**
+   * The explanations the players come up with.
+   */
+  private Map<Player, String> explanations = new HashMap<>();
+
+  /**
+   * The explanation the players think is the correct answer.
+   */
+  private Map<Player, String> chosenExplanations = new HashMap<>();
+
+  private State state;
+  private Word word;
 
   public Round(Category category, RoundChanged roundChangedImpl) {
     roundFinishedListeners = new ArrayList<>();
