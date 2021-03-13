@@ -32,7 +32,7 @@ export const Lobby = () => {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 w-full flex justify-center mb-16 sm:mb-20 md:mb-32">
-        <Button label="Start game" primary onClick={startGame} />
+        <Button label="Start Game" primary onClick={startGame} />
       </div>
     </Container>
   );
