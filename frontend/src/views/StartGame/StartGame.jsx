@@ -57,8 +57,8 @@ export function StartGame() {
           <div className="bg-gray-700 rounded-xl w-96 p-10 mt-20">
             <h2 className="text-2xl font-bold">Select category</h2>
             <ul className="mt-5">
-              {categories.map((category) => (
-                <>
+              {categories.map((category, index) => (
+                <div key={`category-${index}`}>
                   <input
                     id="category"
                     name="category"
@@ -67,7 +67,7 @@ export function StartGame() {
                   />
                   <label className="ml-2">{category.name}</label>
                   <br></br>
-                </>
+                </div>
               ))}
             </ul>
           </div>
