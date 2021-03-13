@@ -6,7 +6,7 @@ const states = {
   END: 'END',
   PRESENT_WORD_INPUT_EXPLANATION: 'PRESENT_WORD_INPUT_EXPLANATION',
   SELECT_EXPLANATION: 'SELECT_EXPLANATION',
-  PRESENT_ANSWER: 'PRESENT_ANSWER',
+  PRESENT_EXPLANATION: 'PRESENT_EXPLANATION',
   PRESENT_SCORE: 'PRESENT_SCORE',
 };
 
@@ -16,8 +16,8 @@ const actions = {
   SET_PLAYERS: 'SET_PLAYERS',
   SET_CURRENT_PROGRESS: 'SET_CURRENT_PROGRESS',
   SET_CURRENT_WORD: 'SET_CURRENT_WORD',
-  SET_ANSWERS: 'SET_ANSWERS',
-  SET_CORRECT_ANSWER: 'SET_CORRECT_ANSWER',
+  SET_EXPLANATIONS: 'SET_EXPLANATIONS',
+  SET_CORRECT_EXPLANATION: 'SET_CORRECT_EXPLANATION',
 };
 
 const initialState = {
@@ -26,8 +26,8 @@ const initialState = {
   players: [],
   currentProgress: 0,
   currentWord: 'Default',
-  correctAnswer: '',
-  answers: [],
+  correctExplanation: '',
+  explanations: [],
 };
 
 function reducer(state, action) {
@@ -62,16 +62,16 @@ function reducer(state, action) {
         currentWord: action.word,
       };
     }
-    case actions.SET_CORRECT_ANSWER: {
+    case actions.SET_CORRECT_EXPLANATION: {
       return {
         ...state,
-        correctAnswer: action.description,
+        correctExplanation: action.description,
       };
     }
-    case actions.SET_ANSWERS: {
+    case actions.SET_EXPLANATIONS: {
       return {
         ...state,
-        answers: action.answers,
+        explanations: action.explanations,
       };
     }
     default: {
@@ -101,11 +101,11 @@ export const GameProvider = (props) => {
   const setCurrentWord = (word) =>
     dispatch({ type: actions.SET_CURRENT_WORD, word: word });
 
-  const setCorrectAnswer = (description) =>
-    dispatch({ type: actions.SET_CORRECT_ANSWER, description: description });
+  const setCorrectExplanation = (description) =>
+    dispatch({ type: actions.SET_CORRECT_EXPLANATION, description: description });
 
-  const setAnswers = (answers) =>
-    dispatch({ type: actions.SET_ANSWERS, answers: answers });
+  const setExplanations = (explanations) =>
+    dispatch({ type: actions.SET_EXPLANATIONS, explanations: explanations });
 
   const value = useMemo(
     () => ({
@@ -115,8 +115,8 @@ export const GameProvider = (props) => {
       setPlayers,
       setCurrentProgress,
       setCurrentWord,
-      setCorrectAnswer,
-      setAnswers,
+      setCorrectExplanation,
+      setExplanations,
     }),
     [gameState]
   );

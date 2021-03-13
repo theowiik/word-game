@@ -62,8 +62,8 @@ export const Game = () => {
       setGlobalGameState(game.state);
       setPlayers(game.players);
       setCurrentWord(game.word);
-      setCorrectAnswer(game.correctAnswer);
-      //setAnswers(game.answers);
+      setCorrectExplanation(game.correctAnswer);
+      //setExplanations(game.answers);
     } catch (error) {
       console.log('Could not parse JSON');
     }
@@ -95,8 +95,8 @@ export const Game = () => {
     setPlayers,
     setCurrentProgress,
     setCurrentWord,
-    setCorrectAnswer,
-    setAnswers,
+    setCorrectExplanation,
+    setExplanations,
     setPin,
   } = useGame();
 
@@ -128,7 +128,7 @@ export const Game = () => {
       { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
       { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
     ];
-    setAnswers(answers);
+    setExplanations(answers);
     //TODO: make sure to give the context the right state from websocket on reload
   }, []);
 
