@@ -11,8 +11,10 @@ export const Round = () => {
       <div className="col-span-5 md:col-span-1 h-full pl-5 pt-20">
         {/** Display players to the left */}
         <h2 className="text-gray-300 font-bold ml-2">Players:</h2>
-        {players.map((player) => {
-          return <UserTile {...player} color='peach' />;
+        {players.map((player, index) => {
+          return <div key={`player-${index}`} >
+          <UserTile {...player} color='peach' />
+          </div>;
         })}
       </div>
 
