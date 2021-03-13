@@ -1,9 +1,7 @@
 package teamsocial.wordgame.websocket;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import lombok.Getter;
 import lombok.Setter;
 import teamsocial.wordgame.model.game.Game;
@@ -18,7 +16,7 @@ public class GameResponse {
   private Long currentStateEndTime;
   private List<Player> players;
   private String correctExplanation;
-  private List<String> explanations;
+  private List<String> explanations = new ArrayList<>();
   private List<PickedAnswerResponse> pickedAnswers;
 
   public GameResponse(Game game) {
@@ -49,6 +47,8 @@ public class GameResponse {
 
     // Explanations
     game.getCurrentRound().getExplanations().forEach((key, value) -> explanations.add(value));
+    explanations.add(game.getCurrentRound().getWord().getWord());
+    Collections.shuffle(explanations);
 
     // PickedAnswers
     pickedAnswers = new ArrayList<>();
