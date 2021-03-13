@@ -2,12 +2,7 @@ package teamsocial.wordgame.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import lombok.Getter;
@@ -44,6 +39,14 @@ public class Round implements Serializable {
    * The unix time in milliseconds when the current state started.
    */
   private long currentStateStartedAt;
+
+  public List<String> getAllExplanations(){
+    List<String> explanations = new ArrayList<>();
+    explanations.addAll(this.explanations.values());
+    explanations.add(word.getDescription());
+    Collections.shuffle(explanations);
+    return explanations;
+  }
 
   public Round(Category category, RoundChanged roundChangedImpl) {
     roundFinishedListeners = new ArrayList<>();

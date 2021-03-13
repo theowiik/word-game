@@ -52,9 +52,7 @@ public class GameResponse {
       ? game.getCurrentRound().getWord().getDescription() : "Naughty naughty trying to cheat ;)";
 
     // Explanations
-    game.getCurrentRound().getExplanations().forEach((key, value) -> explanations.add(value));
-    explanations.add(game.getCurrentRound().getWord().getWord());
-    Collections.shuffle(explanations);
+    game.getCurrentRound().getAllExplanations();
 
     // PickedAnswers
     pickedAnswers = new ArrayList<>();
