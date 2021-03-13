@@ -1,6 +1,7 @@
 package teamsocial.wordgame.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,8 +61,8 @@ public class Round implements Serializable {
    */
   public void setExplanation(Player player, String description) {
     if (player == null
-        || !validDescription(description)
-        || state != State.PRESENT_WORD_INPUT_EXPLANATION
+      || !validDescription(description)
+      || state != State.PRESENT_WORD_INPUT_EXPLANATION
     ) {
       throw new IllegalStateException();
     }
@@ -68,21 +70,20 @@ public class Round implements Serializable {
   }
 
 
-  public String correctAnswer(){
+  public String correctAnswer() {
     return word.getDescription();
   }
 
 
   /**
-   *
    * @return The list of players who guessed correctly
    */
 
   public Set<Player> correctPlayers() {
     var correctExplanation = this.word.getDescription();
     Set<Player> correctPlayers = new HashSet<>();
-    for(Map.Entry<Player, String> e : chosenExplanations.entrySet()){
-      if(e.getValue().equals(correctAnswer())){
+    for (Map.Entry<Player, String> e : chosenExplanations.entrySet()) {
+      if (e.getValue().equals(correctAnswer())) {
         correctPlayers.add(e.getKey());
       }
     }

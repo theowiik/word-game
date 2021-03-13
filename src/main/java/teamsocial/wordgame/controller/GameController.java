@@ -1,6 +1,5 @@
 package teamsocial.wordgame.controller;
 
-import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,8 @@ import teamsocial.wordgame.model.GameManagerBean;
 import teamsocial.wordgame.model.UserBean;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.model.game.Player;
+
+import java.io.Serializable;
 
 @RestController
 @RequestMapping("/api/v1/games")
@@ -36,8 +37,8 @@ public class GameController implements Serializable {
 
   @PostMapping("/{pin}/add_explanation")
   public ResponseEntity setExplanation(
-      @PathVariable("pin") String pin,
-      @RequestParam("description") String description
+    @PathVariable("pin") String pin,
+    @RequestParam("description") String description
   ) {
     try {
       var game = getGame(pin);
@@ -50,8 +51,8 @@ public class GameController implements Serializable {
 
   @PostMapping("/{pin}/pick_explanation")
   public ResponseEntity pickExplanation(
-          @PathVariable("pin") String pin,
-          @RequestParam("explanation") String explanation
+    @PathVariable("pin") String pin,
+    @RequestParam("explanation") String explanation
   ) {
     try {
       var game = getGame(pin);
@@ -64,8 +65,8 @@ public class GameController implements Serializable {
 
   @PostMapping("/{pin}/join/")
   public ResponseEntity joinGame(
-      @PathVariable("pin") String pin,
-      @RequestParam("name") String name
+    @PathVariable("pin") String pin,
+    @RequestParam("name") String name
   ) {
     var game = getGame(pin);
 

@@ -1,28 +1,19 @@
 package teamsocial.wordgame.websocket;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Data;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.model.game.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 public class GameResponse {
-
-  private enum State {
-    LOBBY,
-    PRESENT_WORD_INPUT_EXPLANATION,
-    SELECT_EXPLANATION,
-    PRESENT_ANSWER,
-    PRESENT_SCORE,
-    END
-  }
 
   private List<Player> players;
   private State state;
   private String word;
   private String correctAnswer;
-
   public GameResponse(Game game) {
     setPlayers(new ArrayList<>(game.getPlayers()));
     state = getResponseState(game);
@@ -54,5 +45,14 @@ public class GameResponse {
     }
 
     return output;
+  }
+
+  private enum State {
+    LOBBY,
+    PRESENT_WORD_INPUT_EXPLANATION,
+    SELECT_EXPLANATION,
+    PRESENT_ANSWER,
+    PRESENT_SCORE,
+    END
   }
 }
