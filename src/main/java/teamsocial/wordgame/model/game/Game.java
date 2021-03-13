@@ -90,7 +90,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
   }
 
   public Round getCurrentRound() {
-    return rounds.get(round);
+    return rounds.get(round - 1);
   }
 
   /**
@@ -115,7 +115,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
 
   private void notifyGameChangedObservers() {
     for (var o : observers) {
-      o.onGameChange();
+      o.onGameChange(this);
     }
   }
 
@@ -138,6 +138,6 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
 
   public interface GameObserver {
 
-    void onGameChange();
+    void onGameChange(Game game);
   }
 }

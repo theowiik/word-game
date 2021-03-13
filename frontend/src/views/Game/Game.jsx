@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Button, GameLayout, Lobby, Summary, Round } from 'components';
+import { Button, GameLayout, Lobby, Round, Summary } from 'components';
 import { useGame } from 'contexts/game';
 import { getRandomName } from 'lib/names';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -22,8 +22,10 @@ const tempGameStatesList = [
 ];
 
 export const Game = () => {
+  const params = useParams();
+  const pin = params.pin;
   const websocketEndpointUrl = `${websocketBaseUrl}/chat`;
-  const subscribeToEndpoint = '/topic/messages';
+  const subscribeToEndpoint = `/topic/messages/${pin}`;
 
   const joinGame = () => {
     console.log(
@@ -84,8 +86,6 @@ export const Game = () => {
     memoizedConnectedCallback,
   ]);
 
-  const params = useParams();
-  const pin = params.pin;
   const [gameFound, setGameFound] = useState(false);
   const history = useHistory();
 
