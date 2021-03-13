@@ -137,6 +137,17 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     }
   }
 
+  /**
+   * Checks whether the player has joined the game.
+   *
+   * @param player the player to check.
+   * @return true if the player has joined the game.
+   */
+  public boolean playerIsJoined(Player player) {
+    if (player == null) return false;
+    return  players.contains(player);
+  }
+
   public enum State {
     LOBBY, PLAYING, END
   }
