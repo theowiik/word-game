@@ -2,7 +2,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 export function Input({ placeholder, type, id, name, regex }) {
-  const [value, setValue] = useState('123');
+  const [value, setValue] = useState('');
 
   const handlePinInputChange = (e) => {
     if (regex == null) {
