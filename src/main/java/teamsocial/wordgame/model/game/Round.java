@@ -89,7 +89,7 @@ public class Round implements Serializable {
     return correctPlayers;
   }
 
-  public void setChosenExplanation(Player player, String chosenExplanation) {
+  void setChosenExplanation(Player player, String chosenExplanation) {
     if (state != State.SELECT_EXPLANATION
     ) {
       throw new IllegalStateException();

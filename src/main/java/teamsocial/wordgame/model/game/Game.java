@@ -108,6 +108,10 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     notifyGameChangedObservers();
   }
 
+  public void pickAnswer(Player player, String description) {
+    getCurrentRound().setChosenExplanation(player, description);
+  }
+
   public void addPlayer(Player player) {
     players.add(player);
     notifyGameChangedObservers();
