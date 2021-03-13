@@ -1,11 +1,12 @@
 import { useGame } from 'contexts/game';
 import { AnswerRevealCard } from 'components/AnswerRevealCard';
-import React from 'react';
+import { useState, useEffect } from 'react';
 
 export const PresentCorrectAnswer = () => {
+  const [view, setView] = useState([]);
   const { currentWord, correctExplanation } = useGame();
   const delay = 1;
-  const pickedAnswers = [
+  const selectedExplanations = [
     {
       players: ['peter', 'piper'],
       explanation: 'Cool thing',
@@ -18,14 +19,39 @@ export const PresentCorrectAnswer = () => {
     }
   ];
 
+  useEffect(() => {
+      const timer = setInterval(
+        () => {
+          if (view.length >= selectedExplanations.length) {
+            window.clearInterval(timer);
+            return;
+          }
+
+          setView((previousState) => {
+            return [...previousState, selectedExplanations[previousState.length]];
+          });
+        }
+        , 3000);
+
+      return () => window.clearInterval(timer);
+    }, [view]
+  );
+
   return (
     <div className='m-14 w-full'>
+
+      {view.map((selectedExplanation) => {
+        return (
+          <p>{selectedExplanation.explanation}</p>
+        );
+      })}
+
       <p className='text-yellow-400 tracking-wide uppercase'>
         Correct description of
       </p>
       <h1 className='text-6xl font-bold'>{currentWord}</h1>
 
-      {pickedAnswers.map((pickedAnswer) => {
+      {selectedExplanations.map((pickedAnswer) => {
         return (
           <AnswerRevealCard text={pickedAnswer.explanation} by='me :)' chose={pickedAnswer.players}
                             correct={pickedAnswer.correct} />
