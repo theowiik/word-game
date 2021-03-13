@@ -13,7 +13,7 @@ export const PresentWord = () => {
     const form = new FormData();
     form.append('explanation', explanation) 
 
-    axios.post(`/games/${pin}/explanation`, form).then((res) => {
+    axios.post(`/games/${pin}/add_explanation`, form).then((res) => {
       console.log('explanation submitted');
       console.log(res);
     }).catch((err) => {
