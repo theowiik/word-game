@@ -75,7 +75,6 @@ public class GameController implements Serializable {
     var game = getGame(pin);
 
     if (userBean.getPlayer() == null) {
-      System.out.println("NY SPELARE");
       userBean.setPlayer(new Player(name));
     }
 

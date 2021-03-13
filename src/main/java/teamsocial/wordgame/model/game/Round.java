@@ -154,7 +154,6 @@ public class Round implements Serializable {
     state = State.PRESENT_SCORE;
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
-    System.out.println("round ended!");
 
     for (var o : roundFinishedListeners) {
       o.roundChanged();

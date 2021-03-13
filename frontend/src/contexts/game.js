@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import {states} from '../lib/constants'
+import { states } from '../lib/constants';
 const GameContext = React.createContext();
 
 const actions = {
@@ -78,7 +78,6 @@ export const GameProvider = (props) => {
   const [gameState, dispatch] = React.useReducer(reducer, initialState);
 
   const setGlobalGameState = (state) => {
-    console.log('im here!!!!!');
     dispatch({ type: actions.SET_GLOBAL_STATE, state: state });
   };
 

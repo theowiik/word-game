@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { Button, GameLayout, Lobby, Round, Summary } from 'components';
 import { useGame } from 'contexts/game';
+import { states } from 'lib/constants';
 import { getRandomName } from 'lib/names';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { gameExists } from 'services/database-service';
 import { websocketBaseUrl } from 'services/urlConstants';
 import { createStompClient } from 'services/websocketService';
-import { states } from 'lib/constants'
 
 {
   /** Temp to trigger statechanges */
@@ -29,20 +29,14 @@ export const Game = () => {
   const subscribeToEndpoint = `/topic/messages/${pin}`;
 
   const joinGame = () => {
-    console.log(
-      '---------------------------------- JDSSDSDAOINING GAME ----------------------'
-    );
-
     const form = new FormData();
     form.append('name', getRandomName());
     axios
       .post(`/games/${pin}/join/`, form)
       .then((res) => {
-        console.log('Joined game');
         console.log(res);
       })
       .catch((err) => {
-        console.log('Failed to join game');
         console.log(err);
       });
   };
@@ -54,19 +48,14 @@ export const Game = () => {
   const messageCallback = (message) => {
     let game;
     try {
-      console.log('Attempting to parse: ');
-      console.log(message.body);
       game = JSON.parse(message.body);
-      console.log('RECIEVED GAMESTATE -----------');
-      console.log(game.state);
-      console.log(game);
       setGlobalGameState(game.state);
       setPlayers(game.players);
       setCurrentWord(game.word);
       setCorrectExplanation(game.correctAnswer);
       //setExplanations(game.answers);
     } catch (error) {
-      console.log('Could not parse JSON');
+      console.log(error);
     }
   };
 

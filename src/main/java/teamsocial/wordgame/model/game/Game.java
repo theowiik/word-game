@@ -99,7 +99,6 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
    * Inits and creates a new round. Does not start the round.
    */
   private void nextRound() {
-    System.out.println("creating a new round");
     rounds.add(new Round(category, this::notifyGameChangedObservers));
     round++;
     getCurrentRound().addRoundFinishedListener(this);
@@ -128,11 +127,9 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
   @Override
   public void roundChanged() {
     if (round >= ROUNDS) {
-      System.out.println("finished all rounds");
       state = State.END;
       notifyGameChangedObservers();
     } else {
-      System.out.println("ayy");
       nextRound();
       getCurrentRound().start();
     }

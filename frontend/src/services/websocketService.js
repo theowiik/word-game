@@ -7,7 +7,6 @@ export const createStompClient = (endpoint, subscribeTo, messageCallback, connec
 
   try {
     stompClient.connect({}, (frame) => {
-      console.log("Connected: " + frame);
       stompClient.subscribe(subscribeTo, messageCallback);
       connectCallback()
     });

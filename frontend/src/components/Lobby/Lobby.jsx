@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Button, Container, LobbyInfo, UserTile } from 'components';
 import { useGame } from 'contexts/game';
-import { colors } from 'lib/constants'
+import { colors } from 'lib/constants';
 import React from 'react';
 
 export const Lobby = () => {
@@ -11,11 +11,9 @@ export const Lobby = () => {
     axios
       .post(`/games/${pin}/start`, {})
       .then((res) => {
-        console.log('Started game');
         console.log(res);
       })
       .catch((err) => {
-        console.log('Failed to start game');
         console.log(err);
       });
   };

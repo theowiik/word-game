@@ -1,8 +1,8 @@
 import Axios from 'axios';
-import { Navbar, Container } from 'components';
+import { Container, Navbar } from 'components';
+import { Button } from 'components/Button/Button';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button } from 'components/Button/Button';
 
 export function StartGame() {
   const [categories, setCategories] = useState([]);
@@ -14,27 +14,21 @@ export function StartGame() {
         if (Array.isArray(res.data)) setCategories(res.data);
       })
       .catch((err) => {
-        console.log('Failed to fetch categories');
         console.log(err);
       });
 
   const handleStartGame = (event) => {
     event.preventDefault();
     const chosenCategory = event.target.category.value;
-    console.log(chosenCategory);
-
     const form = new FormData();
     form.append('category', chosenCategory) 
-    //Post start game with new pin
+
     Axios.post(`/games/`, form)
       .then((res) => {
-        console.log('Created a new game with category ' + chosenCategory);
         console.log(res);
-        //Redirect to lobby
         history.push(`/game/${res.data.pin}`);
       })
       .catch((err) => {
-        console.log('Failed to create game');
         console.log(err);
       });
 

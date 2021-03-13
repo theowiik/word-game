@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Button, Timer } from 'components';
-import React, { useState } from 'react';
 import { useGame } from 'contexts/game';
+import React, { useState } from 'react';
 
 export const PresentWord = () => {
   const [hasPosted, setHasPosted] = useState(false);
@@ -15,18 +15,15 @@ export const PresentWord = () => {
     form.append('explanation', explanation) 
 
     axios.post(`/games/${pin}/add_explanation`, form).then((res) => {
-      console.log('explanation submitted');
       console.log(res);
       setHasPosted(true)
     }).catch((err) => {
-      console.log('Failed to send explanation');
-        console.log(err);
+      console.log(err);
     });
   };
 
   const handleExplanationSubmit = (event) => {
     event.preventDefault();
-    console.log('Post ' + event.target.explanation.value + ' to Server');
     const explanation = event.target.explanation.value;
     postExplanation(explanation);
   };
