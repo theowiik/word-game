@@ -2,24 +2,28 @@ import axios from 'axios';
 import { Button, Timer } from 'components';
 import { useGame } from 'contexts/game';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 export const PresentWord = () => {
   const [hasPosted, setHasPosted] = useState(false);
-
   const { currentWord, pin, currentProgress } = useGame();
 
-
   const postExplanation = (explanation) => {
-
     const form = new FormData();
-    form.append('explanation', explanation) 
+    form.append('explanation', explanation);
 
-    axios.post(`/games/${pin}/add_explanation`, form).then((res) => {
-      console.log(res);
-      setHasPosted(true)
-    }).catch((err) => {
-      console.log(err);
-    });
+    axios
+      .post(`/games/${pin}/add_explanation`, form)
+      .then((res) => {
+        console.log(res);
+        toast('Submitted explanation 😎');
+        setHasPosted(true);
+      })
+      .catch((err) => {
+        console.log('yoooo');
+        toast.error('Failed submitting answer 😩');
+        console.log(err);
+      });
   };
 
   const handleExplanationSubmit = (event) => {
@@ -37,14 +41,17 @@ export const PresentWord = () => {
         </h1>{' '}
         <Timer progress={currentProgress} />
         {!hasPosted ? (
-          <form onSubmit={handleExplanationSubmit} className="flex flex-col w-full">
+          <form
+            onSubmit={handleExplanationSubmit}
+            className="flex flex-col w-full"
+          >
             <textarea
               name="explanation"
               className="p-5 rounded-lg text-white bg-gray-600  border-none h-72 my-10"
               placeholder="Write your explanation.."
             ></textarea>
 
-            <Button primary label="Submit your explanation" />
+            <Button primary label="Submit" />
           </form>
         ) : (
           <div className="w-full p-10 rounded-lg bg-gray-600 text-center text-bold">
