@@ -19,7 +19,7 @@ const tempGameStatesList = [
   'SELECT_EXPLANATION',
   'PRESENT_ANSWER',
   'PRESENT_SCORE',
-  'END',
+  'END'
 ];
 
 export const Game = () => {
@@ -74,7 +74,7 @@ export const Game = () => {
     websocketEndpointUrl,
     subscribeToEndpoint,
     memoizedMessageCallback,
-    memoizedConnectedCallback,
+    memoizedConnectedCallback
   ]);
 
   const [gameFound, setGameFound] = useState(false);
@@ -88,7 +88,7 @@ export const Game = () => {
     setCurrentWord,
     setCorrectExplanation,
     setExplanations,
-    setPin,
+    setPin
   } = useGame();
 
   const checkIfGameExists = async () => {
@@ -107,7 +107,7 @@ export const Game = () => {
     setPlayers([
       { name: 'Jesper', color: 'grass', score: 100 },
       { name: 'Hentoo', color: 'grass', score: 10 },
-      { name: 'Jonathan', color: 'grass', score: 300 },
+      { name: 'Jonathan', color: 'grass', score: 300 }
     ]);
 
     //Test data
@@ -117,7 +117,7 @@ export const Game = () => {
       { answer: 'Hentoo e king' },
       { answer: 'Jopsidop e king' },
       { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
-      { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
+      { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' }
     ];
     setExplanations(answers);
     //TODO: make sure to give the context the right state from websocket on reload
@@ -134,18 +134,14 @@ export const Game = () => {
           return <Round />;
         }
       })()}
-      <Button
-        onClick={() =>
-          setGlobalGameState(
-            tempGameStatesList[selectedIndex++ % tempGameStatesList.length]
-          )
-        }
-        label="Byt gamestate"
-        secondary
-      />
-      <h1 className="text-3xl">
-        Debug: Current state {globalGameState || 'null/undefined'}
-      </h1>
+
+      <p className='cursor-pointer text-gray-500 ml-8' onClick={() =>
+        setGlobalGameState(
+          tempGameStatesList[selectedIndex++ % tempGameStatesList.length]
+        )
+      }>
+        (Dev) Byt state
+      </p>
     </GameLayout>
   );
 };
