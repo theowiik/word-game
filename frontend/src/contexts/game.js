@@ -1,14 +1,6 @@
 import React, { useMemo } from 'react';
+import {states} from '../lib/constants'
 const GameContext = React.createContext();
-
-const states = {
-  LOBBY: 'LOBBY',
-  END: 'END',
-  PRESENT_WORD_INPUT_EXPLANATION: 'PRESENT_WORD_INPUT_EXPLANATION',
-  SELECT_EXPLANATION: 'SELECT_EXPLANATION',
-  PRESENT_EXPLANATION: 'PRESENT_EXPLANATION',
-  PRESENT_SCORE: 'PRESENT_SCORE',
-};
 
 const actions = {
   SET_GLOBAL_STATE: 'SET_GLOBAL_STATE',

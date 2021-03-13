@@ -7,6 +7,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { gameExists } from 'services/database-service';
 import { websocketBaseUrl } from 'services/urlConstants';
 import { createStompClient } from 'services/websocketService';
+import { states } from 'lib/constants'
 
 {
   /** Temp to trigger statechanges */
@@ -135,9 +136,9 @@ export const Game = () => {
   return (
     <GameLayout>
       {(() => {
-        if (globalGameState == 'LOBBY') {
+        if (globalGameState === states.LOBBY) {
           return <Lobby />;
-        } else if (globalGameState == 'END') {
+        } else if (globalGameState === states.END) {
           return <Summary />;
         } else {
           return <Round />;

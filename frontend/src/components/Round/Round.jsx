@@ -1,7 +1,13 @@
 import React from 'react';
 import { useGame } from 'contexts/game';
-import { PresentAnswers, PresentWord, PresentScore, PresentCorrectAnswer } from 'components';
+import {
+  PresentAnswers,
+  PresentWord,
+  PresentScore,
+  PresentCorrectAnswer,
+} from 'components';
 import { UserTile } from 'components/UserTile/UserTile';
+import { states } from 'lib/constants';
 
 export const Round = () => {
   const { players, globalGameState } = useGame();
@@ -12,22 +18,20 @@ export const Round = () => {
         {/** Display players to the left */}
         <h2 className="text-gray-300 font-bold ml-2">Players:</h2>
         {players.map((player, index) => {
-          return <div key={`player-${index}`} >
-          <UserTile {...player} color='peach' />
-          </div>;
+          return (
+            <div key={`player-${index}`}>
+              <UserTile {...player} color="peach" />
+            </div>
+          );
         })}
       </div>
 
       <div className="col-span-5 md:col-span-4 p-5 md:p-20 w-full h-full flex flex-col justify-center items-center">
         {/** Display corresponding view for current state */}
-        {
-          {
-            PRESENT_WORD_INPUT_EXPLANATION: <PresentWord />,
-            SELECT_EXPLANATION: <PresentAnswers />,
-            PRESENT_ANSWER: <PresentCorrectAnswer/>,
-            PRESENT_SCORE: <PresentScore />,
-          }[globalGameState]
-        }
+        {globalGameState === states.PRESENT_WORD_INPUT_EXPLANATION && <PresentWord />}
+        {globalGameState === states.SELECT_EXPLANATION && <PresentAnswers />}
+        {globalGameState === states.PRESENT_ANSWER && <PresentCorrectAnswer />}
+        {globalGameState === states.PRESENT_SCORE && <PresentScore />}
       </div>
     </div>
   );
