@@ -2,7 +2,7 @@ import classNames from 'classnames';
 
 const getCardClassNames = (props) => {
   return classNames({
-    'p-20 rounded-lg rounded-xl mt-14 bg-white-400 text-white': true,
+    'p-10 rounded-lg rounded-xl mt-14 bg-white-400 text-white': true,
     'bg-gray-700': !props.correct,
     'bg-green-500': props.correct
   });
@@ -27,7 +27,7 @@ export function AnswerRevealCard({ text, by, chose, correct }) {
       </div>
 
       <div className='flex flex-row justify-end mt-2'>
-        <p className='text-3xl font-semibold'>{by}</p>
+        <p className='text-3xl font-semibold animate__animated animate__fadeInDown'>{by ? by : 'Correct answer'}</p>
       </div>
 
       <div className='flex flex-row justify-end mt-2'>

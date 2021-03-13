@@ -31,3 +31,7 @@
 .large {
   @apply btn-base py-4 w-full text-xl rounded-xl;
 }
+
+.reveal-card {
+  max-width: 600px;
+}
