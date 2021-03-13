@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 export const PresentWord = () => {
   const [hasPosted, setHasPosted] = useState(false);
 
-  const { currentWord, pin, currentProgress } = useGame();
+  const { currentWord, pin, currentStateEndTime } = useGame();
 
 
   const postExplanation = (explanation) => {
@@ -35,7 +35,7 @@ export const PresentWord = () => {
         <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold text-center justify-center mb-10 ">
           {currentWord}
         </h1>{' '}
-        <Timer progress={currentProgress} />
+        <Timer start={new Date().getTime()} end={currentStateEndTime} />
         {!hasPosted ? (
           <form onSubmit={handleExplanationSubmit} className="flex flex-col w-full">
             <textarea

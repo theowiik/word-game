@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Timer, PresentAnswerTile } from 'components';
 import { useGame } from 'contexts/game';
 
 export const PresentAnswers = () => {
-  const { currentWord, explanations, currentProgress } = useGame();
 
   const [hasSelected, setHasSelected] = useState(false);
+
+  const { currentWord, explanations, currentStateEndTime } = useGame()
 
   return (
     <>
@@ -13,8 +14,8 @@ export const PresentAnswers = () => {
         {currentWord}
       </h1>
 
-      <div className="mt-14 w-full">
-        <Timer progress={currentProgress} />
+      <div className="mt-14 w-150">
+        <Timer start={new Date().getTime()} end={currentStateEndTime} />
       </div>
 
       <div className="flex items-center mt-10">

@@ -6,7 +6,7 @@ const actions = {
   SET_GLOBAL_STATE: 'SET_GLOBAL_STATE',
   SET_PIN: 'SET_PIN',
   SET_PLAYERS: 'SET_PLAYERS',
-  SET_CURRENT_PROGRESS: 'SET_CURRENT_PROGRESS',
+  SET_CURRENT_STATE_END_TIME: 'SET_CURRENT_STATE_END_TIME',
   SET_CURRENT_WORD: 'SET_CURRENT_WORD',
   SET_EXPLANATIONS: 'SET_EXPLANATIONS',
   SET_CORRECT_EXPLANATION: 'SET_CORRECT_EXPLANATION',
@@ -16,7 +16,7 @@ const initialState = {
   state: states.LOBBY,
   pin: '12345',
   players: [],
-  currentProgress: 0,
+  currentStateEndTime: 0,
   currentWord: 'Default',
   correctExplanation: '',
   explanations: [],
@@ -42,10 +42,10 @@ function reducer(state, action) {
         players: action.players,
       };
     }
-    case actions.SET_CURRENT_PROGRESS: {
+    case actions.SET_CURRENT_STATE_END_TIME: {
       return {
         ...state,
-        currentProgress: action.currentProgress,
+        currentStateEndTime: action.currentStateEndTime,
       };
     }
     case actions.SET_CURRENT_WORD: {
@@ -86,14 +86,20 @@ export const GameProvider = (props) => {
   const setPlayers = (players) =>
     dispatch({ type: actions.SET_PLAYERS, players: players });
 
-  const setCurrentProgress = (progress) =>
-    dispatch({ type: actions.SET_CURRENT_PROGRESS, currentProgress: progress });
+  const setCurrentStateEndTime = (time) =>
+    dispatch({
+      type: actions.SET_CURRENT_STATE_END_TIME,
+      currentStateEndTime: time,
+    });
 
   const setCurrentWord = (word) =>
     dispatch({ type: actions.SET_CURRENT_WORD, word: word });
 
   const setCorrectExplanation = (description) =>
-    dispatch({ type: actions.SET_CORRECT_EXPLANATION, description: description });
+    dispatch({
+      type: actions.SET_CORRECT_EXPLANATION,
+      description: description,
+    });
 
   const setExplanations = (explanations) =>
     dispatch({ type: actions.SET_EXPLANATIONS, explanations: explanations });
@@ -104,7 +110,7 @@ export const GameProvider = (props) => {
       setGlobalGameState,
       setPin,
       setPlayers,
-      setCurrentProgress,
+      setCurrentStateEndTime,
       setCurrentWord,
       setCorrectExplanation,
       setExplanations,
@@ -118,7 +124,7 @@ export const GameProvider = (props) => {
 export const useGame = () => {
   const context = React.useContext(GameContext);
   if (context === undefined) {
-    throw new Error(`useGame must be used within a GameProvider`);
+    throw new Error('useGame must be used within a GameProvider');
   }
   return context;
 };

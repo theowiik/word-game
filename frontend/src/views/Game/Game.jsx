@@ -53,6 +53,7 @@ export const Game = () => {
       setPlayers(game.players);
       setCurrentWord(game.word);
       setCorrectExplanation(game.correctExplanation);
+      setCurrentStateEndTime(game.currentStateEndTime);
       //setExplanations(game.answers);
     } catch (error) {
       console.log(error);
@@ -83,7 +84,7 @@ export const Game = () => {
     globalGameState,
     setGlobalGameState,
     setPlayers,
-    setCurrentProgress,
+    setCurrentStateEndTime,
     setCurrentWord,
     setCorrectExplanation,
     setExplanations,
