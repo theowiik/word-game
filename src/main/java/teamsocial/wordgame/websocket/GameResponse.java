@@ -1,7 +1,10 @@
 package teamsocial.wordgame.websocket;
 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import teamsocial.wordgame.model.game.Game;
@@ -14,9 +17,9 @@ public class GameResponse {
   private String word;
   private State state;
   private Long currentStateEndTime;
-  private Map<Player, Integer> players;
   private String correctExplanation;
   private List<String> explanations = new ArrayList<>();
+  private List<PlayerResponse> players;
   private List<PickedAnswerResponse> pickedAnswers;
 
   public GameResponse(Game game) {
@@ -38,7 +41,10 @@ public class GameResponse {
     }
 
     // Players
-    setPlayers(game.getPlayerScores());
+    players = new ArrayList<>();
+    for (var entity : game.getPlayerScores().entrySet()) {
+      players.add(new PlayerResponse(entity.getKey().getName(), entity.getValue()));
+    }
 
     // CorrectAnswer
     var shouldShowAnswer = state == State.PRESENT_ANSWER;
@@ -81,7 +87,7 @@ public class GameResponse {
     return inverseMap;
   }
 
-  private final class PickedAnswerResponse {
+  private class PickedAnswerResponse {
 
     private final List<Player> players;
     private final String explanation;
@@ -89,6 +95,17 @@ public class GameResponse {
     public PickedAnswerResponse(List<Player> players, String explanation) {
       this.players = players;
       this.explanation = explanation;
+    }
+  }
+
+  private class PlayerResponse {
+
+    private String name;
+    private int score;
+
+    public PlayerResponse(String name, int score) {
+      this.name = name;
+      this.score = score;
     }
   }
 
