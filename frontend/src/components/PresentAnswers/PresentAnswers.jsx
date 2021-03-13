@@ -19,9 +19,12 @@ export const PresentAnswers = () => {
 
       <div className="flex items-center mt-10">
         <div className="grid grid-cols-3">
-          {answers.map((answer) => {
+          {answers.map((answer, index) => {
             return (
-              <PresentAnswerTile clickable={!hasSelected} answer={answer.answer} onClick={() => setHasSelected(true)}></PresentAnswerTile>
+              <div key={`answer-${index}`}>
+              <PresentAnswerTile  clickable={!hasSelected} answer={answer.answer} onClick={() => setHasSelected(true)}></PresentAnswerTile>
+              </div>
+              
             );
           })}
         </div>
