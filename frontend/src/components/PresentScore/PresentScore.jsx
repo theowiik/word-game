@@ -26,9 +26,9 @@ export const PresentScore = () => {
         Current score
       </h2>
       <div className="p-20 w-full">
-        {players.sort(compare).map((player) => {
+        {players.sort(compare).map((player,index) => {
           return (
-            <div className="w-full p-5 bg-gray-700 rounded-lg font-bold mb-2 flex justify-between">
+            <div key={`player-${index}`} className="w-full p-5 bg-gray-700 rounded-lg font-bold mb-2 flex justify-between">
               <span>{player.name}</span>
               <span>{`${player.score} points`}</span>
             </div>
