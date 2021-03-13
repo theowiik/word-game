@@ -17,7 +17,7 @@ public class GameResponse {
   private State state;
   private Long currentStateEndTime;
   private List<Player> players;
-  private String correctAnswer;
+  private String correctExplanation;
   private List<String> explanations;
   private List<PickedAnswerResponse> pickedAnswers;
 
@@ -44,7 +44,7 @@ public class GameResponse {
 
     // CorrectAnswer
     var shouldShowAnswer = state == State.PRESENT_ANSWER;
-    correctAnswer = shouldShowAnswer
+    correctExplanation = shouldShowAnswer
       ? game.getCurrentRound().getWord().getDescription() : "Naughty naughty trying to cheat ;)";
 
     // Explanations
