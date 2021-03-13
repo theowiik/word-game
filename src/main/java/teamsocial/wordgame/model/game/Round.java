@@ -74,7 +74,7 @@ public class Round implements Serializable {
    * @param player      the player that wants to add the word.
    * @param description the description of the word.
    */
-  public void setExplanation(Player player, String description) {
+  public void addPlayerExplanation(Player player, String description) {
     if (player == null
       || !validDescription(description)
       || state != State.PRESENT_WORD_INPUT_EXPLANATION
@@ -105,7 +105,7 @@ public class Round implements Serializable {
     return correctPlayers;
   }
 
-  void setChosenExplanation(Player player, String chosenExplanation) {
+  void pickExplanation(Player player, String chosenExplanation) {
     if (state != State.SELECT_EXPLANATION
     ) {
       throw new IllegalStateException();

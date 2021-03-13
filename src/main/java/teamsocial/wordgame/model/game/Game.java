@@ -104,13 +104,13 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     getCurrentRound().addRoundFinishedListener(this);
   }
 
-  public void setExplanation(Player player, String description) {
-    getCurrentRound().setExplanation(player, description);
+  public void addPlayerExplanation(Player player, String explanation) {
+    getCurrentRound().addPlayerExplanation(player, explanation);
     notifyGameChangedObservers();
   }
 
-  public void pickAnswer(Player player, String description) {
-    getCurrentRound().setChosenExplanation(player, description);
+  public void pickExplanation(Player player, String explanation) {
+    getCurrentRound().pickExplanation(player, explanation);
   }
 
   public void addPlayer(Player player) {

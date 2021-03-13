@@ -40,16 +40,16 @@ public class GameController implements Serializable {
   }
 
   @PostMapping("/{pin}/add_explanation")
-  public ResponseEntity setExplanation(
+  public ResponseEntity addExplanation(
     @PathVariable("pin") String pin,
-    @RequestParam("description") String description
+    @RequestParam("description") String explanation
   ) {
     try {
       var game = getGame(pin);
-      game.setExplanation(userBean.getPlayer(), description);
+      game.addPlayerExplanation(userBean.getPlayer(), explanation);
       return ResponseEntity.ok().build();
     } catch (IllegalStateException e) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not save explanation");
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not add player explanation");
     }
   }
 
@@ -60,7 +60,7 @@ public class GameController implements Serializable {
   ) {
     try {
       var game = getGame(pin);
-      game.pickAnswer(userBean.getPlayer(), explanation);
+      game.pickExplanation(userBean.getPlayer(), explanation);
       return ResponseEntity.ok().build();
     } catch (IllegalStateException e) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not pick explanation");
