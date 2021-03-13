@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { useEffect } from 'react';
 
 const getCardClassNames = (props) => {
   return classNames({
@@ -16,9 +17,21 @@ const getBadgeClassNames = (props) => {
   });
 };
 
-export function AnswerRevealCard({ text, by, chose, correct }) {
+export function AnswerRevealCard({ text, by, chose, correct, index }) {
   const cardClassNames = getCardClassNames({ correct });
   const badgeClassNames = getBadgeClassNames({ correct });
+  const delaySeconds = 5;
+
+  useEffect(() => {
+    const timer = setTimeout(
+      () => {
+        const element = document.querySelector(`#by-${index}`);
+        element.classList.add('animate__animated', 'animate__bounceOutLeft');
+      }
+      , delaySeconds * 1000);
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   return (
     <>
@@ -27,7 +40,8 @@ export function AnswerRevealCard({ text, by, chose, correct }) {
       </div>
 
       <div className='flex flex-row justify-end mt-2'>
-        <p className='text-3xl font-semibold animate__animated animate__fadeInDown'>{by ? by : 'Correct answer'}</p>
+        <p className='text-3xl font-semibold'
+           id={`by-${index}`}>{by ? by : 'Correct answer'}</p>
       </div>
 
       <div className='flex flex-row justify-end mt-2'>

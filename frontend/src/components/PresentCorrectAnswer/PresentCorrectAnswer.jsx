@@ -50,11 +50,17 @@ export const PresentCorrectAnswer = () => {
       </p>
       <h1 className='text-6xl font-bold'>{currentWord}</h1>
 
-      {view.reverse().map((explanation) => {
+      {view.reverse().map((explanation, i) => {
         return (
-          <div className='transition animate__animated animate__fadeIn' key={explanation.explanation}>
-            <AnswerRevealCard text={explanation.explanation} by={explanation.by} chose={explanation.players}
-                              correct={explanation.correct} />
+          <div className='transition animate__animated animate__fadeIn' key={i}>
+            <AnswerRevealCard
+              text={explanation.explanation}
+              by={explanation.by}
+              chose={explanation.players}
+              correct={explanation.correct}
+              index={i}
+              key={i}
+            />
           </div>
         );
       })}
