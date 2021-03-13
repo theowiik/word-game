@@ -22,8 +22,6 @@ export function AnswerRevealCard({ text, by, chose, correct }) {
 
   return (
     <>
-      <p>{correct ? 'correct' : 'nah fam'}</p>
-
       <div className={cardClassNames}>
         <p className='text-center font-bold text-2xl'>{text}</p>
       </div>
