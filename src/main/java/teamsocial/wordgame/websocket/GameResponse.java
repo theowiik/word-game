@@ -1,7 +1,9 @@
 package teamsocial.wordgame.websocket;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import teamsocial.wordgame.model.game.Game;
@@ -11,20 +13,75 @@ import teamsocial.wordgame.model.game.Player;
 @Setter
 public class GameResponse {
 
-  private List<Player> players;
-  private State state;
   private String word;
+  private State state;
+  private int currentStateEndTime;
+  private List<Player> players;
   private String correctAnswer;
-  public GameResponse(Game game) {
-    setPlayers(new ArrayList<>(game.getPlayers()));
-    state = getResponseState(game);
-    word = game.getCurrentRound().getWord().getWord();
-    var description = "Hidden";
-    if (state == State.PRESENT_ANSWER) {
-      description = game.getCurrentRound().getWord().getDescription();
-    }
-    correctAnswer = description;
+  private List<String> explanations;
+  private List<PickedAnswerResponse> pickedAnswers;
 
+  public GameResponse(Game game) {
+    // Word
+    word = game.getCurrentRound().getWord().getWord();
+
+    // State
+    state = getResponseState(game);
+
+    // CurrentStateEndTime
+    currentStateEndTime = 999999999;
+
+    // Players
+    setPlayers(new ArrayList<>(game.getPlayers()));
+
+    // CorrectAnswer
+    var shouldShowAnswer = state == State.PRESENT_ANSWER;
+    correctAnswer = shouldShowAnswer
+      ? game.getCurrentRound().getWord().getDescription() : "Naughty naughty trying to cheat ;)";
+
+    // Explanations
+    game.getCurrentRound().getExplanations().forEach((key, value) -> explanations.add(value));
+
+    // PickedAnswers
+    pickedAnswers = new ArrayList<>();
+    if (state == State.PRESENT_ANSWER) {
+      var map = game.getCurrentRound().getChosenExplanations();
+      for (var entry : inverse(map).entrySet()) {
+        var pickedAnswer = new PickedAnswerResponse(entry.getValue(), entry.getKey());
+        pickedAnswers.add(pickedAnswer);
+      }
+    }
+  }
+
+  /**
+   * Turns a map like: {"key1": "my_value", "key2": "my_value"} to {"my_value": ["key1", "key2"]}
+   *
+   * @param map the map to "inverse".
+   * @return the "inversed" map.
+   */
+  private Map<String, List<Player>> inverse(Map<Player, String> map) {
+    var inverseMap = new HashMap<String, List<Player>>();
+
+    map.forEach((player, explanation) -> {
+      if (!inverseMap.containsKey(explanation)) {
+        inverseMap.put(explanation, new ArrayList<>());
+      }
+
+      inverseMap.get(explanation).add(player);
+    });
+
+    return inverseMap;
+  }
+
+  private final class PickedAnswerResponse {
+
+    private final List<Player> players;
+    private final String explanation;
+
+    public PickedAnswerResponse(List<Player> players, String explanation) {
+      this.players = players;
+      this.explanation = explanation;
+    }
   }
 
   private State getResponseState(Game game) {
