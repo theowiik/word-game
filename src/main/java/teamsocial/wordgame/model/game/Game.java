@@ -9,25 +9,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import teamsocial.wordgame.model.entity.Category;
 
-@Data
+@Getter
+@Setter
 public class Game implements Serializable, Round.RoundFinishedListeners {
+
+  @Getter(onMethod = @__(@JsonIgnore))
+  private final Set<GameObserver> observers;
 
   private final static int ROUNDS = 2;
   @Getter(onMethod = @__(@JsonIgnore))
-  private final Set<GameObserver> observers;
-  private final Category category;
   private final Set<Player> players;
+  @Getter(onMethod = @__(@JsonIgnore))
+  private List<Round> rounds;
+
+  private final Category category;
+  @Setter(AccessLevel.PRIVATE)
+  private boolean started;
   private final String pin;
   private State state;
   private int round;
-  private List<Round> rounds;
-  @Setter(AccessLevel.PRIVATE)
-  private boolean started;
 
   /**
    * @param category the category for the game.
