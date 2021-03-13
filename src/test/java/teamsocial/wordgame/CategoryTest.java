@@ -1,11 +1,9 @@
 package teamsocial.wordgame;
 
-import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.Assert;
 import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.repository.ICategoryRepository;
 
@@ -20,8 +18,8 @@ class CategoryTest {
     var category = new Category(null);
 
     Assertions.assertThrows(
-        Exception.class,
-        () -> categoryRepository.save(category)
+      Exception.class,
+      () -> categoryRepository.save(category)
     );
   }
 
