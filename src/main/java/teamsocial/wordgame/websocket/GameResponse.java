@@ -15,7 +15,7 @@ public class GameResponse {
 
   private String word;
   private State state;
-  private int currentStateEndTime;
+  private Long currentStateEndTime;
   private List<Player> players;
   private String correctAnswer;
   private List<String> explanations;
@@ -29,7 +29,15 @@ public class GameResponse {
     state = getResponseState(game);
 
     // CurrentStateEndTime
-    currentStateEndTime = 999999999;
+    var round = game.getCurrentRound();
+    var roundState = round.getState();
+
+    if (roundState != null) {
+      long roundSectionDurationSeconds = round.getState().getDurationSeconds();
+      currentStateEndTime = round.getCurrentStateStartedAt() + roundSectionDurationSeconds * 1000;
+    } else {
+      currentStateEndTime = null;
+    }
 
     // Players
     setPlayers(new ArrayList<>(game.getPlayers()));

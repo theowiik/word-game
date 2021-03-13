@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import teamsocial.wordgame.model.entity.Category;
+
 @Getter
 @Setter
 public class Game implements Serializable, Round.RoundFinishedListeners {

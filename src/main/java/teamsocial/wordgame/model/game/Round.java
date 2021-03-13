@@ -40,6 +40,11 @@ public class Round implements Serializable {
   private State state;
   private Word word;
 
+  /**
+   * The unix time in milliseconds when the current state started.
+   */
+  private long currentStateStartedAt;
+
   public Round(Category category, RoundChanged roundChangedImpl) {
     roundFinishedListeners = new ArrayList<>();
     this.roundChangedImpl = roundChangedImpl;
@@ -126,24 +131,28 @@ public class Round implements Serializable {
 
   private void enterPresentWordInputExplanation() {
     this.state = State.PRESENT_WORD_INPUT_EXPLANATION;
+    currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
     callAfter(this::enterSelectExplanation, state.getDurationSeconds());
   }
 
   private void enterSelectExplanation() {
     this.state = State.SELECT_EXPLANATION;
+    currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
     callAfter(this::enterPresentAnswer, state.getDurationSeconds());
   }
 
   private void enterPresentAnswer() {
     state = State.PRESENT_ANSWER;
+    currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
     callAfter(this::enterPresentScore, state.getDurationSeconds());
   }
 
   private void enterPresentScore() {
     state = State.PRESENT_SCORE;
+    currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
     System.out.println("round ended!");
 
@@ -183,6 +192,15 @@ public class Round implements Serializable {
   interface RoundChanged {
 
     void performOnRoundStateChanged();
+  }
+
+  /**
+   * Gets the current unix time in milliseconds.
+   *
+   * @return the current unix time in milliseconds.
+   */
+  private long now() {
+    return System.currentTimeMillis();
   }
 
   private interface Invokable {
