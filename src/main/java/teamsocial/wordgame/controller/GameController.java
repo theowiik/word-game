@@ -42,7 +42,7 @@ public class GameController implements Serializable {
   @PostMapping("/{pin}/add_explanation")
   public ResponseEntity addExplanation(
     @PathVariable("pin") String pin,
-    @RequestParam("description") String explanation
+    @RequestParam("explanation") String explanation
   ) {
     try {
       var game = getGame(pin);
