@@ -14,7 +14,7 @@ public class GameResponse {
   private String word;
   private State state;
   private Long currentStateEndTime;
-  private List<Player> players;
+  private Map<Player, Integer> players;
   private String correctExplanation;
   private List<String> explanations = new ArrayList<>();
   private List<PickedAnswerResponse> pickedAnswers;
@@ -38,7 +38,7 @@ public class GameResponse {
     }
 
     // Players
-    setPlayers(new ArrayList<>(game.getPlayers()));
+    setPlayers(game.getPlayerScores());
 
     // CorrectAnswer
     var shouldShowAnswer = state == State.PRESENT_ANSWER;
