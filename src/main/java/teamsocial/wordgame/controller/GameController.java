@@ -34,7 +34,7 @@ public class GameController implements Serializable {
     return ResponseEntity.ok(game);
   }
 
-  @PostMapping("/{pin}/explanation")
+  @PostMapping("/{pin}/add_explanation")
   public ResponseEntity setExplanation(
       @PathVariable("pin") String pin,
       @RequestParam("description") String description
