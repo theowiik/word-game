@@ -14,6 +14,7 @@ const actions = {
   SET_GLOBAL_STATE: 'SET_GLOBAL_STATE',
   SET_PIN: 'SET_PIN',
   SET_PLAYERS: 'SET_PLAYERS',
+  SET_CURRENT_PROGRESS: 'SET_CURRENT_PROGRESS',
   SET_CURRENT_WORD: 'SET_CURRENT_WORD',
   SET_ANSWERS: 'SET_ANSWERS',
   SET_CORRECT_ANSWER: 'SET_CORRECT_ANSWER',
@@ -23,6 +24,7 @@ const initialState = {
   state: states.LOBBY,
   pin: '12345',
   players: [],
+  currentProgress: 0,
   currentWord: 'Default',
   correctAnswer: '',
   answers: [],
@@ -46,6 +48,12 @@ function reducer(state, action) {
       return {
         ...state,
         players: action.players,
+      };
+    }
+    case actions.SET_CURRENT_PROGRESS: {
+      return {
+        ...state,
+        currentProgress: action.currentProgress,
       };
     }
     case actions.SET_CURRENT_WORD: {
@@ -87,6 +95,9 @@ export const GameProvider = (props) => {
   const setPlayers = (players) =>
     dispatch({ type: actions.SET_PLAYERS, players: players });
 
+  const setCurrentProgress = (progress) =>
+    dispatch({ type: actions.SET_CURRENT_PROGRESS, currentProgress: progress });
+
   const setCurrentWord = (word) =>
     dispatch({ type: actions.SET_CURRENT_WORD, word: word });
 
@@ -102,6 +113,7 @@ export const GameProvider = (props) => {
       setGlobalGameState,
       setPin,
       setPlayers,
+      setCurrentProgress,
       setCurrentWord,
       setCorrectAnswer,
       setAnswers,

@@ -1,12 +1,13 @@
 import axios from 'axios';
-import { Button, UserTile, Timer } from 'components';
+import { Button, Timer } from 'components';
 import React, { useState } from 'react';
 import { useGame } from 'contexts/game';
 
 export const PresentWord = () => {
   const [hasPosted, setHasPosted] = useState(false);
 
-  const { currentWord, pin } = useGame();
+  const { currentWord, pin, currentProgress } = useGame();
+
 
   const postExplanation = (explanation) => {
 
@@ -16,6 +17,7 @@ export const PresentWord = () => {
     axios.post(`/games/${pin}/add_explanation`, form).then((res) => {
       console.log('explanation submitted');
       console.log(res);
+      setHasPosted(true)
     }).catch((err) => {
       console.log('Failed to send explanation');
         console.log(err);
@@ -36,7 +38,7 @@ export const PresentWord = () => {
         <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold text-center justify-center mb-10 ">
           {currentWord}
         </h1>{' '}
-        <Timer duration={200} />
+        <Timer progress={currentProgress} />
         {!hasPosted ? (
           <form onSubmit={handleExplanationSubmit} className="flex flex-col w-full">
             <textarea

@@ -93,6 +93,7 @@ export const Game = () => {
     globalGameState,
     setGlobalGameState,
     setPlayers,
+    setCurrentProgress,
     setCurrentWord,
     setCorrectAnswer,
     setAnswers,

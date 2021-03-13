@@ -5,16 +5,18 @@ import { useGame } from 'contexts/game';
 export const PresentAnswers = () => {
 
 
-  const { currentWord, answers } = useGame()
+  const { currentWord, answers, currentProgress } = useGame()
 
   const [ hasSelected, setHasSelected ] = useState(false)
+
+
 
   return (
     <>
       <h1 className="text-center mt-14 text-6xl font-semibold">{currentWord}</h1>
 
       <div className="mt-14 w-150">
-        <Timer duration={200} />
+        <Timer progress={currentProgress} />
       </div>
 
       <div className="flex items-center mt-10">
