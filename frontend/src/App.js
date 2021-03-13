@@ -13,9 +13,9 @@ function App() {
       <BrowserRouter>
         <ToastContainer />
         <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/game/:pin" component={Game} />
-          <Route exact path="/game-settings" component={StartGame} />
+          <Route exact path='/' component={Home} />
+          <Route exact path='/game/new' component={StartGame} />
+          <Route exact path='/game/:pin' component={Game} />
         </Switch>
       </BrowserRouter>
     </ManagedGameContext>

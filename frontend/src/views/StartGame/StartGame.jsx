@@ -60,13 +60,13 @@ export function StartGame() {
                     value={category.name}
                   />
                   <label className="ml-2">{category.name}</label>
-                  <br></br>
+                  <br/>
                 </div>
               ))}
             </ul>
           </div>
           <div className="mt-14">
-            <Button primary label="Start game" type="submit" />
+            <Button primary label="Create Game" type="submit" />
           </div>
         </form>
       </Container>

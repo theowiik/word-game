@@ -41,8 +41,8 @@ export function Home() {
         </form>
 
         <div className="mt-24">
-          <Link to="/game-settings">
-            <Button label="Create a game" secondary></Button>
+          <Link to="/game/new">
+            <Button label="New Game" secondary></Button>
           </Link>
         </div>
       </div>

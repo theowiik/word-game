@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { toast } from "react-toastify";
 
 export function Input({ placeholder, type, id, name, regex }) {
   const [value, setValue] = useState('');
@@ -11,10 +10,7 @@ export function Input({ placeholder, type, id, name, regex }) {
     }
 
     if (e.target.value === '' || regex.test(e.target.value)) {
-      toast.success('ok')
       setValue(e.target.value);
-    } else {
-      toast.error('bad')
     }
   };
 
