@@ -33,7 +33,7 @@ export const Summary = () => {
       </div>
       {restOfPlayers.map((player, index) => {
         return (
-          <div className="w-120 p-5 bg-gray-700 rounded-lg font-bold mt-2 flex justify-between">
+          <div key={`player-${index}`} className="w-120 p-5 bg-gray-700 rounded-lg font-bold mt-2 flex justify-between">
             <span>{`${player.name} at ${index + 2} place`}</span>
             <span>{`${player.score} points`}</span>
           </div>
