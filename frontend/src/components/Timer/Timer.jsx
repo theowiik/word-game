@@ -1,20 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 export function Timer({ duration }) {
-    
   const [progress, setProgress] = useState(100);
 
   useEffect(() => {
-    let interval;
-    sessionStart(interval);
-    return () => clearInterval(interval);
-  }, []);
-
-  const sessionStart = (interval) => {
-    interval = setInterval(() => {
+    let interval = setInterval(() => {
       setProgress((progress) => progress - 1);
     }, duration);
-  };
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="w-full overflow-hidden h-6 mb-4 text-xs flex rounded-full bg-green-100">
