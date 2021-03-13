@@ -32,7 +32,7 @@ export const Game = () => {
     const form = new FormData();
     form.append('name', getRandomName());
     axios
-      .post(`/games/${pin}/join/`, form)
+      .post(`/games/${pin}/join`, form)
       .then((res) => {
         console.log(res);
       })

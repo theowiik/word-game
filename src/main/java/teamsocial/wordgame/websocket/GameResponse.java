@@ -1,7 +1,6 @@
 package teamsocial.wordgame.websocket;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,7 @@ public class GameResponse {
   private String correctExplanation;
   private List<String> explanations = new ArrayList<>();
   private List<PlayerResponse> players;
-  private List<PickedAnswerResponse> pickedAnswers;
+  private List<SelectedExplanationResponse> selectedExplanations;
 
   public GameResponse(Game game) {
     // Word
@@ -55,12 +54,12 @@ public class GameResponse {
     game.getCurrentRound().getAllExplanations();
 
     // PickedAnswers
-    pickedAnswers = new ArrayList<>();
+    selectedExplanations = new ArrayList<>();
     if (state == State.PRESENT_ANSWER) {
       var map = game.getCurrentRound().getChosenExplanations();
       for (var entry : inverse(map).entrySet()) {
-        var pickedAnswer = new PickedAnswerResponse(entry.getValue(), entry.getKey());
-        pickedAnswers.add(pickedAnswer);
+        var pickedAnswer = new SelectedExplanationResponse(entry.getValue(), entry.getKey());
+        selectedExplanations.add(pickedAnswer);
       }
     }
   }
@@ -85,21 +84,25 @@ public class GameResponse {
     return inverseMap;
   }
 
-  private class PickedAnswerResponse {
+  @Getter
+  @Setter
+  private class SelectedExplanationResponse {
 
     private final List<Player> players;
     private final String explanation;
 
-    public PickedAnswerResponse(List<Player> players, String explanation) {
+    public SelectedExplanationResponse(List<Player> players, String explanation) {
       this.players = players;
       this.explanation = explanation;
     }
   }
 
+  @Getter
+  @Setter
   private class PlayerResponse {
 
-    private String name;
-    private int score;
+    private final String name;
+    private final int score;
 
     public PlayerResponse(String name, int score) {
       this.name = name;
