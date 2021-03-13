@@ -12,8 +12,14 @@ import { createStompClient } from 'services/websocketService';
   /** Temp to trigger statechanges */
 }
 var selectedIndex = 0;
-const tempGameStatesList = ['LOBBY', 'PRESENT_WORD_INPUT_EXPLANATION','SELECT_EXPLANATION','PRESENT_ANSWER','PRESENT_SCORE', 'END'];
-
+const tempGameStatesList = [
+  'LOBBY',
+  'PRESENT_WORD_INPUT_EXPLANATION',
+  'SELECT_EXPLANATION',
+  'PRESENT_ANSWER',
+  'PRESENT_SCORE',
+  'END',
+];
 
 export const Game = () => {
   const websocketEndpointUrl = `${websocketBaseUrl}/chat`;
@@ -25,7 +31,7 @@ export const Game = () => {
     );
 
     const form = new FormData();
-    form.append('name', getRandomName()) 
+    form.append('name', getRandomName());
     axios
       .post(`/games/${pin}/join/`, form)
       .then((res) => {
@@ -54,7 +60,7 @@ export const Game = () => {
       setGlobalGameState(game.state);
       setPlayers(game.players);
       setCurrentWord(game.word);
-      setCorrectAnswer(game.correctAnswer)
+      setCorrectAnswer(game.correctAnswer);
       //setAnswers(game.answers);
     } catch (error) {
       console.log('Could not parse JSON');
@@ -133,7 +139,7 @@ export const Game = () => {
         } else if (globalGameState == 'END') {
           return <Summary />;
         } else {
-          return <Round />
+          return <Round />;
         }
       })()}
       <Button
@@ -145,7 +151,9 @@ export const Game = () => {
         label="Byt gamestate"
         secondary
       />
-      <h1 className="text-3xl">Debug: Current state -> {globalGameState || 'null/undefined'}</h1>
+      <h1 className="text-3xl">
+        Debug: Current state {globalGameState || 'null/undefined'}
+      </h1>
     </GameLayout>
   );
 };
