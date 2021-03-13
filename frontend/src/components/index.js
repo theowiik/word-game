@@ -15,3 +15,4 @@ export * from "./PresentCorrectAnswer";
 export * from "./Timer";
 export * from './PresentWord';
 export * from './Summary'
+export * from './AnswerRevealCard'
