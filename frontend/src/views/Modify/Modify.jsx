@@ -31,6 +31,24 @@ export const Modify = () => {
     fetchWords();
   }, []);
 
+  const handleNewCategory = (category) => {
+    //Add to state
+    setCategories((current) => [...current, category]);
+    //add to db
+    console.log(category);
+  };
+
+  const handleNewWord = (word) => {
+    //Add to state
+    setWords((current) => [current, word]);
+    //add to db
+    console.log(word);
+  };
+
+  const handleUpdateWord = (index, newData) => {
+    console.log(`Update index: ${index} with ${newData}`);
+  };
+
   return (
     <div className="bg-gray-800 text-white min-h-screen">
       <Container>
@@ -40,8 +58,16 @@ export const Modify = () => {
           </h1>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <AddWordsCard availableCategories={categories} currentWords={words} />
-          <AddCategoriesCard currentCategories={categories} />
+          <AddWordsCard
+            availableCategories={categories}
+            currentWords={words}
+            onNewWord={handleNewWord}
+            onUpdateWord={handleUpdateWord}
+          />
+          <AddCategoriesCard
+            currentCategories={categories}
+            onNewCategory={handleNewCategory}
+          />
         </div>
       </Container>
     </div>
@@ -57,49 +83,163 @@ const ModifyCard = ({ children, label }) => {
   );
 };
 
-const ListItem = ({ children }) => {
+const ListItem = ({ children, editing }) => {
   return (
-    <div className="p-4 bg-gray-800 rounded-lg mt-2 flex justify-between">
-      {children}
+    <div className="flex ">
+      <div className="w-full p-4 bg-gray-800 rounded-lg mt-2 flex justify-between">
+        {children}
+      </div>
+      {editing && (
+        <button type="submit" className="ml-4 text-yellow-500 rounded-lg">
+          update
+        </button>
+      )}
     </div>
   );
 };
 
-const AddWordsCard = ({ availableCategories, currentWords }) => {
+const AddWordsCard = ({
+  availableCategories,
+  currentWords,
+  onNewWord,
+  onUpdateWord,
+}) => {
+  const handleNewWord = (event) => {
+    event.preventDefault();
+    const word = {
+      word: event.target.word.value,
+      description: event.target.description.value,
+      category: event.target.category.value,
+    };
+    onNewWord(word);
+    var form = document.getElementById('newWordForm');
+    form.reset();
+  };
+
+  const handleUpdateWord = (event, index) => {
+    event.preventDefault();
+    const newData = {
+      word: event.target.currentWord.value,
+      description: event.target.currentDescription.value,
+      category: event.target.currentCategory.value,
+    };
+    onUpdateWord(index, newData);
+  };
+
+  const [editingIndex, setEditingIndex] = useState(-1);
+
   return (
     <ModifyCard label="Words">
-      {currentWords.map((word) => {
+      {currentWords.map((word, index) => {
         return (
-          <ListItem>
-            <span>{word.word}</span>
-            <span>{word.description}</span>
-            <select
-              name="category"
-              id="category"
-              className="bg-transparent"
-              defaultValue="cat1" //TODO: Check what category it belongs to
+          <ListItem editing={editingIndex === index}>
+            <form
+              onSubmit={(event) => handleUpdateWord(event, index)}
+              className="flex w-full justify-between"
             >
-              {availableCategories.map((category) => {
-                return <option value={category.name}>{category.name}</option>;
-              })}
-            </select>
+              <input
+                name="currentWord"
+                id="currentWord"
+                className="bg-transparent"
+                defaultValue={word.word}
+                onChange={(e) => setEditingIndex(index)}
+              />
+              <input
+                name="currentDescription"
+                id="currentDescription"
+                className="bg-transparent"
+                defaultValue={word.description}
+                onChange={(e) => setEditingIndex(index)}
+              />
+
+              <select
+                name="currentCategory"
+                id="currentCategory"
+                className="bg-transparent"
+                onChange={(e) => setEditingIndex(index)}
+                defaultValue="cat1" //TODO: Check what category it belongs to
+              >
+                {availableCategories.map((category) => {
+                  return <option value={category.name}>{category.name}</option>;
+                })}
+              </select>
+            </form>
           </ListItem>
         );
       })}
+      <div className="h-px bg-gray-800 mt-10" />
+      <form id="newWordForm" onSubmit={handleNewWord} className="mt-5">
+        <h3>Add new word</h3>
+        <div className="flex justify-between">
+          <input
+            name="word"
+            id="word"
+            className="bg-gray-800 p-2 rounded-lg w-full mr-4"
+            placeholder="Word"
+          />
+          <input
+            name="description"
+            id="description"
+            className="bg-gray-800 p-2 rounded-lg w-full mr-4"
+            placeholder="Description"
+          />
+          <select
+            name="category"
+            id="category"
+            className="bg-gray-800 p-2 rounded-lg w-full"
+          >
+            {availableCategories.map((category) => {
+              return <option value={category.name}>{category.name}</option>;
+            })}
+          </select>
+          <button
+            type="submit"
+            className="py-2 px-5 bg-yellow-500 rounded-lg ml-5"
+          >
+            Add
+          </button>
+        </div>
+      </form>
     </ModifyCard>
   );
 };
 
-const AddCategoriesCard = ({ currentCategories }) => {
+const AddCategoriesCard = ({ currentCategories, onNewCategory }) => {
+  const handleNewCategory = (event) => {
+    event.preventDefault();
+    const category = event.target.newCategory.value;
+    onNewCategory({ name: category });
+    var form = document.getElementById('newCategoryForm');
+    form.reset();
+  };
   return (
     <ModifyCard label="Categories">
       {currentCategories.map((category) => {
         return (
           <ListItem>
-            <span>{category.name}</span>
+            <input className="bg-transparent" defaultValue={category.name} />
           </ListItem>
         );
       })}
+
+      <div className="h-px bg-gray-800 mt-10" />
+      <form id="newCategoryForm" onSubmit={handleNewCategory} className="mt-5">
+        <h3>Add new category</h3>
+        <div className="flex justify-between">
+          <input
+            name="newCategory"
+            id="newCategory"
+            className="bg-gray-800 p-2 rounded-lg w-full"
+            placeholder="Category name"
+          />
+          <button
+            type="submit"
+            className="py-2 px-5 bg-yellow-500 rounded-lg ml-5"
+          >
+            Add
+          </button>
+        </div>
+      </form>
     </ModifyCard>
   );
 };
