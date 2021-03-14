@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
 export function Timer({ start, end }) {
-
   const [progress, setProgress] = useState(100);
-  const totalTime = end - start;
+  const marginal = 1400;
+  const duration = end - start - marginal;
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setProgress(((end - new Date().getTime()) / totalTime) * 100);
-    }, 1000);
+      setProgress((progress) => progress - 1);
+    }, duration/100);
     return () => clearInterval(interval);
-  }, []);
+  }, [progress]);
 
-  
   return (
     <div className="w-full overflow-hidden h-6 mb-4 text-xs flex rounded-full bg-green-100">
       <div

@@ -49,11 +49,11 @@ export const Game = () => {
     let game;
     try {
       game = JSON.parse(message.body);
-      setGlobalGameState(game.state);
+      setCurrentStateEndTime(game.currentStateEndTime);
       setPlayers(game.players);
       setCurrentWord(game.word);
       setCorrectExplanation(game.correctExplanation);
-      setCurrentStateEndTime(game.currentStateEndTime);
+      setGlobalGameState(game.state);
       //setExplanations(game.answers);
     } catch (error) {
       console.log(error);
