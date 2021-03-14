@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 export const PresentCorrectAnswer = () => {
   const [view, setView] = useState([]);
   const { currentWord, correctExplanation } = useGame();
-  const delaySeconds = 8;
+  const delaySeconds = 2;
   const selectedExplanations = [
     {
       players: ['peter', 'piper', 'picked', 'a', 'pepper', 'OK!', 'letgo'],
@@ -35,7 +35,7 @@ export const PresentCorrectAnswer = () => {
 
   function sortBy(key) {
     return (a, b) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
-  };
+  }
 
   useEffect(() => {
       const timer = setInterval(
@@ -62,20 +62,24 @@ export const PresentCorrectAnswer = () => {
       </p>
       <h1 className='text-6xl font-bold'>{currentWord}</h1>
 
-      {view.map((explanation, i) => {
-        return (
-          <div className='transition animate__animated animate__fadeIn' key={i}>
-            <AnswerRevealCard
-              text={explanation.explanation}
-              by={explanation.by}
-              chose={explanation.players}
-              correct={explanation.correct}
-              index={i}
-              key={i}
-            />
-          </div>
-        );
-      })}
+      {console.log(view)}
+
+      <div className="flex flex-col-reverse transition-all duration-300 ease-in-out">
+        {view.map((explanation, i) => {
+          return (
+            <div className='transition animate__animated animate__fadeIn' key={i}>
+              <AnswerRevealCard
+                text={explanation.explanation}
+                by={explanation.by}
+                chose={explanation.players}
+                correct={explanation.correct}
+                index={i}
+                key={i}
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
