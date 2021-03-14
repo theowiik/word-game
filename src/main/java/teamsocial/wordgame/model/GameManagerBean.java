@@ -1,14 +1,15 @@
 package teamsocial.wordgame.model;
 
-import java.util.HashMap;
-import java.util.Map;
-import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.repository.ICategoryRepository;
 import teamsocial.wordgame.websocket.GameChangedPushService;
+
+import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 
 @ApplicationScope
 @Component

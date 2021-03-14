@@ -16,21 +16,21 @@ public class WebConfig {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOriginPatterns("http://localhost:3000")
-            .allowedMethods("GET", "POST")
-            .allowedHeaders("*")
-            .allowCredentials(true)
-            .maxAge(31536000);
+          .allowedOriginPatterns("http://localhost:3000")
+          .allowedMethods("GET", "POST")
+          .allowedHeaders("*")
+          .allowCredentials(true)
+          .maxAge(31536000);
       }
 
       @Override
       public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/{spring:^[a-zA-Z\\d-_]+}")
-                .setViewName("forward:/");
+          .setViewName("forward:/");
         registry.addViewController("/**/{spring:^[a-zA-Z\\d-_]+}")
-                .setViewName("forward:/");
+          .setViewName("forward:/");
         registry.addViewController("/{spring:^[a-zA-Z\\d-_]+}/**{spring:?!(\\.js|\\.css)$}")
-                .setViewName("forward:/");
+          .setViewName("forward:/");
       }
     };
   }

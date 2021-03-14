@@ -1,26 +1,22 @@
 package teamsocial.wordgame.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import teamsocial.wordgame.model.entity.Category;
 
+import java.io.Serializable;
+import java.util.*;
+
 @Getter
 @Setter
 public class Game implements Serializable, Round.RoundFinishedListeners {
 
+  private final static int ROUNDS = 2;
   @Getter(onMethod = @__(@JsonIgnore))
   private final Set<GameObserver> observers;
   private final Set<GameFinishedListeners> gameFinishedListeners;
-  private final static int ROUNDS = 2;
   @Getter(onMethod = @__(@JsonIgnore))
   private final Set<Player> players;
   private final Category category;
@@ -156,14 +152,14 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
    */
   public boolean playerIsJoined(Player player) {
     if (player == null) return false;
-    return  players.contains(player);
+    return players.contains(player);
   }
 
   public String getCurrentWord() {
     return getCurrentRound().getCurrentWord();
   }
 
-  public String getCorrectOrMaskedAnswer(){
+  public String getCorrectOrMaskedAnswer() {
     return getCurrentRound().getCorrectOrMaskedAnswer();
   }
 

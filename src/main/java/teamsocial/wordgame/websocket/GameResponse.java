@@ -1,13 +1,14 @@
 package teamsocial.wordgame.websocket;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.model.game.Player;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -48,7 +49,6 @@ public class GameResponse {
     correctExplanation = game.getCorrectOrMaskedAnswer();
 
 
-
     // Explanations
     explanations = game.getCurrentRound().getAllExplanations();
 
@@ -83,32 +83,6 @@ public class GameResponse {
     return inverseMap;
   }
 
-  @Getter
-  @Setter
-  private class SelectedExplanationResponse {
-
-    private final List<Player> players;
-    private final String explanation;
-
-    public SelectedExplanationResponse(List<Player> players, String explanation) {
-      this.players = players;
-      this.explanation = explanation;
-    }
-  }
-
-  @Getter
-  @Setter
-  private class PlayerResponse {
-
-    private final String name;
-    private final int score;
-
-    public PlayerResponse(String name, int score) {
-      this.name = name;
-      this.score = score;
-    }
-  }
-
   private State getResponseState(Game game) {
     var output = State.LOBBY;
     var gameIsActive = game.getState() == Game.State.PLAYING;
@@ -137,5 +111,31 @@ public class GameResponse {
     PRESENT_ANSWER,
     PRESENT_SCORE,
     END
+  }
+
+  @Getter
+  @Setter
+  private class SelectedExplanationResponse {
+
+    private final List<Player> players;
+    private final String explanation;
+
+    public SelectedExplanationResponse(List<Player> players, String explanation) {
+      this.players = players;
+      this.explanation = explanation;
+    }
+  }
+
+  @Getter
+  @Setter
+  private class PlayerResponse {
+
+    private final String name;
+    private final int score;
+
+    public PlayerResponse(String name, int score) {
+      this.name = name;
+      this.score = score;
+    }
   }
 }
