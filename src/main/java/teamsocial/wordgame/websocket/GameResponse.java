@@ -17,7 +17,7 @@ public class GameResponse {
   private State state;
   private Long currentStateEndTime;
   private String correctExplanation;
-  private List<String> explanations = new ArrayList<>();
+  private List<String> explanations;
   private List<PlayerResponse> players;
   private List<SelectedExplanationResponse> selectedExplanations;
 
@@ -51,7 +51,7 @@ public class GameResponse {
       ? game.getCurrentRound().getWord().getDescription() : "Naughty naughty trying to cheat ;)";
 
     // Explanations
-    game.getCurrentRound().getAllExplanations();
+    explanations = game.getCurrentRound().getAllExplanations();
 
     // PickedAnswers
     selectedExplanations = new ArrayList<>();

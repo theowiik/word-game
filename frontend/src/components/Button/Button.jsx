@@ -7,7 +7,8 @@ const getButtonClassNames = (props) => {
     'btn-secondary': props.secondary,
     'btn-success': props.success,
     'btn-danger': props.danger,
-    'large': props.large
+    'large': props.large,
+    'disabled': props.disabled
   });
 };
 
@@ -19,12 +20,13 @@ export function Button({
   danger,
   success,
   secondary,
-  large
+  large,
+  disabled
 }) {
-  const classes = getButtonClassNames({ primary, secondary, danger, success, large });
+  const classes = getButtonClassNames({ primary, secondary, danger, success, large, disabled });
 
   return (
-    <button onClick={onClick} type={type} className={classes}>
+    <button onClick={disabled ? null : onClick} type={type} className={classes}>
       {label}
     </button>
   );

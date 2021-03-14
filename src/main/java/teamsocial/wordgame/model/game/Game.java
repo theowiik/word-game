@@ -19,6 +19,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
 
   @Getter(onMethod = @__(@JsonIgnore))
   private final Set<GameObserver> observers;
+  private final Set<GameFinishedListeners> gameFinishedListeners;
   private final static int ROUNDS = 2;
   @Getter(onMethod = @__(@JsonIgnore))
   private final Set<Player> players;
@@ -42,6 +43,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
 
     rounds = new ArrayList<>();
     observers = new HashSet<>();
+    gameFinishedListeners = new HashSet<>();
     this.category = category;
     state = State.LOBBY;
     players = new HashSet<>();
@@ -91,6 +93,10 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     observers.add(go);
   }
 
+  public void addGameFinishedListener(GameFinishedListeners gfl) {
+    gameFinishedListeners.add(gfl);
+  }
+
   public Round getCurrentRound() {
     return rounds.get(round - 1);
   }
@@ -124,11 +130,18 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     }
   }
 
+  public void notifyGameFinishedListeners() {
+    for (var l : gameFinishedListeners) {
+      l.notifyGameFinished(pin);
+    }
+  }
+
   @Override
   public void notifyRoundFinished() {
     if (round >= ROUNDS) {
       state = State.END;
       notifyGameChangedObservers();
+      notifyGameFinishedListeners();
     } else {
       nextRound();
       getCurrentRound().start();
@@ -153,5 +166,9 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
   public interface GameObserver {
 
     void notifyGameChanged(Game game);
+  }
+
+  public interface GameFinishedListeners {
+    void notifyGameFinished(String pin);
   }
 }

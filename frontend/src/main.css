@@ -28,6 +28,10 @@
   @apply btn bg-gray-600 text-white;
 }
 
+.disabled {
+  @apply btn bg-gray-900 text-gray-600 cursor-not-allowed
+}
+
 .large {
   @apply btn-base py-4 w-full text-xl rounded-xl;
 }
