@@ -54,7 +54,7 @@ export const Game = () => {
       setCurrentWord(game.word);
       setCorrectExplanation(game.correctExplanation);
       setGlobalGameState(game.state);
-      //setExplanations(game.answers);
+      setExplanations(game.explanations);
     } catch (error) {
       console.log(error);
     }
@@ -110,16 +110,6 @@ export const Game = () => {
       { name: 'Jonathan', color: 'grass', score: 300 }
     ]);
 
-    //Test data
-    const answers = [
-      { answer: 'Theo e king' },
-      { answer: 'Sudo e king' },
-      { answer: 'Hentoo e king' },
-      { answer: 'Jopsidop e king' },
-      { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
-      { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' }
-    ];
-    setExplanations(answers);
     //TODO: make sure to give the context the right state from websocket on reload
   }, []);
 

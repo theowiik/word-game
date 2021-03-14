@@ -24,7 +24,7 @@ export const PresentAnswers = () => {
               <div key={`answer-${index}`}>
                 <PresentAnswerTile
                   clickable={!hasSelected}
-                  answer={answer.answer}
+                  answer={answer}
                   onClick={() => setHasSelected(true)}
                 ></PresentAnswerTile>
               </div>
