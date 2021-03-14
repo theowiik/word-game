@@ -17,7 +17,7 @@ public class WebConfig {
       public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
           .allowedOriginPatterns("http://localhost:3000")
-          .allowedMethods("GET", "POST")
+          .allowedMethods("GET", "POST", "PUT", "DELETE")
           .allowedHeaders("*")
           .allowCredentials(true)
           .maxAge(31536000);

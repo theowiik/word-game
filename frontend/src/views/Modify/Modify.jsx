@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container } from 'components';
+import { toast } from 'react-toastify';
 
 export const Modify = () => {
   const [categories, setCategories] = useState([]);
@@ -32,29 +33,81 @@ export const Modify = () => {
   }, []);
 
   const handleNewCategory = (category) => {
-    //Add to state
-    setCategories((current) => [...current, category]);
-    //add to db
-    console.log(category);
+    //Add to db
+    axios
+      .post('/categories', category)
+      .then((res) => {
+        toast.success('Category added');
+        //Add to state
+        setCategories((current) => [...current, res.data]);
+      })
+      .catch((err) => {
+        toast.error('Failed to add category');
+      });
   };
 
   const handleNewWord = (word) => {
-    //Add to state
-    setWords((current) => [...current, word]);
     //add to db
-    console.log(words);
+    axios
+      .post('/words', word)
+      .then((res) => {
+        toast.success('Word added');
+        //Add to state
+        setWords((current) => [...current, res.data]);
+      })
+      .catch((err) => {
+        toast.error('Failed to add word');
+      });
   };
 
-  const handleUpdateWord = (index, newData) => {
-    console.log(`Update index: ${index} with:`);
-    console.log(newData)
+  const handleUpdateWord = (newData) => {
+    axios
+      .put('/words', newData)
+      .then((res) => {
+        toast.success('Word updated');
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error('Failed to update word');
+      });
   };
 
   const handleUpdateCategory = (index, newData) => {
-    console.log(`Update index: ${index} with:`);
-    console.log(newData)
-    
-  }
+    axios
+      .put('/categories', newData)
+      .then((res) => {
+        toast.success('Category updated');
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error('Failed to update category');
+      });
+  };
+
+  const handleDeleteCategory = (category) => {
+   
+    axios
+      .delete('/categories', category)
+      .then((res) => {
+        toast.success('Category deleted');
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error('Failed to delete category');
+      });
+  };
+
+  const handleDeleteWord = (word) => {
+    axios
+    .delete('/words', word)
+    .then((res) => {
+      toast.success('Word deleted');
+    })
+    .catch((err) => {
+      console.log(err);
+      toast.error('Failed to delete word');
+    });
+  };
 
   return (
     <div className="bg-gray-800 text-white min-h-screen">
@@ -70,11 +123,13 @@ export const Modify = () => {
             currentWords={words}
             onNewWord={handleNewWord}
             onUpdateWord={handleUpdateWord}
+            onDeleteWord={handleDeleteWord}
           />
           <AddCategoriesCard
             currentCategories={categories}
             onNewCategory={handleNewCategory}
             onUpdateCategory={handleUpdateCategory}
+            onDeleteCategory={handleDeleteCategory}
           />
         </div>
       </Container>
@@ -91,9 +146,16 @@ const ModifyCard = ({ children, label }) => {
   );
 };
 
-const ListItem = ({ children, editing = false }) => {
+const ListItem = ({
+  children,
+  editing = false,
+  onPointerEnter,
+  onPointerLeave,
+}) => {
   return (
     <div
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
       className={`w-full p-4 ${
         editing ? 'bg-gray-700' : 'bg-gray-800'
       } rounded-lg mt-2 flex justify-between`}
@@ -103,24 +165,29 @@ const ListItem = ({ children, editing = false }) => {
   );
 };
 
-const WordListItem = ({ word, index, onUpdate, availableCategories }) => {
+const WordListItem = ({
+  word,
+  onUpdate,
+  onDeleteWord,
+  availableCategories,
+}) => {
   const [editing, setEditing] = useState(false);
 
   const handleSubmit = (event) => {
-    onUpdate(event, index);
+    onUpdate(event, word.word);
     setEditing(false);
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex">
+      <div
+        onClick={() => onDeleteWord(word)}
+        className="rounded-full bg-gray-800 p-2 h-10 w-10 mr-2 text-center bg-opacity-50 hover:bg-red-500 cursor-pointer mt-4"
+      >
+        x
+      </div>
       <ListItem editing={editing}>
-        <input
-          name="currentWord"
-          id="currentWord"
-          className="bg-transparent"
-          defaultValue={word.word}
-          onChange={() => setEditing(true)}
-        />
+        <span>{word.word}</span>
         <input
           name="currentDescription"
           id="currentDescription"
@@ -134,7 +201,7 @@ const WordListItem = ({ word, index, onUpdate, availableCategories }) => {
           id="currentCategory"
           className="bg-transparent"
           onChange={() => setEditing(true)}
-          defaultValue="cat1" //TODO: Check what category it belongs to
+          defaultValue={word.category.name} //TODO: Check what category it belongs to
         >
           {availableCategories.map((category) => {
             return <option value={category.name}>{category.name}</option>;
@@ -158,6 +225,7 @@ const AddWordsCard = ({
   currentWords,
   onNewWord,
   onUpdateWord,
+  onDeleteWord,
 }) => {
   const handleNewWord = (event) => {
     event.preventDefault();
@@ -171,14 +239,14 @@ const AddWordsCard = ({
     form.reset();
   };
 
-  const handleUpdateWord = (event, index) => {
+  const handleUpdateWord = (event, word) => {
     event.preventDefault();
     const newData = {
-      word: event.target.currentWord.value,
+      word: word,
       description: event.target.currentDescription.value,
       category: event.target.currentCategory.value,
     };
-    onUpdateWord(index, newData);
+    onUpdateWord(newData);
   };
 
   return (
@@ -189,6 +257,7 @@ const AddWordsCard = ({
             word={word}
             index={index}
             onUpdate={handleUpdateWord}
+            onDeleteWord={onDeleteWord}
             availableCategories={availableCategories}
           />
         );
@@ -230,21 +299,28 @@ const AddWordsCard = ({
   );
 };
 
-const CategoryListItem = ({ category, index, onUpdate }) => {
+const CategoryListItem = ({ category, index, onUpdate, onDelete }) => {
   const [editing, setEditing] = useState(false);
 
   const handleUpdate = (event) => {
     event.preventDefault();
 
     const newData = {
-      name: event.target.currentCategory.value,
+      oldName: category.name,
+      newName: event.target.currentCategory.value,
     };
     onUpdate(index, newData);
-    setEditing(false)
+    setEditing(false);
   };
 
   return (
     <form onSubmit={handleUpdate} className="flex">
+      <div
+        onClick={() => onDelete(category)}
+        className="rounded-full bg-gray-800 p-2 h-10 w-10 mr-2 text-center bg-opacity-50 hover:bg-red-500 cursor-pointer mt-4"
+      >
+        x
+      </div>
       <ListItem editing={editing}>
         <input
           name="currentCategory"
@@ -270,6 +346,7 @@ const AddCategoriesCard = ({
   currentCategories,
   onNewCategory,
   onUpdateCategory,
+  onDeleteCategory,
 }) => {
   const handleNewCategory = (event) => {
     event.preventDefault();
@@ -286,6 +363,7 @@ const AddCategoriesCard = ({
           <CategoryListItem
             index={index}
             onUpdate={onUpdateCategory}
+            onDelete={onDeleteCategory}
             category={category}
           />
         );
