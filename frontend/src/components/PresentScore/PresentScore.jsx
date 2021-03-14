@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGame } from 'contexts/game';
-import { Button } from 'components';
 
 export const PresentScore = () => {
-  const { players } = useGame();
+  const { players, currentStateEndTime } = useGame();
+  const [timeLeft, setTimeLeft] = useState(
+    Math.floor((currentStateEndTime - new Date().getTime()) / 1000)
+  );
 
   function compare(a, b) {
     if (a.score < b.score) {
@@ -15,17 +17,19 @@ export const PresentScore = () => {
     return 0;
   }
 
-  const handleClick = () => {
-    //TODO: Post new word from db.
-    //TODO: post change roundState to PRESENT_WORD
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft((time) => time - 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timeLeft]);
 
   return (
     <div className="w-full flex flex-col items-center">
       <h2 className="text-center mt-14 text-6xl font-semibold">
         Current score
       </h2>
-      <div className="p-20 w-full">
+      <div className="my-5 sm:p-20 w-full">
         {players.sort(compare).map((player, index) => {
           return (
             <div
@@ -39,7 +43,8 @@ export const PresentScore = () => {
         })}
       </div>
       <div>
-        <Button onClick={handleClick} label="Start new round" primary />
+        <span className="mr-5">Next round starts in:</span>
+        <span>{`${timeLeft} seconds`}</span>
       </div>
     </div>
   );

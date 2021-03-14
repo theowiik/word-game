@@ -14,7 +14,7 @@ export function Navbar({ label, onBackClickPath }) {
        
       )}
 
-      <h1 className="mt-20 sm:mt-0 text-gray-50 text-4xl font-bold text-center">{label}</h1>
+      <h1 className="mt-16 sm:mt-0 text-gray-50 text-4xl font-bold text-center">{label}</h1>
     </div>
   );
 }
