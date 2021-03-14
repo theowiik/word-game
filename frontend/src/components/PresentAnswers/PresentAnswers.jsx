@@ -17,7 +17,7 @@ export const PresentAnswers = () => {
         <Timer start={new Date().getTime()} end={currentStateEndTime} />
       </div>
 
-      <div className="flex items-center mt-10">
+      <div className="w-full items-center mt-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {explanations.map((answer, index) => {
             return (
