@@ -5,19 +5,31 @@ import { useState, useEffect } from 'react';
 export const PresentCorrectAnswer = () => {
   const [view, setView] = useState([]);
   const { currentWord, correctExplanation } = useGame();
-  const delaySeconds = 2;
+  const delaySeconds = 8;
   const selectedExplanations = [
     {
-      players: ['peter', 'piper'],
+      players: ['peter', 'piper', 'picked', 'a', 'pepper', 'OK!', 'letgo'],
       explanation: 'Cool thing',
       correct: true,
       by: null
     },
     {
-      players: ['mooowo'],
+      players: ['mooowo', 'a', 'pepper', 'OK!'],
       explanation: 'Not so cool thing. bUt a very long sentence woo woo i ma so long, hahha look at me!! no one would type more than this right????',
       correct: false,
       by: 'peter'
+    },
+    {
+      players: ['mooowo', 'a', 'pepper', 'OK!'],
+      explanation: 'you dont wannna know :||',
+      correct: false,
+      by: 'Mr. Wasder'
+    },
+    {
+      players: [],
+      explanation: ':) no',
+      correct: false,
+      by: 'Ms. Wasder'
     }
   ].sort(sortBy('correct'));
 
@@ -50,7 +62,7 @@ export const PresentCorrectAnswer = () => {
       </p>
       <h1 className='text-6xl font-bold'>{currentWord}</h1>
 
-      {view.reverse().map((explanation, i) => {
+      {view.map((explanation, i) => {
         return (
           <div className='transition animate__animated animate__fadeIn' key={i}>
             <AnswerRevealCard
