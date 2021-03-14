@@ -35,6 +35,7 @@ export const Game = () => {
       .post(`/games/${pin}/join`, form)
       .then((res) => {
         console.log(res);
+        localStorage.setItem('playerName', form.get('name'));
       })
       .catch((err) => {
         console.log(err);

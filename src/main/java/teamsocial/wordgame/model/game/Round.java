@@ -17,6 +17,11 @@ import lombok.Setter;
 import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.model.entity.Word;
 
+import java.io.Serializable;
+import java.util.*;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -46,7 +51,14 @@ public class Round implements Serializable {
    */
   private long currentStateStartedAt;
 
-  public List<String> getAllExplanations(){
+  public Round(Category category, RoundChanged roundChangedImpl) {
+    roundFinishedListeners = new ArrayList<>();
+    explanations = new HashMap<>();
+    this.roundChangedImpl = roundChangedImpl;
+    setRandomWord(category);
+  }
+
+  public List<String> getAllExplanations() {
     List<String> explanations = new ArrayList<>();
     explanations.addAll(this.explanations.values());
     explanations.add(word.getDescription());
@@ -54,9 +66,7 @@ public class Round implements Serializable {
     return explanations;
   }
 
-  public Round(Category category, RoundChanged roundChangedImpl) {
-    roundFinishedListeners = new ArrayList<>();
-    this.roundChangedImpl = roundChangedImpl;
+  private void setRandomWord(Category category) {
     var rand = new java.util.Random();
     var words = category.getWords();
 
@@ -65,12 +75,19 @@ public class Round implements Serializable {
     }
 
     word = words.get(rand.nextInt(words.size()));
-    explanations = new HashMap<>();
   }
 
-  public interface RoundFinishedListeners {
+  public String getCurrentWord() {
+    return word.getWord();
+  }
 
-    void notifyRoundFinished();
+  public long getCurrentStateEndTime() {
+    return getCurrentStateStartedAt() + getState().getDurationMilliSeconds();
+  }
+
+  public String getCorrectOrMaskedAnswer() {
+    var shouldShowAnswer = state == State.PRESENT_ANSWER;
+    return shouldShowAnswer ? correctAnswer() : "Naughty naughty trying to cheat ;)";
   }
 
   public void addRoundFinishedListener(RoundFinishedListeners listener) {
@@ -93,11 +110,9 @@ public class Round implements Serializable {
     explanations.put(player, description);
   }
 
-
-  public String correctAnswer() {
+  private String correctAnswer() {
     return word.getDescription();
   }
-
 
   /**
    * @return The list of players who guessed correctly
@@ -121,7 +136,6 @@ public class Round implements Serializable {
     }
     chosenExplanations.put(player, chosenExplanation);
   }
-
 
   private boolean validDescription(String string) {
 
@@ -183,6 +197,15 @@ public class Round implements Serializable {
     exec.schedule(invokable::perform, delayInSeconds, TimeUnit.SECONDS);
   }
 
+  /**
+   * Gets the current unix time in milliseconds.
+   *
+   * @return the current unix time in milliseconds.
+   */
+  private long now() {
+    return System.currentTimeMillis();
+  }
+
   public enum State {
     PRESENT_WORD_INPUT_EXPLANATION(10),
     SELECT_EXPLANATION(10),
@@ -198,6 +221,14 @@ public class Round implements Serializable {
     public int getDurationSeconds() {
       return durationSeconds;
     }
+
+    public int getDurationMilliSeconds() {
+      return durationSeconds * 1000;
+    }
+  }
+
+  public interface RoundFinishedListeners {
+    void notifyRoundFinished();
   }
 
   interface RoundChanged {
