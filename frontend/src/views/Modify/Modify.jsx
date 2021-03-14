@@ -40,14 +40,21 @@ export const Modify = () => {
 
   const handleNewWord = (word) => {
     //Add to state
-    setWords((current) => [current, word]);
+    setWords((current) => [...current, word]);
     //add to db
-    console.log(word);
+    console.log(words);
   };
 
   const handleUpdateWord = (index, newData) => {
-    console.log(`Update index: ${index} with ${newData}`);
+    console.log(`Update index: ${index} with:`);
+    console.log(newData)
   };
+
+  const handleUpdateCategory = (index, newData) => {
+    console.log(`Update index: ${index} with:`);
+    console.log(newData)
+    
+  }
 
   return (
     <div className="bg-gray-800 text-white min-h-screen">
@@ -67,6 +74,7 @@ export const Modify = () => {
           <AddCategoriesCard
             currentCategories={categories}
             onNewCategory={handleNewCategory}
+            onUpdateCategory={handleUpdateCategory}
           />
         </div>
       </Container>
@@ -83,18 +91,65 @@ const ModifyCard = ({ children, label }) => {
   );
 };
 
-const ListItem = ({ children, editing }) => {
+const ListItem = ({ children, editing = false }) => {
   return (
-    <div className="flex ">
-      <div className="w-full p-4 bg-gray-800 rounded-lg mt-2 flex justify-between">
-        {children}
-      </div>
+    <div
+      className={`w-full p-4 ${
+        editing ? 'bg-gray-700' : 'bg-gray-800'
+      } rounded-lg mt-2 flex justify-between`}
+    >
+      {children}
+    </div>
+  );
+};
+
+const WordListItem = ({ word, index, onUpdate, availableCategories }) => {
+  const [editing, setEditing] = useState(false);
+
+  const handleSubmit = (event) => {
+    onUpdate(event, index);
+    setEditing(false);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex">
+      <ListItem editing={editing}>
+        <input
+          name="currentWord"
+          id="currentWord"
+          className="bg-transparent"
+          defaultValue={word.word}
+          onChange={() => setEditing(true)}
+        />
+        <input
+          name="currentDescription"
+          id="currentDescription"
+          className="bg-transparent"
+          defaultValue={word.description}
+          onChange={() => setEditing(true)}
+        />
+
+        <select
+          name="currentCategory"
+          id="currentCategory"
+          className="bg-transparent"
+          onChange={() => setEditing(true)}
+          defaultValue="cat1" //TODO: Check what category it belongs to
+        >
+          {availableCategories.map((category) => {
+            return <option value={category.name}>{category.name}</option>;
+          })}
+        </select>
+      </ListItem>
       {editing && (
-        <button type="submit" className="ml-4 text-yellow-500 rounded-lg">
-          update
+        <button
+          type="submit"
+          className="bg-green-500 mt-2 px-2 ml-2 rounded-lg"
+        >
+          Update
         </button>
       )}
-    </div>
+    </form>
   );
 };
 
@@ -126,45 +181,16 @@ const AddWordsCard = ({
     onUpdateWord(index, newData);
   };
 
-  const [editingIndex, setEditingIndex] = useState(-1);
-
   return (
     <ModifyCard label="Words">
       {currentWords.map((word, index) => {
         return (
-          <ListItem editing={editingIndex === index}>
-            <form
-              onSubmit={(event) => handleUpdateWord(event, index)}
-              className="flex w-full justify-between"
-            >
-              <input
-                name="currentWord"
-                id="currentWord"
-                className="bg-transparent"
-                defaultValue={word.word}
-                onChange={(e) => setEditingIndex(index)}
-              />
-              <input
-                name="currentDescription"
-                id="currentDescription"
-                className="bg-transparent"
-                defaultValue={word.description}
-                onChange={(e) => setEditingIndex(index)}
-              />
-
-              <select
-                name="currentCategory"
-                id="currentCategory"
-                className="bg-transparent"
-                onChange={(e) => setEditingIndex(index)}
-                defaultValue="cat1" //TODO: Check what category it belongs to
-              >
-                {availableCategories.map((category) => {
-                  return <option value={category.name}>{category.name}</option>;
-                })}
-              </select>
-            </form>
-          </ListItem>
+          <WordListItem
+            word={word}
+            index={index}
+            onUpdate={handleUpdateWord}
+            availableCategories={availableCategories}
+          />
         );
       })}
       <div className="h-px bg-gray-800 mt-10" />
@@ -204,7 +230,47 @@ const AddWordsCard = ({
   );
 };
 
-const AddCategoriesCard = ({ currentCategories, onNewCategory }) => {
+const CategoryListItem = ({ category, index, onUpdate }) => {
+  const [editing, setEditing] = useState(false);
+
+  const handleUpdate = (event) => {
+    event.preventDefault();
+
+    const newData = {
+      name: event.target.currentCategory.value,
+    };
+    onUpdate(index, newData);
+    setEditing(false)
+  };
+
+  return (
+    <form onSubmit={handleUpdate} className="flex">
+      <ListItem editing={editing}>
+        <input
+          name="currentCategory"
+          id="currentCategory"
+          className="bg-transparent w-full"
+          onChange={() => setEditing(true)}
+          defaultValue={category.name}
+        />
+      </ListItem>
+      {editing && (
+        <button
+          type="submit"
+          className="bg-green-500 mt-2 px-2 ml-2 rounded-lg"
+        >
+          Update
+        </button>
+      )}
+    </form>
+  );
+};
+
+const AddCategoriesCard = ({
+  currentCategories,
+  onNewCategory,
+  onUpdateCategory,
+}) => {
   const handleNewCategory = (event) => {
     event.preventDefault();
     const category = event.target.newCategory.value;
@@ -212,13 +278,16 @@ const AddCategoriesCard = ({ currentCategories, onNewCategory }) => {
     var form = document.getElementById('newCategoryForm');
     form.reset();
   };
+
   return (
     <ModifyCard label="Categories">
-      {currentCategories.map((category) => {
+      {currentCategories.map((category, index) => {
         return (
-          <ListItem>
-            <input className="bg-transparent" defaultValue={category.name} />
-          </ListItem>
+          <CategoryListItem
+            index={index}
+            onUpdate={onUpdateCategory}
+            category={category}
+          />
         );
       })}
 
