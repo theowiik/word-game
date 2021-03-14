@@ -54,15 +54,15 @@ const [disabledButton, setDisabledButton] = useState(true)
             onSubmit={handleExplanationSubmit}
             className="flex flex-col w-full"
           >
-            <textarea
+            <input
               name="explanation"
-              className="p-5 rounded-lg text-white bg-gray-600  border-none h-72 my-10"
-              placeholder="Write your explanation.."
+              className="p-5 rounded-lg text-white bg-gray-600 text-center  border-none h-44 my-10"
+              placeholder="Write your explanation..."
               onChange={handleChangedExplanation}
               
-            ></textarea>
+            ></input>
 
-            <Button primary={!disabledButton} disabled={disabledButton} label="Submit" />
+            <Button type="submit" primary={!disabledButton} disabled={disabledButton} label="Submit" />
           </form>
         ) : (
           <div className="w-full p-10 rounded-lg bg-gray-600 text-center text-bold">

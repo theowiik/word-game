@@ -43,8 +43,14 @@ export const PresentScore = () => {
         })}
       </div>
       <div>
-        <span className="mr-5">Next round starts in:</span>
-        <span>{`${timeLeft} seconds`}</span>
+        {timeLeft > 0 ? (
+          <>
+            <span className="mr-5">Next round starts in:</span>
+            <span>{`${timeLeft} seconds`}</span>
+          </>
+        ) : (
+          <span>Lets gooo 😎</span>
+        )}
       </div>
     </div>
   );
