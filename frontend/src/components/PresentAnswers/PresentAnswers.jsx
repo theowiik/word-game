@@ -3,10 +3,9 @@ import { Timer, PresentAnswerTile } from 'components';
 import { useGame } from 'contexts/game';
 
 export const PresentAnswers = () => {
-
   const [hasSelected, setHasSelected] = useState(false);
 
-  const { currentWord, explanations, currentStateEndTime } = useGame()
+  const { currentWord, explanations, currentStateEndTime } = useGame();
 
   return (
     <>
@@ -14,7 +13,7 @@ export const PresentAnswers = () => {
         {currentWord}
       </h1>
 
-      <div className="mt-14 w-150">
+      <div className="mt-14 w-full">
         <Timer start={new Date().getTime()} end={currentStateEndTime} />
       </div>
 
