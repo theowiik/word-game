@@ -54,9 +54,9 @@ export const Game = () => {
       setCurrentStateEndTime(game.currentStateEndTime);
       setPlayers(game.players);
       setCurrentWord(game.word);
-      setGlobalGameState(game.state);
       setSelectedExplanations(game.selectedExplanations);
       setExplanations(game.explanations);
+      setGlobalGameState(game.state);
     } catch (error) {
       console.log(error);
     }

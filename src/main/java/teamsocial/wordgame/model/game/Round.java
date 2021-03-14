@@ -17,11 +17,6 @@ import lombok.Setter;
 import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.model.entity.Word;
 
-import java.io.Serializable;
-import java.util.*;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -195,15 +190,6 @@ public class Round implements Serializable {
   private void callAfter(Invokable invokable, int delayInSeconds) {
     ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
     exec.schedule(invokable::perform, delayInSeconds, TimeUnit.SECONDS);
-  }
-
-  /**
-   * Gets the current unix time in milliseconds.
-   *
-   * @return the current unix time in milliseconds.
-   */
-  private long now() {
-    return System.currentTimeMillis();
   }
 
   public enum State {

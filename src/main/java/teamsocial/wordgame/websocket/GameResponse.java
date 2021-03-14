@@ -144,30 +144,4 @@ public class GameResponse {
     PRESENT_SCORE,
     END
   }
-
-  @Getter
-  @Setter
-  private class SelectedExplanationResponse {
-
-    private final List<Player> players;
-    private final String explanation;
-
-    public SelectedExplanationResponse(List<Player> players, String explanation) {
-      this.players = players;
-      this.explanation = explanation;
-    }
-  }
-
-  @Getter
-  @Setter
-  private class PlayerResponse {
-
-    private final String name;
-    private final int score;
-
-    public PlayerResponse(String name, int score) {
-      this.name = name;
-      this.score = score;
-    }
-  }
 }
