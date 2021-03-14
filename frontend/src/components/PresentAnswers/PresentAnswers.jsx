@@ -17,7 +17,7 @@ export const PresentAnswers = () => {
       .post(`/games/${pin}/pick_explanation`, form)
       .then((res) => {
         console.log(res);
-        toast('Picked explanation 😎');
+        toast.success('Picked explanation 😎');
         setHasSelected(true)
       })
       .catch((err) => {
@@ -26,7 +26,6 @@ export const PresentAnswers = () => {
         console.log(err);
       });
   }
-
 
   return (
     <>

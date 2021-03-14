@@ -9,7 +9,7 @@ const actions = {
   SET_CURRENT_STATE_END_TIME: 'SET_CURRENT_STATE_END_TIME',
   SET_CURRENT_WORD: 'SET_CURRENT_WORD',
   SET_EXPLANATIONS: 'SET_EXPLANATIONS',
-  SET_CORRECT_EXPLANATION: 'SET_CORRECT_EXPLANATION',
+  SET_SELECTED_EXPLANATIONS: 'SET_SELECTED_EXPLANATIONS'
 };
 
 const initialState = {
@@ -18,8 +18,8 @@ const initialState = {
   players: [],
   currentStateEndTime: 0,
   currentWord: 'Default',
-  correctExplanation: '',
   explanations: [],
+  selectedExplanations: [],
 };
 
 function reducer(state, action) {
@@ -54,17 +54,17 @@ function reducer(state, action) {
         currentWord: action.word,
       };
     }
-    case actions.SET_CORRECT_EXPLANATION: {
-      return {
-        ...state,
-        correctExplanation: action.description,
-      };
-    }
     case actions.SET_EXPLANATIONS: {
       return {
         ...state,
         explanations: action.explanations,
       };
+    }
+    case actions.SET_SELECTED_EXPLANATIONS: {
+      return {
+        ...state,
+        selectedExplanations: action.selectedExplanations
+      }
     }
     default: {
       return {
@@ -95,11 +95,8 @@ export const GameProvider = (props) => {
   const setCurrentWord = (word) =>
     dispatch({ type: actions.SET_CURRENT_WORD, word: word });
 
-  const setCorrectExplanation = (description) =>
-    dispatch({
-      type: actions.SET_CORRECT_EXPLANATION,
-      description: description,
-    });
+  const setSelectedExplanations = (selectedExplanations) =>
+    dispatch({ type: actions.SET_SELECTED_EXPLANATIONS, selectedExplanations: selectedExplanations });
 
   const setExplanations = (explanations) =>
     dispatch({ type: actions.SET_EXPLANATIONS, explanations: explanations });
@@ -112,8 +109,8 @@ export const GameProvider = (props) => {
       setPlayers,
       setCurrentStateEndTime,
       setCurrentWord,
-      setCorrectExplanation,
-      setExplanations,
+      setSelectedExplanations,
+      setExplanations
     }),
     [gameState]
   );
