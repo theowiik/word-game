@@ -49,11 +49,12 @@ export const Game = () => {
     let game;
     try {
       game = JSON.parse(message.body);
+      console.log('Recieved: ', game);
       setCurrentStateEndTime(game.currentStateEndTime);
       setPlayers(game.players);
       setCurrentWord(game.word);
-      setCorrectExplanation(game.correctExplanation);
       setGlobalGameState(game.state);
+      setSelectedExplanations(game.selectedExplanations);
       setExplanations(game.explanations);
     } catch (error) {
       console.log(error);
@@ -86,7 +87,7 @@ export const Game = () => {
     setPlayers,
     setCurrentStateEndTime,
     setCurrentWord,
-    setCorrectExplanation,
+    setSelectedExplanations,
     setExplanations,
     setPin
   } = useGame();

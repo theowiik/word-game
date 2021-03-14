@@ -19,7 +19,7 @@ const getBadgeClassNames = (props) => {
   });
 };
 
-export function AnswerRevealCard({ text, by, chose, correct }) {
+export function AnswerRevealCard({ text, byPlayer, playersWhoChose, correct }) {
   const showByDelaySeconds = 6;
   const showChoseDelaySeconds = 3;
   const [showBy, setShowBy] = useState(false);
@@ -49,18 +49,18 @@ export function AnswerRevealCard({ text, by, chose, correct }) {
 
       <div className='flex flex-row flex-wrap justify-end mt-2'>
         {
-          showChose && chose.length > 0 && (
-            chose.map((playerName, i) => {
+          showChose && playersWhoChose.length > 0 && (
+            playersWhoChose.map((player, i) => {
               return (
                 <p className={getBadgeClassNames({ success: correct, danger: !correct })} key={i}>
-                  {correct ? '+' : '-'}1 {playerName}
+                  {correct ? '+' : '-'}1 {player.name}
                 </p>
               );
             })
           )
         }
         {
-          showChose && chose.length === 0 && (
+          showChose && playersWhoChose.length === 0 && (
             <p className={getBadgeClassNames({ dark: true })}>
               No one 😢
             </p>
@@ -72,7 +72,7 @@ export function AnswerRevealCard({ text, by, chose, correct }) {
         {
           showBy && (
             <p className='text-3xl font-semibold animate__animated animate__fadeInDown'>
-              {by ? `by ${by}` : 'Correct answer'}
+              {byPlayer ? `by ${byPlayer.name}` : 'Correct answer'}
             </p>
           )
         }

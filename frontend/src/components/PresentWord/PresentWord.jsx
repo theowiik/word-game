@@ -17,7 +17,7 @@ const [disabledButton, setDisabledButton] = useState(true)
       .post(`/games/${pin}/add_explanation`, form)
       .then((res) => {
         console.log(res);
-        toast('Submitted explanation 😎');
+        toast.success('Submitted explanation 😎');
         setHasPosted(true);
       })
       .catch((err) => {
@@ -65,7 +65,7 @@ const [disabledButton, setDisabledButton] = useState(true)
             <Button primary={!disabledButton} disabled={disabledButton} label="Submit" />
           </form>
         ) : (
-          <div className="w-full p-10 rounded-lg bg-gray-600 text-center text-bold">
+          <div className="w-full p-5 rounded-lg bg-gray-600 text-center text-bold">
             Your explanation is submitted
           </div>
         )}

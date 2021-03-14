@@ -2,7 +2,13 @@ package teamsocial.wordgame.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import lombok.Getter;
@@ -197,6 +203,20 @@ public class Round implements Serializable {
   interface RoundChanged {
 
     void performOnRoundStateChanged();
+  }
+
+  public Player whoWrote(String explanation) {
+    for (var entry : explanations.entrySet()) {
+      if (entry.getValue().equals(explanation)) {
+        return entry.getKey();
+      }
+    }
+
+    return null;
+  }
+
+  public boolean isCorrect(String explanation) {
+    return explanation.equals(word.getWord());
   }
 
   /**
