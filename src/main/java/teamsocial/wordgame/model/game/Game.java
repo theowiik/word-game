@@ -159,6 +159,14 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     return  players.contains(player);
   }
 
+  public String getCurrentWord() {
+    return getCurrentRound().getCurrentWord();
+  }
+
+  public String getCorrectOrMaskedAnswer(){
+    return getCurrentRound().getCorrectOrMaskedAnswer();
+  }
+
   public enum State {
     LOBBY, PLAYING, END
   }

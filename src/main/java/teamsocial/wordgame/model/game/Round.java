@@ -66,6 +66,19 @@ public class Round implements Serializable {
     word = words.get(rand.nextInt(words.size()));
   }
 
+  public String getCurrentWord() {
+    return word.getWord();
+  }
+
+  public long getCurrentStateEndTime(){
+      return getCurrentStateStartedAt() + getState().getDurationMilliSeconds();
+  }
+
+  public String getCorrectOrMaskedAnswer() {
+    var shouldShowAnswer = state == State.PRESENT_ANSWER;
+    return shouldShowAnswer ? correctAnswer() : "Naughty naughty trying to cheat ;)";
+  }
+
   public interface RoundFinishedListeners {
 
     void notifyRoundFinished();
@@ -92,7 +105,7 @@ public class Round implements Serializable {
   }
 
 
-  public String correctAnswer() {
+  private String correctAnswer() {
     return word.getDescription();
   }
 
@@ -195,6 +208,9 @@ public class Round implements Serializable {
 
     public int getDurationSeconds() {
       return durationSeconds;
+    }
+    public int getDurationMilliSeconds() {
+      return durationSeconds * 1000;
     }
   }
 

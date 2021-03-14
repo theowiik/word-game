@@ -23,7 +23,7 @@ public class GameResponse {
 
   public GameResponse(Game game) {
     // Word
-    word = game.getCurrentRound().getWord().getWord();
+    word = game.getCurrentWord();
 
     // State
     state = getResponseState(game);
@@ -33,8 +33,7 @@ public class GameResponse {
     var roundState = round.getState();
 
     if (roundState != null) {
-      long roundSectionDurationSeconds = round.getState().getDurationSeconds();
-      currentStateEndTime = round.getCurrentStateStartedAt() + roundSectionDurationSeconds * 1000;
+      currentStateEndTime = round.getCurrentStateEndTime();
     } else {
       currentStateEndTime = null;
     }
@@ -46,9 +45,9 @@ public class GameResponse {
     }
 
     // CorrectAnswer
-    var shouldShowAnswer = state == State.PRESENT_ANSWER;
-    correctExplanation = shouldShowAnswer
-      ? game.getCurrentRound().getWord().getDescription() : "Naughty naughty trying to cheat ;)";
+    correctExplanation = game.getCorrectOrMaskedAnswer();
+
+
 
     // Explanations
     explanations = game.getCurrentRound().getAllExplanations();
