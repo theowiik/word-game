@@ -50,7 +50,12 @@ public class Round implements Serializable {
 
   public Round(Category category, RoundChanged roundChangedImpl) {
     roundFinishedListeners = new ArrayList<>();
+    explanations = new HashMap<>();
     this.roundChangedImpl = roundChangedImpl;
+    setRandomWord(category);
+  }
+
+  private void setRandomWord(Category category){
     var rand = new java.util.Random();
     var words = category.getWords();
 
@@ -59,7 +64,6 @@ public class Round implements Serializable {
     }
 
     word = words.get(rand.nextInt(words.size()));
-    explanations = new HashMap<>();
   }
 
   public interface RoundFinishedListeners {
