@@ -103,13 +103,6 @@ export const Game = () => {
   useEffect(() => {
     checkIfGameExists();
 
-    //Test player
-    setPlayers([
-      { name: 'Jesper', color: 'grass', score: 100 },
-      { name: 'Hentoo', color: 'grass', score: 10 },
-      { name: 'Jonathan', color: 'grass', score: 300 }
-    ]);
-
     //TODO: make sure to give the context the right state from websocket on reload
   }, []);
 
