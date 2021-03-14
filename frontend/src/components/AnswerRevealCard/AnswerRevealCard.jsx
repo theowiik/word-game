@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const getCardClassNames = (props) => {
   return classNames({
@@ -20,38 +20,67 @@ const getBadgeClassNames = (props) => {
 export function AnswerRevealCard({ text, by, chose, correct, index }) {
   const cardClassNames = getCardClassNames({ correct });
   const badgeClassNames = getBadgeClassNames({ correct });
-  const delaySeconds = 5;
+  const delaySeconds = 2;
+  const [view, setView] = useState([]);
+
+  const tempYo = () => {
+    console.log('test');
+    reveal();
+  };
+
+  const reveal = () => {
+    const by = document.querySelector(`#by-${index}`);
+
+    by.classList.remove('invisible');
+    by.classList.add('animate__animated', 'animate__fadeInDown');
+
+    const interval = setInterval(() => {
+      console.log('XXX');
+      console.log(view.length);
+      console.log(chose.length)
+
+      if (view.length <= chose.length) {
+        console.log('adding another');
+
+        setView((prevState) => {
+          return [...prevState, chose[prevState.length]];
+        });
+
+      } else {
+        console.log('wasd!');
+      }
+    }, 1000);
+  };
 
   useEffect(() => {
+    const flag = false;
+
     const timer = setTimeout(
       () => {
-        const element = document.querySelector(`#by-${index}`);
-        element.classList.add('animate__animated', 'animate__bounceOutLeft');
+        reveal();
       }
       , delaySeconds * 1000);
 
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [view, chose]);
 
   return (
     <>
-      <div className={cardClassNames}>
+      <div className={cardClassNames} onClick={tempYo}>
         <p className='text-center font-bold text-2xl'>{text}</p>
       </div>
 
       <div className='flex flex-row justify-end mt-2'>
-        <p className='text-3xl font-semibold'
-           id={`by-${index}`}>{by ? by : 'Correct answer'}</p>
+        <p className='text-3xl font-semibold invisible'
+           id={`by-${index}`}>{by ? `by ${by}` : 'Correct answer'}</p>
       </div>
 
       <div className='flex flex-row justify-end mt-2'>
-        {chose.map((playerName) => {
+        {view.map((playerName, i) => {
           return (
-            <>
-              <p className={badgeClassNames}>
-                {correct ? '+' : '-'}1 {playerName}
-              </p>
-            </>
+            <p className={badgeClassNames} key={i}>
+              {correct ? '+' : '-'}1 {playerName}
+            </p>
           );
         })}
       </div>
