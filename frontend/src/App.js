@@ -6,6 +6,7 @@ import { BrowserRouter, Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Game, Home, StartGame, Modify } from 'views';
+import 'animate.css';
 
 
 function App() {

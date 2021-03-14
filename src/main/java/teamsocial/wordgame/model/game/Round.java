@@ -1,16 +1,21 @@
 package teamsocial.wordgame.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.model.entity.Word;
-
-import java.io.Serializable;
-import java.util.*;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 @Getter
 @Setter
@@ -191,20 +196,11 @@ public class Round implements Serializable {
     exec.schedule(invokable::perform, delayInSeconds, TimeUnit.SECONDS);
   }
 
-  /**
-   * Gets the current unix time in milliseconds.
-   *
-   * @return the current unix time in milliseconds.
-   */
-  private long now() {
-    return System.currentTimeMillis();
-  }
-
   public enum State {
-    PRESENT_WORD_INPUT_EXPLANATION(10),
-    SELECT_EXPLANATION(10),
-    PRESENT_ANSWER(10),
-    PRESENT_SCORE(6);
+    PRESENT_WORD_INPUT_EXPLANATION(20),
+    SELECT_EXPLANATION(15),
+    PRESENT_ANSWER(50),
+    PRESENT_SCORE(15);
 
     private final int durationSeconds;
 
@@ -228,6 +224,29 @@ public class Round implements Serializable {
   interface RoundChanged {
 
     void performOnRoundStateChanged();
+  }
+
+  public Player whoWrote(String explanation) {
+    for (var entry : explanations.entrySet()) {
+      if (entry.getValue().equals(explanation)) {
+        return entry.getKey();
+      }
+    }
+
+    return null;
+  }
+
+  public boolean isCorrect(String explanation) {
+    return explanation.equals(word.getDescription());
+  }
+
+  /**
+   * Gets the current unix time in milliseconds.
+   *
+   * @return the current unix time in milliseconds.
+   */
+  private long now() {
+    return System.currentTimeMillis();
   }
 
   private interface Invokable {

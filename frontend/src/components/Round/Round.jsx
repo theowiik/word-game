@@ -26,7 +26,7 @@ export const Round = () => {
         })}
       </div>
 
-      <div className="col-span-5 md:col-span-4 p-5 md:p-20 w-full h-full flex flex-col justify-center items-center">
+      <div className="col-span-5 md:col-span-4 p-5 md:p-20 w-full h-full flex flex-col justify-center items-center md:justify-start md:items-start">
         {/** Display corresponding view for current state */}
         {globalGameState === states.PRESENT_WORD_INPUT_EXPLANATION && (
           <PresentWord />

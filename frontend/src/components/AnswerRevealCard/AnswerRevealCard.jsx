@@ -1,24 +1,45 @@
 import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 
 const getCardClassNames = (props) => {
   return classNames({
-    'p-20 rounded-lg rounded-xl mt-14 bg-white-400 text-white': true,
-    'bg-gray-700': !props.correct,
-    'bg-green-500': props.correct
+    'p-10 rounded-lg rounded-xl mt-8 text-white transition': true,
+    'bg-green-500': props.showBy,
+    'bg-gray-600': !props.showBy
   });
 };
 
 const getBadgeClassNames = (props) => {
   return classNames({
-    'font-bold inline-block py-1 px-2 uppercase rounded ml-2': true,
-    'bg-red-700': !props.correct,
-    'bg-green-800 text-white': props.correct
+    'font-bold inline-block py-1 px-2 uppercase rounded ml-2 mb-2': true,
+    'animate__animated animate__fadeInDown': true,
+    'bg-red-700': props.danger,
+    'bg-green-800 text-white': props.success,
+    'bg-gray-700': props.dark
   });
 };
 
-export function AnswerRevealCard({ text, by, chose, correct }) {
-  const cardClassNames = getCardClassNames({ correct });
-  const badgeClassNames = getBadgeClassNames({ correct });
+export function AnswerRevealCard({ text, byPlayer, playersWhoChose, correct }) {
+  const showByDelaySeconds = 6;
+  const showChoseDelaySeconds = 3;
+  const [showBy, setShowBy] = useState(false);
+  const [showChose, setShowChose] = useState(false);
+  const cardClassNames = getCardClassNames({ correct: correct });
+
+  useEffect(() => {
+    const byTimeout = setTimeout(() => {
+      setShowBy(true);
+    }, showByDelaySeconds * 1000);
+
+    const choseTimeout = setTimeout(() => {
+      setShowChose(true);
+    }, showChoseDelaySeconds * 1000);
+
+    return () => {
+      clearTimeout(choseTimeout);
+      clearTimeout(byTimeout);
+    };
+  }, []);
 
   return (
     <>
@@ -26,20 +47,35 @@ export function AnswerRevealCard({ text, by, chose, correct }) {
         <p className='text-center font-bold text-2xl'>{text}</p>
       </div>
 
-      <div className='flex flex-row justify-end mt-2'>
-        <p className='text-3xl font-semibold'>{by}</p>
+      <div className='flex flex-row flex-wrap justify-end mt-2'>
+        {
+          showChose && playersWhoChose.length > 0 && (
+            playersWhoChose.map((player, i) => {
+              return (
+                <p className={getBadgeClassNames({ success: correct, danger: !correct })} key={i}>
+                  {correct ? '+' : '-'}1 {player.name}
+                </p>
+              );
+            })
+          )
+        }
+        {
+          showChose && playersWhoChose.length === 0 && (
+            <p className={getBadgeClassNames({ dark: true })}>
+              No one 😢
+            </p>
+          )
+        }
       </div>
 
-      <div className='flex flex-row justify-end mt-2'>
-        {chose.map((playerName) => {
-          return (
-            <>
-              <p className={badgeClassNames}>
-                {correct ? '+' : '-'}1 {playerName}
-              </p>
-            </>
-          );
-        })}
+      <div className='flex flex-row justify-end'>
+        {
+          showBy && (
+            <p className='text-3xl font-semibold animate__animated animate__fadeInDown'>
+              {byPlayer ? `by ${byPlayer.name}` : 'Correct answer'}
+            </p>
+          )
+        }
       </div>
     </>
   );

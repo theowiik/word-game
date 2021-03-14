@@ -1,5 +1,10 @@
 package teamsocial.wordgame.websocket;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import teamsocial.wordgame.model.game.Game;
@@ -17,7 +22,6 @@ public class GameResponse {
   private String word;
   private State state;
   private Long currentStateEndTime;
-  private String correctExplanation;
   private List<String> explanations;
   private List<PlayerResponse> players;
   private List<SelectedExplanationResponse> selectedExplanations;
@@ -45,20 +49,24 @@ public class GameResponse {
       players.add(new PlayerResponse(entity.getKey().getName(), entity.getValue()));
     }
 
-    // CorrectAnswer
-    correctExplanation = game.getCorrectOrMaskedAnswer();
-
-
     // Explanations
-    explanations = game.getCurrentRound().getAllExplanations();
+    explanations = new ArrayList<>();
+    if (state == State.SELECT_EXPLANATION) {
+      explanations = game.getCurrentRound().getAllExplanations();
+    }
 
-    // PickedAnswers
+    // SelectedExplanations
     selectedExplanations = new ArrayList<>();
     if (state == State.PRESENT_ANSWER) {
       var map = game.getCurrentRound().getChosenExplanations();
       for (var entry : inverse(map).entrySet()) {
-        var pickedAnswer = new SelectedExplanationResponse(entry.getValue(), entry.getKey());
-        selectedExplanations.add(pickedAnswer);
+        var selectedExplanation = new SelectedExplanationResponse(
+          entry.getValue(),
+          entry.getKey(),
+          game.getCurrentRound().whoWrote(entry.getKey()),
+          game.getCurrentRound().isCorrect(entry.getKey())
+        );
+        selectedExplanations.add(selectedExplanation);
       }
     }
   }
@@ -81,6 +89,30 @@ public class GameResponse {
     });
 
     return inverseMap;
+  }
+
+  @Getter
+  @Setter
+  @AllArgsConstructor
+  private class SelectedExplanationResponse {
+
+    private final List<Player> players;
+    private final String explanation;
+    private final Player by;
+    private final boolean correct;
+  }
+
+  @Getter
+  @Setter
+  private class PlayerResponse {
+
+    private final String name;
+    private final int score;
+
+    public PlayerResponse(String name, int score) {
+      this.name = name;
+      this.score = score;
+    }
   }
 
   private State getResponseState(Game game) {
@@ -111,31 +143,5 @@ public class GameResponse {
     PRESENT_ANSWER,
     PRESENT_SCORE,
     END
-  }
-
-  @Getter
-  @Setter
-  private class SelectedExplanationResponse {
-
-    private final List<Player> players;
-    private final String explanation;
-
-    public SelectedExplanationResponse(List<Player> players, String explanation) {
-      this.players = players;
-      this.explanation = explanation;
-    }
-  }
-
-  @Getter
-  @Setter
-  private class PlayerResponse {
-
-    private final String name;
-    private final int score;
-
-    public PlayerResponse(String name, int score) {
-      this.name = name;
-      this.score = score;
-    }
   }
 }
