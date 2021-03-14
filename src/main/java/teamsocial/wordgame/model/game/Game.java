@@ -30,7 +30,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
   @Getter(onMethod = @__(@JsonIgnore))
   private List<Round> rounds;
   private State state;
-  private int round;
+  private int activeRoundIndex;
 
   /**
    * @param category the category for the game.
@@ -98,7 +98,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
   }
 
   public Round getCurrentRound() {
-    return rounds.get(round - 1);
+    return rounds.get(activeRoundIndex - 1);
   }
 
   /**
@@ -106,7 +106,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
    */
   private void nextRound() {
     rounds.add(new Round(category, this::notifyGameChangedObservers));
-    round++;
+    activeRoundIndex++;
     getCurrentRound().addRoundFinishedListener(this);
   }
 
@@ -138,7 +138,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
 
   @Override
   public void notifyRoundFinished() {
-    if (round >= ROUNDS) {
+    if (activeRoundIndex >= ROUNDS) {
       state = State.END;
       notifyGameChangedObservers();
       notifyGameFinishedListeners();
