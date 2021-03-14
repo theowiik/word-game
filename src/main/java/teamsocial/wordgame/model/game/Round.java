@@ -71,8 +71,12 @@ public class Round implements Serializable {
     return word.getWord();
   }
 
-  public long getCurrentStateEndTime() {
-    return getCurrentStateStartedAt() + getState().getDurationMilliSeconds();
+  public Long getCurrentStateEndTime() {
+    if (getState() != null){
+      return getCurrentStateStartedAt() + getState().getDurationMilliSeconds();
+    } else {
+      return null;
+    }
   }
 
   public String getCorrectOrMaskedAnswer() {
