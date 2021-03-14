@@ -1,25 +1,22 @@
 package teamsocial.wordgame.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import teamsocial.wordgame.model.entity.Category;
 
+import java.io.Serializable;
+import java.util.*;
+
 @Getter
 @Setter
 public class Game implements Serializable, Round.RoundFinishedListeners {
 
+  private final static int ROUNDS = 2;
   @Getter(onMethod = @__(@JsonIgnore))
   private final Set<GameObserver> observers;
-  private final static int ROUNDS = 2;
+  private final Set<GameFinishedListeners> gameFinishedListeners;
   @Getter(onMethod = @__(@JsonIgnore))
   private final Set<Player> players;
   private final Category category;
@@ -29,7 +26,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
   @Getter(onMethod = @__(@JsonIgnore))
   private List<Round> rounds;
   private State state;
-  private int round;
+  private int activeRoundIndex;
 
   /**
    * @param category the category for the game.
@@ -42,6 +39,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
 
     rounds = new ArrayList<>();
     observers = new HashSet<>();
+    gameFinishedListeners = new HashSet<>();
     this.category = category;
     state = State.LOBBY;
     players = new HashSet<>();
@@ -91,8 +89,12 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     observers.add(go);
   }
 
+  public void addGameFinishedListener(GameFinishedListeners gfl) {
+    gameFinishedListeners.add(gfl);
+  }
+
   public Round getCurrentRound() {
-    return rounds.get(round - 1);
+    return rounds.get(activeRoundIndex - 1);
   }
 
   /**
@@ -100,7 +102,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
    */
   private void nextRound() {
     rounds.add(new Round(category, this::notifyGameChangedObservers));
-    round++;
+    activeRoundIndex++;
     getCurrentRound().addRoundFinishedListener(this);
   }
 
@@ -124,11 +126,18 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     }
   }
 
+  public void notifyGameFinishedListeners() {
+    for (var l : gameFinishedListeners) {
+      l.notifyGameFinished(pin);
+    }
+  }
+
   @Override
   public void notifyRoundFinished() {
-    if (round >= ROUNDS) {
+    if (activeRoundIndex >= ROUNDS) {
       state = State.END;
       notifyGameChangedObservers();
+      notifyGameFinishedListeners();
     } else {
       nextRound();
       getCurrentRound().start();
@@ -143,7 +152,15 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
    */
   public boolean playerIsJoined(Player player) {
     if (player == null) return false;
-    return  players.contains(player);
+    return players.contains(player);
+  }
+
+  public String getCurrentWord() {
+    return getCurrentRound().getCurrentWord();
+  }
+
+  public String getCorrectOrMaskedAnswer() {
+    return getCurrentRound().getCorrectOrMaskedAnswer();
   }
 
   public enum State {
@@ -153,5 +170,9 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
   public interface GameObserver {
 
     void notifyGameChanged(Game game);
+  }
+
+  public interface GameFinishedListeners {
+    void notifyGameFinished(String pin);
   }
 }

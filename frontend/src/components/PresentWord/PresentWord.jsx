@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 export const PresentWord = () => {
   const [hasPosted, setHasPosted] = useState(false);
   const { currentWord, pin, currentStateEndTime } = useGame();
+const [disabledButton, setDisabledButton] = useState(true)
 
   const postExplanation = (explanation) => {
     const form = new FormData();
@@ -32,6 +33,14 @@ export const PresentWord = () => {
     postExplanation(explanation);
   };
 
+  const handleChangedExplanation = (event) => {
+    if(event.target.value !== '') {
+      setDisabledButton(false)
+    } else {
+      setDisabledButton(true)
+    }
+  }
+
   return (
     <div className="w-full">
       {/* WORD */}
@@ -45,13 +54,15 @@ export const PresentWord = () => {
             onSubmit={handleExplanationSubmit}
             className="flex flex-col w-full"
           >
-            <textarea
+            <input
               name="explanation"
-              className="p-5 rounded-lg text-white bg-gray-600  border-none h-72 my-10"
-              placeholder="Write your explanation.."
-            ></textarea>
+              className="p-5 rounded-lg text-white bg-gray-600 text-center  border-none h-44 my-10"
+              placeholder="Write your explanation..."
+              onChange={handleChangedExplanation}
+              
+            ></input>
 
-            <Button primary label="Submit" />
+            <Button type="submit" primary={!disabledButton} disabled={disabledButton} label="Submit" />
           </form>
         ) : (
           <div className="w-full p-10 rounded-lg bg-gray-600 text-center text-bold">

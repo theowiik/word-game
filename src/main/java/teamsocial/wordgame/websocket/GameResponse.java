@@ -1,13 +1,14 @@
 package teamsocial.wordgame.websocket;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.model.game.Player;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -17,13 +18,13 @@ public class GameResponse {
   private State state;
   private Long currentStateEndTime;
   private String correctExplanation;
-  private List<String> explanations = new ArrayList<>();
+  private List<String> explanations;
   private List<PlayerResponse> players;
   private List<SelectedExplanationResponse> selectedExplanations;
 
   public GameResponse(Game game) {
     // Word
-    word = game.getCurrentRound().getWord().getWord();
+    word = game.getCurrentWord();
 
     // State
     state = getResponseState(game);
@@ -33,8 +34,7 @@ public class GameResponse {
     var roundState = round.getState();
 
     if (roundState != null) {
-      long roundSectionDurationSeconds = round.getState().getDurationSeconds();
-      currentStateEndTime = round.getCurrentStateStartedAt() + roundSectionDurationSeconds * 1000;
+      currentStateEndTime = round.getCurrentStateEndTime();
     } else {
       currentStateEndTime = null;
     }
@@ -46,12 +46,11 @@ public class GameResponse {
     }
 
     // CorrectAnswer
-    var shouldShowAnswer = state == State.PRESENT_ANSWER;
-    correctExplanation = shouldShowAnswer
-      ? game.getCurrentRound().getWord().getDescription() : "Naughty naughty trying to cheat ;)";
+    correctExplanation = game.getCorrectOrMaskedAnswer();
+
 
     // Explanations
-    game.getCurrentRound().getAllExplanations();
+    explanations = game.getCurrentRound().getAllExplanations();
 
     // PickedAnswers
     selectedExplanations = new ArrayList<>();
@@ -84,32 +83,6 @@ public class GameResponse {
     return inverseMap;
   }
 
-  @Getter
-  @Setter
-  private class SelectedExplanationResponse {
-
-    private final List<Player> players;
-    private final String explanation;
-
-    public SelectedExplanationResponse(List<Player> players, String explanation) {
-      this.players = players;
-      this.explanation = explanation;
-    }
-  }
-
-  @Getter
-  @Setter
-  private class PlayerResponse {
-
-    private final String name;
-    private final int score;
-
-    public PlayerResponse(String name, int score) {
-      this.name = name;
-      this.score = score;
-    }
-  }
-
   private State getResponseState(Game game) {
     var output = State.LOBBY;
     var gameIsActive = game.getState() == Game.State.PLAYING;
@@ -138,5 +111,31 @@ public class GameResponse {
     PRESENT_ANSWER,
     PRESENT_SCORE,
     END
+  }
+
+  @Getter
+  @Setter
+  private class SelectedExplanationResponse {
+
+    private final List<Player> players;
+    private final String explanation;
+
+    public SelectedExplanationResponse(List<Player> players, String explanation) {
+      this.players = players;
+      this.explanation = explanation;
+    }
+  }
+
+  @Getter
+  @Setter
+  private class PlayerResponse {
+
+    private final String name;
+    private final int score;
+
+    public PlayerResponse(String name, int score) {
+      this.name = name;
+      this.score = score;
+    }
   }
 }

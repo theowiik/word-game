@@ -5,7 +5,7 @@ export function PresentAnswerTile({ answer , onClick, clickable}) {
 
   function handleSetChosen() {
     setChosen(true);
-    onClick()
+    onClick(answer)
     //TODO: post selected answer
   }
 

@@ -35,6 +35,7 @@ export const Game = () => {
       .post(`/games/${pin}/join`, form)
       .then((res) => {
         console.log(res);
+        localStorage.setItem('playerName', form.get('name'));
       })
       .catch((err) => {
         console.log(err);
@@ -49,12 +50,12 @@ export const Game = () => {
     let game;
     try {
       game = JSON.parse(message.body);
-      setGlobalGameState(game.state);
+      setCurrentStateEndTime(game.currentStateEndTime);
       setPlayers(game.players);
       setCurrentWord(game.word);
       setCorrectExplanation(game.correctExplanation);
-      setCurrentStateEndTime(game.currentStateEndTime);
-      //setExplanations(game.answers);
+      setGlobalGameState(game.state);
+      setExplanations(game.explanations);
     } catch (error) {
       console.log(error);
     }
@@ -103,23 +104,6 @@ export const Game = () => {
   useEffect(() => {
     checkIfGameExists();
 
-    //Test player
-    setPlayers([
-      { name: 'Jesper', color: 'grass', score: 100 },
-      { name: 'Hentoo', color: 'grass', score: 10 },
-      { name: 'Jonathan', color: 'grass', score: 300 }
-    ]);
-
-    //Test data
-    const answers = [
-      { answer: 'Theo e king' },
-      { answer: 'Sudo e king' },
-      { answer: 'Hentoo e king' },
-      { answer: 'Jopsidop e king' },
-      { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' },
-      { answer: 'Behöver ett långt svar så att dehär får bli ett långt svar' }
-    ];
-    setExplanations(answers);
     //TODO: make sure to give the context the right state from websocket on reload
   }, []);
 
