@@ -48,7 +48,7 @@ export function StartGame() {
           onSubmit={handleStartGame}
           className="flex flex-col justify-center items-center"
         >
-          <div className="bg-gray-700 rounded-xl w-96 p-10 mt-20">
+          <div className="bg-gray-700 rounded-xl w-full sm:w-96 p-10 mt-20">
             <h2 className="text-2xl font-bold">Select category</h2>
             <ul className="mt-5">
               {categories.map((category, index) => (
@@ -59,7 +59,7 @@ export function StartGame() {
                     type="radio"
                     value={category.name}
                   />
-                  <label className="ml-2">{category.name}</label>
+                  <label className="ml-2 font-bold uppercase">{category.name}</label>
                   <br/>
                 </div>
               ))}
