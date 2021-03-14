@@ -197,10 +197,10 @@ public class Round implements Serializable {
   }
 
   public enum State {
-    PRESENT_WORD_INPUT_EXPLANATION(10),
-    SELECT_EXPLANATION(10),
-    PRESENT_ANSWER(10),
-    PRESENT_SCORE(6);
+    PRESENT_WORD_INPUT_EXPLANATION(20),
+    SELECT_EXPLANATION(15),
+    PRESENT_ANSWER(50),
+    PRESENT_SCORE(15);
 
     private final int durationSeconds;
 
@@ -237,7 +237,7 @@ public class Round implements Serializable {
   }
 
   public boolean isCorrect(String explanation) {
-    return explanation.equals(word.getWord());
+    return explanation.equals(word.getDescription());
   }
 
   /**

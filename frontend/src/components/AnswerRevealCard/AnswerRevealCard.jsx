@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 const getCardClassNames = (props) => {
   return classNames({
-    'p-10 rounded-lg rounded-xl mt-8 bg-white-400 text-white transition': true,
+    'p-10 rounded-lg rounded-xl mt-8 text-white transition': true,
     'bg-green-500': props.showBy,
     'bg-gray-600': !props.showBy
   });
@@ -24,7 +24,7 @@ export function AnswerRevealCard({ text, byPlayer, playersWhoChose, correct }) {
   const showChoseDelaySeconds = 3;
   const [showBy, setShowBy] = useState(false);
   const [showChose, setShowChose] = useState(false);
-  const cardClassNames = getCardClassNames({ correct });
+  const cardClassNames = getCardClassNames({ correct: correct });
 
   useEffect(() => {
     const byTimeout = setTimeout(() => {
