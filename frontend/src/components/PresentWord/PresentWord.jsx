@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 export const PresentWord = () => {
   const [hasPosted, setHasPosted] = useState(false);
   const { currentWord, pin, currentStateEndTime } = useGame();
-const [disabledButton, setDisabledButton] = useState(true)
+  const [disabledButton, setDisabledButton] = useState(true);
 
   const postExplanation = (explanation) => {
     const form = new FormData();
@@ -34,12 +34,12 @@ const [disabledButton, setDisabledButton] = useState(true)
   };
 
   const handleChangedExplanation = (event) => {
-    if(event.target.value !== '') {
-      setDisabledButton(false)
+    if (event.target.value !== '') {
+      setDisabledButton(false);
     } else {
-      setDisabledButton(true)
+      setDisabledButton(true);
     }
-  }
+  };
 
   return (
     <div className="w-full">
@@ -58,11 +58,16 @@ const [disabledButton, setDisabledButton] = useState(true)
               name="explanation"
               className="p-5 rounded-lg text-white bg-gray-600 text-center  border-none h-44 my-10"
               placeholder="Write your explanation..."
+              autoComplete="off"
               onChange={handleChangedExplanation}
-              
             ></input>
 
-            <Button type="submit" primary={!disabledButton} disabled={disabledButton} label="Submit" />
+            <Button
+              type="submit"
+              primary={!disabledButton}
+              disabled={disabledButton}
+              label="Submit"
+            />
           </form>
         ) : (
           <div className="w-full p-5 rounded-lg bg-gray-600 text-center text-bold">
