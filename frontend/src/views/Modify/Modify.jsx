@@ -87,9 +87,9 @@ export const Modify = () => {
   const handleDeleteCategory = (category) => {
    
     axios
-      .delete('/categories', category)
+      .delete(`/categories/${category.name}`, {})
       .then((res) => {
-        toast.success('Category deleted');
+        toast.success(`${category.name} deleted`);
       })
       .catch((err) => {
         console.log(err);
@@ -99,9 +99,9 @@ export const Modify = () => {
 
   const handleDeleteWord = (word) => {
     axios
-    .delete('/words', word)
+    .delete(`/words/${word.word}`, {})
     .then((res) => {
-      toast.success('Word deleted');
+      toast.success(`${word.word} deleted`);
     })
     .catch((err) => {
       console.log(err);
