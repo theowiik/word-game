@@ -26,7 +26,7 @@ export const PresentScore = () => {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <h2 className="text-center mt-14 text-6xl font-semibold">
+      <h2 className="text-center mt-14 text-6xl font-bold">
         Current score
       </h2>
       <div className="my-5 sm:p-20 w-full">
