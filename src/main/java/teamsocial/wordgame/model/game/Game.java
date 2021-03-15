@@ -13,7 +13,7 @@ import java.util.*;
 @Setter
 public class Game implements Serializable, Round.RoundFinishedListeners {
 
-  private final static int ROUNDS = 2;
+  private final static int ROUNDS = 5;
   @Getter(onMethod = @__(@JsonIgnore))
   private final Set<GameObserver> observers;
   private final Set<GameFinishedListeners> gameFinishedListeners;
