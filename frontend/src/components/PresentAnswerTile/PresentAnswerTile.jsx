@@ -5,8 +5,7 @@ export function PresentAnswerTile({ answer , onClick, clickable}) {
 
   function handleSetChosen() {
     setChosen(true);
-    onClick(answer)
-    //TODO: post selected answer
+    onClick()
   }
 
   return (
@@ -18,7 +17,7 @@ export function PresentAnswerTile({ answer , onClick, clickable}) {
       }`}
       onClick={clickable ? handleSetChosen : null}
     >
-      <div className="text-blue-900 font-bold text-sm">"{answer}"</div>
+      <div className="text-blue-900 font-bold text-sm capitalize">"{answer}"</div>
     </div>
   );
 }
