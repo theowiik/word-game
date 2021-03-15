@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container } from 'components';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 export const Modify = () => {
@@ -86,7 +86,6 @@ export const Modify = () => {
   };
 
   const handleDeleteCategory = (category) => {
-   
     axios
       .delete(`/categories/${category.name}`, {})
       .then((res) => {
@@ -99,14 +98,14 @@ export const Modify = () => {
 
   const handleDeleteWord = (word) => {
     axios
-    .delete(`/words/${word.word}`, {})
-    .then((res) => {
-      toast.success(`${word.word} deleted`);
-    })
-    .catch((err) => {
-      console.log(err);
-      toast.error('Failed to delete word');
-    });
+      .delete(`/words/${word.word}`, {})
+      .then((res) => {
+        toast.success(`${word.word} deleted`);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error('Failed to delete word');
+      });
   };
 
   return (
@@ -116,13 +115,13 @@ export const Modify = () => {
           <h1 className="font-bold text-center text-3xl">
             Modify words and categories
           </h1>
-          <div className='absolute top-10 sm:left-10'>
-        <Link to="/game/new">
-          <span className="bg-gray-600 py-2 px-4 rounded-full text-sm ml-5">
-            Back to home
-          </span>
-        </Link>
-        </div>
+          <div className="absolute top-10 sm:left-10">
+            <Link to="/game/new">
+              <span className="bg-gray-600 py-2 px-4 rounded-full text-sm ml-5">
+                Back to home
+              </span>
+            </Link>
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <AddWordsCard
@@ -194,7 +193,7 @@ const WordListItem = ({
         x
       </div>
       <ListItem editing={editing}>
-        <span className='w-24'>{word.word}</span>
+        <span className="w-24">{word.word}</span>
         <input
           name="currentDescription"
           id="currentDescription"
@@ -211,7 +210,11 @@ const WordListItem = ({
           defaultValue={word.category.name} //TODO: Check what category it belongs to
         >
           {availableCategories.map((category) => {
-            return <option value={category.name}>{category.name}</option>;
+            return (
+              <option key={category.name} value={category.name}>
+                {category.name}
+              </option>
+            );
           })}
         </select>
       </ListItem>
@@ -258,20 +261,22 @@ const AddWordsCard = ({
 
   return (
     <ModifyCard label="Words">
-    <div className='pl-12 pr-8 flex justify-between w-full text-gray-600'>
+      <div className="pl-12 pr-8 flex justify-between w-full text-gray-600">
         <span>Word</span>
-        <span className='-ml-16'>Description</span>
+        <span className="-ml-16">Description</span>
         <span>Category</span>
-    </div>
+      </div>
       {currentWords.map((word, index) => {
         return (
-          <WordListItem
-            word={word}
-            index={index}
-            onUpdate={handleUpdateWord}
-            onDeleteWord={onDeleteWord}
-            availableCategories={availableCategories}
-          />
+          <div key={`word-${index}`}>
+            <WordListItem
+              word={word}
+              index={index}
+              onUpdate={handleUpdateWord}
+              onDeleteWord={onDeleteWord}
+              availableCategories={availableCategories}
+            />
+          </div>
         );
       })}
       <div className="h-px bg-gray-800 mt-10" />
@@ -295,8 +300,12 @@ const AddWordsCard = ({
             id="category"
             className="bg-gray-800 p-2 rounded-lg w-full"
           >
-            {availableCategories.map((category) => {
-              return <option value={category.name}>{category.name}</option>;
+            {availableCategories.map((category, index) => {
+              return (
+                <option key={`category-${index}`} value={category.name}>
+                  {category.name}
+                </option>
+              );
             })}
           </select>
           <button
@@ -372,12 +381,14 @@ const AddCategoriesCard = ({
     <ModifyCard label="Categories">
       {currentCategories.map((category, index) => {
         return (
-          <CategoryListItem
-            index={index}
-            onUpdate={onUpdateCategory}
-            onDelete={onDeleteCategory}
-            category={category}
-          />
+          <div key={`category-${index}`}>
+            <CategoryListItem
+              index={index}
+              onUpdate={onUpdateCategory}
+              onDelete={onDeleteCategory}
+              category={category}
+            />
+          </div>
         );
       })}
 
