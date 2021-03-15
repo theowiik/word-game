@@ -8,6 +8,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { gameExists } from 'services/database-service';
 import { websocketBaseUrl } from 'services/urlConstants';
 import { createStompClient } from 'services/websocketService';
+import { toast } from 'react-toastify';
 
 export const Game = () => {
   const params = useParams();
@@ -15,6 +16,7 @@ export const Game = () => {
   const websocketEndpointUrl = `${websocketBaseUrl}/chat`;
   const subscribeToEndpoint = `/topic/messages/${pin}`;
 
+  
   const joinGame = () => {
     const form = new FormData();
     form.append('name', getRandomName());
@@ -24,7 +26,8 @@ export const Game = () => {
         console.log(res);
       })
       .catch((err) => {
-        console.log(err);
+        toast.error(err.response.data);
+        history.push('/');
       });
   };
 
@@ -34,9 +37,7 @@ export const Game = () => {
       .then((res) => {
         localStorage.setItem('playerName', res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   const connectedCallback = () => {
@@ -48,7 +49,6 @@ export const Game = () => {
     let game;
     try {
       game = JSON.parse(message.body);
-      console.log('Recieved: ', game);
       setCurrentStateEndTime(game.currentStateEndTime);
       setPlayers(game.players);
       setCurrentWord(game.word);
