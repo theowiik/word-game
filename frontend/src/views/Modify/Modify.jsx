@@ -187,7 +187,7 @@ const WordListItem = ({
         x
       </div>
       <ListItem editing={editing}>
-        <span>{word.word}</span>
+        <span className='w-24'>{word.word}</span>
         <input
           name="currentDescription"
           id="currentDescription"
@@ -251,6 +251,11 @@ const AddWordsCard = ({
 
   return (
     <ModifyCard label="Words">
+    <div className='pl-12 pr-8 flex justify-between w-full text-gray-600'>
+        <span>Word</span>
+        <span className='-ml-16'>Description</span>
+        <span>Category</span>
+    </div>
       {currentWords.map((word, index) => {
         return (
           <WordListItem
