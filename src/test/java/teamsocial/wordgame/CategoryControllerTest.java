@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import teamsocial.wordgame.controller.CategoryController;
+import teamsocial.wordgame.controller.requestwrapper.CategoryUpdateRequest;
 import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.model.entity.Word;
 import teamsocial.wordgame.repository.ICategoryRepository;
@@ -94,6 +95,55 @@ class CategoryControllerTest {
   void deleteNullCategoryFailTest() {
     var response = categoryController.delete(null);
     Assertions.assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
+  }
+
+  @Test
+  void updateCategoryWithNoWordTest() {
+    var oldName = getUnusedName();
+    var newName = getUnusedName();
+    categoryRepository.save(new Category(oldName));
+
+    var request = new CategoryUpdateRequest(oldName, newName);
+    var response = categoryController.update(request);
+
+    var updatedCategory = response.getBody();
+    Assertions.assertNotNull(updatedCategory);
+    Assertions.assertEquals(updatedCategory.getName(), newName);
+  }
+
+  @Test
+  void updateCategoryWithWordsTest() {
+    var oldCatName = getUnusedName();
+    var newCatName = getUnusedName();
+    var wordName = getUnusedName();
+    var category = categoryRepository.save(new Category(oldCatName));
+    var word = wordRepository.save(new Word(wordName, getUnusedName(), category));
+    Assertions.assertEquals(word.getCategory().getName(), oldCatName);
+
+    // Change category name
+    var request = new CategoryUpdateRequest(oldCatName, newCatName);
+    var response = categoryController.update(request);
+    var updatedCategory = response.getBody();
+    Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
+    Assertions.assertNotNull(updatedCategory);
+    Assertions.assertEquals(updatedCategory.getName(), newCatName);
+
+    // Old category should be removed
+    var oldCategory = categoryRepository.findById(oldCatName);
+    Assertions.assertTrue(oldCategory.isEmpty());
+
+    // Words in old category has updated to the new category
+    var updatedWordOptional = wordRepository.findById(wordName);
+    Assertions.assertTrue(updatedWordOptional.isPresent());
+    var updatedWord = updatedWordOptional.get();
+    Assertions.assertEquals(updatedWord.getCategory().getName(), newCatName);
+  }
+
+  @Test
+  void updateNonExistingCategoryFailTest() {
+    var request = new CategoryUpdateRequest(getUnusedName(), getUnusedName());
+    var response = categoryController.update(request);
+    Assertions.assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
   }
 
   private String getUnusedName() {
