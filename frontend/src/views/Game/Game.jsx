@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Button, GameLayout, Lobby, Round, Summary } from 'components';
+import { GameLayout, Lobby, Round, Summary } from 'components';
 import { useGame } from 'contexts/game';
 import { states } from 'lib/constants';
 import { getRandomName } from 'lib/names';
@@ -8,19 +8,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import { gameExists } from 'services/database-service';
 import { websocketBaseUrl } from 'services/urlConstants';
 import { createStompClient } from 'services/websocketService';
-
-{
-  /** Temp to trigger statechanges */
-}
-var selectedIndex = 0;
-const tempGameStatesList = [
-  'LOBBY',
-  'PRESENT_WORD_INPUT_EXPLANATION',
-  'SELECT_EXPLANATION',
-  'PRESENT_ANSWER',
-  'PRESENT_SCORE',
-  'END'
-];
 
 export const Game = () => {
   const params = useParams();
@@ -104,8 +91,6 @@ export const Game = () => {
 
   useEffect(() => {
     checkIfGameExists();
-
-    //TODO: make sure to give the context the right state from websocket on reload
   }, []);
 
   return (
@@ -119,14 +104,6 @@ export const Game = () => {
           return <Round />;
         }
       })()}
-
-      <p className='cursor-pointer text-gray-500 ml-8' onClick={() =>
-        setGlobalGameState(
-          tempGameStatesList[selectedIndex++ % tempGameStatesList.length]
-        )
-      }>
-        (Dev) Byt state
-      </p>
     </GameLayout>
   );
 };
