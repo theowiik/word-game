@@ -50,7 +50,7 @@ public class GameManagerBean implements Game.GameFinishedListeners {
     String pin = null;
 
     while (pin == null || games.containsKey(pin)) {
-      var pinInt = (int) ((Math.random() * (99999 - 1000)) + 1000);
+      var pinInt = (int) ((Math.random() * (99999 - 10000)) + 10000);
       pin = String.valueOf(pinInt);
     }
 
