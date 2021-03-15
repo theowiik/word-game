@@ -54,16 +54,15 @@ public class Round implements Serializable {
   }
 
   /**
-   * Returns a list of all the explanations including the correct one.
+   * Returns a shuffled list of all the explanations including the correct one.
    *
-   * @return a list of all the explanations including the correct one.
+   * @return a shuffled list of all the explanations including the correct one.
    */
   public List<String> getAllExplanations() {
-    var explanations = new ArrayList<String>();
-    explanations.addAll(this.explanations.values());
-    explanations.add(word.getDescription());
-    Collections.shuffle(explanations);
-    return explanations;
+    var output = new ArrayList<>(explanations.values());
+    output.add(word.getDescription());
+    Collections.shuffle(output);
+    return output;
   }
 
   private void setRandomWord(Category category) {
@@ -109,7 +108,7 @@ public class Round implements Serializable {
     explanations.put(player, description);
   }
 
-  private String getCorrectExplanation() {
+  public String getCorrectExplanation() {
     return word.getDescription();
   }
 

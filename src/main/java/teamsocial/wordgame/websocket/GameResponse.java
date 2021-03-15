@@ -51,7 +51,7 @@ public class GameResponse {
     }
 
     // SelectedExplanations
-    selectedExplanations = generateSelectedExplanations(game);
+    selectedExplanations = generateSelectedExplanations(game, state);
     }
 
   /**
@@ -128,36 +128,53 @@ public class GameResponse {
     END
   }
 
-  private List<SelectedExplanationResponse> generateSelectedExplanations(Game game) {
+  /**
+   * Creates a list of the selected explanation responses. Is empty if the state is not
+   * PRESENT_ANSWER.
+   *
+   * @param game  the game.
+   * @param state the state of the game.
+   * @return a list of the selected explanation responses.
+   */
+  private List<SelectedExplanationResponse> generateSelectedExplanations(Game game, State state) {
     var output = new ArrayList<SelectedExplanationResponse>();
-    var cachedAddedExplanations = new ArrayList<String>();
+    var selectedExplanations = game.getCurrentRound().getSelectedExplanations();
+    var playerExplanations = game.getCurrentRound().getExplanations();
 
-    if (state == State.PRESENT_ANSWER) {
-      var map = game.getCurrentRound().getSelectedExplanations();
-      for (var entry : inverse(map).entrySet()) {
-        var selectedExplanation = new SelectedExplanationResponse(
-          entry.getValue(),
-          entry.getKey(),
-          game.getCurrentRound().whoWrote(entry.getKey()),
-          game.getCurrentRound().isCorrect(entry.getKey())
-        );
-        output.add(selectedExplanation);
-        cachedAddedExplanations.add(selectedExplanation.getExplanation());
-      }
+    if (state != State.PRESENT_ANSWER) {
+      return output;
+    }
 
-      // Add choices no one picked
-      var explanations = game.getCurrentRound().getAllExplanations();
-      var noOneChose = explanations.stream().filter(
-        explanation -> !cachedAddedExplanations.contains(explanation)
-      );
-
-      noOneChose.forEach(explanation -> output.add(new SelectedExplanationResponse(
+    // Add all explanations with empty player lists
+    playerExplanations.forEach((player, explanation) -> {
+      var selectedExplanation = new SelectedExplanationResponse(
         new ArrayList<>(),
         explanation,
-        null,
+        player,
         game.getCurrentRound().isCorrect(explanation)
-      )));
-    }
+      );
+
+      output.add(selectedExplanation);
+    });
+
+    // Add correct explanation
+    output.add(
+      new SelectedExplanationResponse(
+        new ArrayList<>(),
+        game.getCurrentRound().getCorrectExplanation(),
+        null,
+        true
+      )
+    );
+
+    // Add players who chose each explanation
+    selectedExplanations.forEach((player, chosenExplanation) -> {
+      for (var response : output) {
+        if (response.getExplanation().equals(chosenExplanation)) {
+          response.getPlayers().add(player);
+        }
+      }
+    });
 
     return output;
   }
