@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 export function Timer({ start, end }) {
   const [progress, setProgress] = useState(100);
-  const marginal = 1400;
-  const duration = end - start - marginal;
+  const duration = end - start;
 
   useEffect(() => {
     const interval = setInterval(() => {
