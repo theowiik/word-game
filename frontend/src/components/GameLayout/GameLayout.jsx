@@ -23,7 +23,7 @@ export const GameLayout = ({ children }) => {
 
   return (
     <div className="text-white bg-gray-800 min-h-screen">
-      <Navbar label={label} />
+     {(globalGameState==='END' || globalGameState==='LOBBY') && <Navbar label={label} />}
       <div className="w-full h-full">{children}</div>
     </div>
   );
