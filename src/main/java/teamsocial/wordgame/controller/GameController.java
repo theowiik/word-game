@@ -4,6 +4,7 @@ import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,17 @@ public class GameController implements Serializable {
 
   @Autowired
   private UserBean userBean;
+
+  @GetMapping("/{pin}")
+  public ResponseEntity get(@PathVariable("pin") String pin) {
+    var game = gameManager.getGameByPin(pin);
+
+    if (game == null) {
+      return ResponseEntity.notFound().build();
+    } else {
+      return ResponseEntity.noContent().build();
+    }
+  }
 
   @PostMapping("/")
   public Game create(@RequestParam("category") String category) {

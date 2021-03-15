@@ -1,5 +1,8 @@
 package teamsocial.wordgame.model;
 
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
@@ -7,16 +10,11 @@ import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.repository.ICategoryRepository;
 import teamsocial.wordgame.websocket.GameChangedPushService;
 
-import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.Map;
-
 @ApplicationScope
 @Component
 public class GameManagerBean implements Game.GameFinishedListeners {
 
   private Map<String, Game> games;
-  private int counter;
 
   @Autowired
   private ICategoryRepository categoryRepository;
@@ -27,7 +25,6 @@ public class GameManagerBean implements Game.GameFinishedListeners {
   @PostConstruct
   private void init() {
     games = new HashMap<>();
-    createGame("cat1"); // TODO Remove this
   }
 
   public Game getGameByPin(String pin) {
@@ -50,8 +47,14 @@ public class GameManagerBean implements Game.GameFinishedListeners {
   }
 
   private String getUnusedPin() {
-    counter++;
-    return String.valueOf(12344 + counter);
+    String pin = null;
+
+    while (pin == null || games.containsKey(pin)) {
+      var pinInt = (int) ((Math.random() * (99999 - 1000)) + 1000);
+      pin = String.valueOf(pinInt);
+    }
+
+    return pin;
   }
 
   @Override
