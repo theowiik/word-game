@@ -42,35 +42,35 @@ export const PresentWord = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       {/* WORD */}
-      <div className=" w-full px-5 sm:px-20">
-        <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold text-center justify-center mb-10 ">
+      <div className='w-full px-5 sm:px-20'>
+        <h1 className='text-5xl sm:text-7xl lg:text-8xl font-bold text-center justify-center mb-10 animate__animated animate__bounceIn animate__delay-1s'>
           {currentWord}
         </h1>{' '}
         <Timer start={new Date().getTime()} end={currentStateEndTime} />
         {!hasPosted ? (
           <form
             onSubmit={handleExplanationSubmit}
-            className="flex flex-col w-full"
+            className='flex flex-col w-full'
           >
             <input
-              name="explanation"
-              className="p-5 rounded-lg text-white bg-gray-600 text-center  border-none h-44 my-10"
-              placeholder="Write your explanation..."
-              autoComplete="off"
+              name='explanation'
+              className='p-5 rounded-lg text-white bg-gray-600 text-center border-none h-44 my-10'
+              placeholder='Write your explanation...'
+              autoComplete='off'
               onChange={handleChangedExplanation}
-            ></input>
+            />
 
             <Button
-              type="submit"
+              type='submit'
               primary={!disabledButton}
               disabled={disabledButton}
-              label="Submit"
+              label='Submit'
             />
           </form>
         ) : (
-          <div className="w-full p-5 rounded-lg bg-gray-600 text-center text-bold">
+          <div className='w-full p-5 rounded-lg bg-gray-600 text-center text-bold'>
             Your explanation is submitted
           </div>
         )}
