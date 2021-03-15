@@ -36,7 +36,7 @@ public class Round implements Serializable {
   /**
    * The explanation the players think is the correct answer.
    */
-  private Map<Player, String> chosenExplanations = new HashMap<>();
+  private Map<Player, String> selectedExplanations = new HashMap<>();
 
   private State state;
   private Word word;
@@ -84,11 +84,6 @@ public class Round implements Serializable {
     }
   }
 
-  public String getCorrectOrMaskedAnswer() {
-    var shouldShowAnswer = state == State.PRESENT_ANSWER;
-    return shouldShowAnswer ? correctAnswer() : "Naughty naughty trying to cheat ;)";
-  }
-
   public void addRoundFinishedListener(RoundFinishedListeners listener) {
     roundFinishedListeners.add(listener);
   }
@@ -114,13 +109,12 @@ public class Round implements Serializable {
   }
 
   /**
-   * @return The list of players who guessed correctly
+   * @return a list of players who guessed correctly.
    */
-
   public Set<Player> correctPlayers() {
     var correctExplanation = this.word.getDescription();
     Set<Player> correctPlayers = new HashSet<>();
-    for (Map.Entry<Player, String> e : chosenExplanations.entrySet()) {
+    for (var e : selectedExplanations.entrySet()) {
       if (e.getValue().equals(correctAnswer())) {
         correctPlayers.add(e.getKey());
       }
@@ -128,12 +122,11 @@ public class Round implements Serializable {
     return correctPlayers;
   }
 
-  void pickExplanation(Player player, String chosenExplanation) {
-    if (state != State.SELECT_EXPLANATION
-    ) {
+  void selectExplanation(Player player, String selectedExplanation) {
+    if (state != State.SELECT_EXPLANATION) {
       throw new IllegalStateException();
     }
-    chosenExplanations.put(player, chosenExplanation);
+    selectedExplanations.put(player, selectedExplanation);
   }
 
   private boolean validDescription(String string) {

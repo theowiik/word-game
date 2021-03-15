@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export function PresentAnswerTile({ answer , onClick, clickable}) {
+export function PresentAnswerTile({ explanation , onClick, clickable}) {
   const [isChosen, setChosen] = useState(false);
 
   function handleSetChosen() {
@@ -17,7 +17,7 @@ export function PresentAnswerTile({ answer , onClick, clickable}) {
       }`}
       onClick={clickable ? handleSetChosen : null}
     >
-      <div className="text-blue-900 font-bold text-xl capitalize">"{answer}"</div>
+      <div className="text-blue-900 font-bold text-xl capitalize">"{explanation}"</div>
     </div>
   );
 }

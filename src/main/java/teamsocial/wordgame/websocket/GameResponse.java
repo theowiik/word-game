@@ -10,11 +10,6 @@ import lombok.Setter;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.model.game.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Getter
 @Setter
 public class GameResponse {
@@ -58,7 +53,8 @@ public class GameResponse {
     // SelectedExplanations
     selectedExplanations = new ArrayList<>();
     if (state == State.PRESENT_ANSWER) {
-      var map = game.getCurrentRound().getChosenExplanations();
+      System.out.println("hi!");
+      var map = game.getCurrentRound().getSelectedExplanations();
       for (var entry : inverse(map).entrySet()) {
         var selectedExplanation = new SelectedExplanationResponse(
           entry.getValue(),

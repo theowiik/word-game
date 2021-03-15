@@ -51,21 +51,25 @@ public class GameController implements Serializable {
   ) {
     try {
       var game = getGame(pin);
-      game.addPlayerExplanation(userBean.getPlayer(), explanation);
+      game.addExplanation(userBean.getPlayer(), explanation);
       return ResponseEntity.ok().build();
     } catch (IllegalStateException e) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not add player explanation");
     }
   }
 
-  @PostMapping("/{pin}/pick_explanation")
+  @PostMapping("/{pin}/select")
   public ResponseEntity pickExplanation(
     @PathVariable("pin") String pin,
     @RequestParam("explanation") String explanation
   ) {
     try {
       var game = getGame(pin);
-      game.pickExplanation(userBean.getPlayer(), explanation);
+
+      System.out.println("Im gonna add: ");
+      System.out.println(explanation);
+
+      game.selectExplanation(userBean.getPlayer(), explanation);
       return ResponseEntity.ok().build();
     } catch (IllegalStateException e) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not pick explanation");

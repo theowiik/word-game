@@ -14,7 +14,7 @@ export const PresentAnswers = () => {
     form.append('explanation', explanation);
 
     axios
-      .post(`/games/${pin}/pick_explanation`, form)
+      .post(`/games/${pin}/select`, form)
       .then((res) => {
         console.log(res);
         toast.success('Picked explanation 😎');
@@ -39,14 +39,14 @@ export const PresentAnswers = () => {
 
       <div className="w-full items-center mt-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {explanations.map((answer, index) => {
+          {explanations.map((explanation, index) => {
             return (
               <div key={`answer-${index}`}>
                 <PresentAnswerTile
                   clickable={!hasSelected}
-                  answer={answer}
-                  onClick={pickExplanation}
-                ></PresentAnswerTile>
+                  explanation={explanation}
+                  onClick={() => pickExplanation(explanation)}
+                />
               </div>
             );
           })}
