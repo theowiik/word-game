@@ -194,9 +194,9 @@ public class Round implements Serializable {
   }
 
   public enum State {
-    PRESENT_WORD_INPUT_EXPLANATION(20),
-    SELECT_EXPLANATION(15),
-    PRESENT_ANSWER(50),
+    PRESENT_WORD_INPUT_EXPLANATION(60),
+    SELECT_EXPLANATION(7 * (3 + 1)),
+    PRESENT_ANSWER(10 * (3 + 1)),
     PRESENT_SCORE(15);
 
     private final int durationSeconds;
