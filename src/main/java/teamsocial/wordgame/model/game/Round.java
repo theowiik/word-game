@@ -53,8 +53,13 @@ public class Round implements Serializable {
     setRandomWord(category);
   }
 
+  /**
+   * Returns a list of all the explanations including the correct one.
+   *
+   * @return a list of all the explanations including the correct one.
+   */
   public List<String> getAllExplanations() {
-    List<String> explanations = new ArrayList<>();
+    var explanations = new ArrayList<String>();
     explanations.addAll(this.explanations.values());
     explanations.add(word.getDescription());
     Collections.shuffle(explanations);
@@ -104,7 +109,7 @@ public class Round implements Serializable {
     explanations.put(player, description);
   }
 
-  private String correctAnswer() {
+  private String getCorrectExplanation() {
     return word.getDescription();
   }
 
@@ -115,7 +120,7 @@ public class Round implements Serializable {
     var correctExplanation = this.word.getDescription();
     Set<Player> correctPlayers = new HashSet<>();
     for (var e : selectedExplanations.entrySet()) {
-      if (e.getValue().equals(correctAnswer())) {
+      if (e.getValue().equals(getCorrectExplanation())) {
         correctPlayers.add(e.getKey());
       }
     }

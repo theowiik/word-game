@@ -65,10 +65,6 @@ public class GameController implements Serializable {
   ) {
     try {
       var game = getGame(pin);
-
-      System.out.println("Im gonna add: ");
-      System.out.println(explanation);
-
       game.selectExplanation(userBean.getPlayer(), explanation);
       return ResponseEntity.ok().build();
     } catch (IllegalStateException e) {

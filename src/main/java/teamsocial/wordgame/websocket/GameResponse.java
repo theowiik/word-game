@@ -51,21 +51,8 @@ public class GameResponse {
     }
 
     // SelectedExplanations
-    selectedExplanations = new ArrayList<>();
-    if (state == State.PRESENT_ANSWER) {
-      System.out.println("hi!");
-      var map = game.getCurrentRound().getSelectedExplanations();
-      for (var entry : inverse(map).entrySet()) {
-        var selectedExplanation = new SelectedExplanationResponse(
-          entry.getValue(),
-          entry.getKey(),
-          game.getCurrentRound().whoWrote(entry.getKey()),
-          game.getCurrentRound().isCorrect(entry.getKey())
-        );
-        selectedExplanations.add(selectedExplanation);
-      }
+    selectedExplanations = generateSelectedExplanations(game);
     }
-  }
 
   /**
    * Turns a map like: {"key1": "my_value", "key2": "my_value"} to {"my_value": ["key1", "key2"]}
@@ -139,5 +126,39 @@ public class GameResponse {
     PRESENT_ANSWER,
     PRESENT_SCORE,
     END
+  }
+
+  private List<SelectedExplanationResponse> generateSelectedExplanations(Game game) {
+    var output = new ArrayList<SelectedExplanationResponse>();
+    var cachedAddedExplanations = new ArrayList<String>();
+
+    if (state == State.PRESENT_ANSWER) {
+      var map = game.getCurrentRound().getSelectedExplanations();
+      for (var entry : inverse(map).entrySet()) {
+        var selectedExplanation = new SelectedExplanationResponse(
+          entry.getValue(),
+          entry.getKey(),
+          game.getCurrentRound().whoWrote(entry.getKey()),
+          game.getCurrentRound().isCorrect(entry.getKey())
+        );
+        output.add(selectedExplanation);
+        cachedAddedExplanations.add(selectedExplanation.getExplanation());
+      }
+
+      // Add choices no one picked
+      var explanations = game.getCurrentRound().getAllExplanations();
+      var noOneChose = explanations.stream().filter(
+        explanation -> !cachedAddedExplanations.contains(explanation)
+      );
+
+      noOneChose.forEach(explanation -> output.add(new SelectedExplanationResponse(
+        new ArrayList<>(),
+        explanation,
+        null,
+        game.getCurrentRound().isCorrect(explanation)
+      )));
+    }
+
+    return output;
   }
 }
