@@ -36,7 +36,7 @@ public class Round implements Serializable {
   /**
    * The explanation the players think is the correct answer.
    */
-  private Map<Player, String> chosenExplanations = new HashMap<>();
+  private Map<Player, String> selectedExplanations = new HashMap<>();
 
   private State state;
   private Word word;
@@ -53,12 +53,16 @@ public class Round implements Serializable {
     setRandomWord(category);
   }
 
+  /**
+   * Returns a shuffled list of all the explanations including the correct one.
+   *
+   * @return a shuffled list of all the explanations including the correct one.
+   */
   public List<String> getAllExplanations() {
-    List<String> explanations = new ArrayList<>();
-    explanations.addAll(this.explanations.values());
-    explanations.add(word.getDescription());
-    Collections.shuffle(explanations);
-    return explanations;
+    var output = new ArrayList<>(explanations.values());
+    output.add(word.getDescription());
+    Collections.shuffle(output);
+    return output;
   }
 
   private void setRandomWord(Category category) {
@@ -84,11 +88,6 @@ public class Round implements Serializable {
     }
   }
 
-  public String getCorrectOrMaskedAnswer() {
-    var shouldShowAnswer = state == State.PRESENT_ANSWER;
-    return shouldShowAnswer ? correctAnswer() : "Naughty naughty trying to cheat ;)";
-  }
-
   public void addRoundFinishedListener(RoundFinishedListeners listener) {
     roundFinishedListeners.add(listener);
   }
@@ -109,31 +108,29 @@ public class Round implements Serializable {
     explanations.put(player, description);
   }
 
-  private String correctAnswer() {
+  public String getCorrectExplanation() {
     return word.getDescription();
   }
 
   /**
-   * @return The list of players who guessed correctly
+   * @return a list of players who guessed correctly.
    */
-
   public Set<Player> correctPlayers() {
     var correctExplanation = this.word.getDescription();
     Set<Player> correctPlayers = new HashSet<>();
-    for (Map.Entry<Player, String> e : chosenExplanations.entrySet()) {
-      if (e.getValue().equals(correctAnswer())) {
+    for (var e : selectedExplanations.entrySet()) {
+      if (e.getValue().equals(getCorrectExplanation())) {
         correctPlayers.add(e.getKey());
       }
     }
     return correctPlayers;
   }
 
-  void pickExplanation(Player player, String chosenExplanation) {
-    if (state != State.SELECT_EXPLANATION
-    ) {
+  void selectExplanation(Player player, String selectedExplanation) {
+    if (state != State.SELECT_EXPLANATION) {
       throw new IllegalStateException();
     }
-    chosenExplanations.put(player, chosenExplanation);
+    selectedExplanations.put(player, selectedExplanation);
   }
 
   private boolean validDescription(String string) {

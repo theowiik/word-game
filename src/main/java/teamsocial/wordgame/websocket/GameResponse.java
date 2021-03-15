@@ -10,11 +10,6 @@ import lombok.Setter;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.model.game.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Getter
 @Setter
 public class GameResponse {
@@ -56,20 +51,8 @@ public class GameResponse {
     }
 
     // SelectedExplanations
-    selectedExplanations = new ArrayList<>();
-    if (state == State.PRESENT_ANSWER) {
-      var map = game.getCurrentRound().getChosenExplanations();
-      for (var entry : inverse(map).entrySet()) {
-        var selectedExplanation = new SelectedExplanationResponse(
-          entry.getValue(),
-          entry.getKey(),
-          game.getCurrentRound().whoWrote(entry.getKey()),
-          game.getCurrentRound().isCorrect(entry.getKey())
-        );
-        selectedExplanations.add(selectedExplanation);
-      }
+    selectedExplanations = generateSelectedExplanations(game, state);
     }
-  }
 
   /**
    * Turns a map like: {"key1": "my_value", "key2": "my_value"} to {"my_value": ["key1", "key2"]}
@@ -143,5 +126,56 @@ public class GameResponse {
     PRESENT_ANSWER,
     PRESENT_SCORE,
     END
+  }
+
+  /**
+   * Creates a list of the selected explanation responses. Is empty if the state is not
+   * PRESENT_ANSWER.
+   *
+   * @param game  the game.
+   * @param state the state of the game.
+   * @return a list of the selected explanation responses.
+   */
+  private List<SelectedExplanationResponse> generateSelectedExplanations(Game game, State state) {
+    var output = new ArrayList<SelectedExplanationResponse>();
+    var selectedExplanations = game.getCurrentRound().getSelectedExplanations();
+    var playerExplanations = game.getCurrentRound().getExplanations();
+
+    if (state != State.PRESENT_ANSWER) {
+      return output;
+    }
+
+    // Add all explanations with empty player lists
+    playerExplanations.forEach((player, explanation) -> {
+      var selectedExplanation = new SelectedExplanationResponse(
+        new ArrayList<>(),
+        explanation,
+        player,
+        game.getCurrentRound().isCorrect(explanation)
+      );
+
+      output.add(selectedExplanation);
+    });
+
+    // Add correct explanation
+    output.add(
+      new SelectedExplanationResponse(
+        new ArrayList<>(),
+        game.getCurrentRound().getCorrectExplanation(),
+        null,
+        true
+      )
+    );
+
+    // Add players who chose each explanation
+    selectedExplanations.forEach((player, chosenExplanation) -> {
+      for (var response : output) {
+        if (response.getExplanation().equals(chosenExplanation)) {
+          response.getPlayers().add(player);
+        }
+      }
+    });
+
+    return output;
   }
 }

@@ -106,13 +106,13 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     getCurrentRound().addRoundFinishedListener(this);
   }
 
-  public void addPlayerExplanation(Player player, String explanation) {
+  public void addExplanation(Player player, String explanation) {
     getCurrentRound().addPlayerExplanation(player, explanation);
     notifyGameChangedObservers();
   }
 
-  public void pickExplanation(Player player, String explanation) {
-    getCurrentRound().pickExplanation(player, explanation);
+  public void selectExplanation(Player player, String explanation) {
+    getCurrentRound().selectExplanation(player, explanation);
   }
 
   public void addPlayer(Player player) {
@@ -157,10 +157,6 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
 
   public String getCurrentWord() {
     return getCurrentRound().getCurrentWord();
-  }
-
-  public String getCorrectOrMaskedAnswer() {
-    return getCurrentRound().getCorrectOrMaskedAnswer();
   }
 
   public enum State {
