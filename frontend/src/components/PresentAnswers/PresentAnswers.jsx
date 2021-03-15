@@ -29,7 +29,7 @@ export const PresentAnswers = () => {
 
   return (
     <>
-      <h1 className="text-center mt-14 text-6xl font-semibold">
+      <h1 className="text-center mt-14 text-6xl font-bold">
         {currentWord}
       </h1>
 
