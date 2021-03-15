@@ -20,7 +20,13 @@ export const Round = () => {
         {players.map((player, index) => {
           return (
             <div key={`player-${index}`}>
-              <UserTile {...player} color={colors[index % colors.length]} />
+              <UserTile
+                {...player}
+                color={colors[index % colors.length]}
+                isCurrentUser={
+                  player.name === localStorage.getItem('playerName')
+                }
+              />
             </div>
           );
         })}

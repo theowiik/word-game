@@ -7,4 +7,4 @@ export const states = {
   PRESENT_SCORE: 'PRESENT_SCORE',
 };
 
-export const colors = ['peach', 'grass', 'beach', 'ocean'];
+export const colors = ['bg-peach', 'bg-grass', 'bg-beach', 'bg-ocean'];
