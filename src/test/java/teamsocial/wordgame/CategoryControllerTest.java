@@ -20,6 +20,17 @@ class CategoryControllerTest {
   private ICategoryRepository categoryRepository;
 
   @Test
+  void indexTest() {
+    categoryRepository.save(new Category(getUnusedName()));
+    categoryRepository.save(new Category(getUnusedName()));
+    categoryRepository.save(new Category(getUnusedName()));
+
+    var categories = categoryController.index();
+
+    Assertions.assertTrue(categories.size() >= 3);
+  }
+
+  @Test
   void createValidTest() {
     var name = getUnusedName();
     var categoryRequest = new Category(name);
@@ -44,6 +55,21 @@ class CategoryControllerTest {
     var response = categoryController.create(new Category(sharedName));
 
     Assertions.assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
+  }
+
+  @Test
+  void deleteCategoryWithNoWordsSuccessTest() {
+    var category = categoryRepository.save(new Category(getUnusedName()));
+    var name = category.getName();
+
+    categoryController.delete(name);
+
+    var catInDB = categoryRepository.findById(name);
+    Assertions.assertTrue(catInDB.isEmpty());
+  }
+
+  @Test
+  void deleteCategoryWithWordsFailTest() {
   }
 
   private String getUnusedName() {
