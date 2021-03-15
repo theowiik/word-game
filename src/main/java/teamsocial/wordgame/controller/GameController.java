@@ -79,6 +79,10 @@ public class GameController implements Serializable {
   ) {
     var game = getGame(pin);
 
+    if (game.isStarted()) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("The game has started already");
+    }
+
     if (userBean.getPlayer() == null) {
       userBean.setPlayer(new Player(name));
     }
