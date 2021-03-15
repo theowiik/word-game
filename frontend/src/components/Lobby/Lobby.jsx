@@ -25,7 +25,13 @@ export const Lobby = () => {
         {players.map((player, i) => {
           return (
             <div key={`player-${i}`}>
-              <UserTile name={player.name} color={colors[i % colors.length]} />
+              <UserTile
+                name={player.name}
+                color={colors[i % colors.length]}
+                isCurrentUser={
+                  player.name === localStorage.getItem('playerName')
+                }
+              />
             </div>
           );
         })}
