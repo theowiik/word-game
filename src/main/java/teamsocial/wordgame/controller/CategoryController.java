@@ -3,13 +3,7 @@ package teamsocial.wordgame.controller;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import teamsocial.wordgame.controller.requestwrapper.CategoryUpdateRequest;
 import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.repository.ICategoryRepository;
@@ -44,13 +38,13 @@ public class CategoryController {
     return ResponseEntity.ok(savedCategory);
   }
 
-  @DeleteMapping
-  public ResponseEntity delete(@RequestBody Category categoryRequest) {
-    if (categoryRequest == null) {
+  @DeleteMapping("/{category}")
+  public ResponseEntity delete( @PathVariable("category") String category) {
+    if (category == null) {
       return ResponseEntity.badRequest().build();
     }
 
-    var categoryInDatabase = categoryRepository.findById(categoryRequest.getName());
+    var categoryInDatabase = categoryRepository.findById(category);
 
     if (categoryInDatabase.isEmpty()) {
       return ResponseEntity.notFound().build();
