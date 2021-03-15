@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
 import { useGame } from 'contexts/game';
+import { TimeCountDown } from 'components/TimeCountDown';
 
 export const PresentScore = () => {
   const { players, currentStateEndTime } = useGame();
-  const [timeLeft, setTimeLeft] = useState(
-    Math.floor((currentStateEndTime - new Date().getTime()) / 1000)
-  );
 
   function compare(a, b) {
     if (a.score < b.score) {
@@ -17,18 +14,9 @@ export const PresentScore = () => {
     return 0;
   }
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft((time) => time - 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [timeLeft]);
-
   return (
     <div className="w-full flex flex-col items-center">
-      <h2 className="text-center mt-14 text-6xl font-bold">
-        Current score
-      </h2>
+      <h2 className="text-center mt-14 text-6xl font-bold">Current score</h2>
       <div className="my-5 sm:p-20 w-full">
         {players.sort(compare).map((player, index) => {
           return (
@@ -42,16 +30,7 @@ export const PresentScore = () => {
           );
         })}
       </div>
-      <div>
-        {timeLeft > 0 ? (
-          <>
-            <span className="mr-5">Next round starts in:</span>
-            <span>{`${timeLeft} seconds`}</span>
-          </>
-        ) : (
-          <span>Lets gooo 😎</span>
-        )}
-      </div>
+      <TimeCountDown label="Next round starts in:" />
     </div>
   );
 };
