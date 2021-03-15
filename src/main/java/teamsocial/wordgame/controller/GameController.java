@@ -92,6 +92,27 @@ public class GameController implements Serializable {
     return ResponseEntity.ok().build();
   }
 
+  @GetMapping("/{pin}/whoami")
+  public ResponseEntity<String> getWhoAmI(@PathVariable("pin") String pin) {
+
+    var game = gameManager.getGameByPin(pin);
+    if (game == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    var player = userBean.getPlayer();
+    if (player == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    if (!game.getPlayers().contains(player)) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    return ResponseEntity.ok(player.getName());
+
+  }
+
   @PostMapping("/{pin}/start")
   public ResponseEntity startGame(@PathVariable("pin") String pin) {
     var game = getGame(pin);

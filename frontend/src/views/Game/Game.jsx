@@ -22,7 +22,17 @@ export const Game = () => {
       .post(`/games/${pin}/join`, form)
       .then((res) => {
         console.log(res);
-        localStorage.setItem('playerName', form.get('name'));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const setCurrentPlayerName = () => {
+    axios
+      .get(`/games/${pin}/whoami`)
+      .then((res) => {
+        localStorage.setItem('playerName', res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -31,6 +41,7 @@ export const Game = () => {
 
   const connectedCallback = () => {
     joinGame();
+    setCurrentPlayerName();
   };
 
   const messageCallback = (message) => {
@@ -63,7 +74,7 @@ export const Game = () => {
     websocketEndpointUrl,
     subscribeToEndpoint,
     memoizedMessageCallback,
-    memoizedConnectedCallback
+    memoizedConnectedCallback,
   ]);
 
   const [gameFound, setGameFound] = useState(false);
@@ -77,7 +88,7 @@ export const Game = () => {
     setCurrentWord,
     setSelectedExplanations,
     setExplanations,
-    setPin
+    setPin,
   } = useGame();
 
   const checkIfGameExists = async () => {
