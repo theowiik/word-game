@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container } from 'components';
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify';
 
 export const Modify = () => {
@@ -116,6 +117,13 @@ export const Modify = () => {
           <h1 className="font-bold text-center text-3xl">
             Modify words and categories
           </h1>
+          <div className='absolute top-10 sm:left-10'>
+        <Link to="/game/new">
+          <span className="bg-gray-600 py-2 px-4 rounded-full text-sm ml-5">
+            Back to home
+          </span>
+        </Link>
+        </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <AddWordsCard
