@@ -8,7 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import teamsocial.wordgame.controller.CategoryController;
 import teamsocial.wordgame.model.entity.Category;
+import teamsocial.wordgame.model.entity.Word;
 import teamsocial.wordgame.repository.ICategoryRepository;
+import teamsocial.wordgame.repository.IWordRepository;
 
 @SpringBootTest
 class CategoryControllerTest {
@@ -18,6 +20,9 @@ class CategoryControllerTest {
 
   @Autowired
   private ICategoryRepository categoryRepository;
+
+  @Autowired
+  private IWordRepository wordRepository;
 
   @Test
   void indexTest() {
@@ -70,6 +75,25 @@ class CategoryControllerTest {
 
   @Test
   void deleteCategoryWithWordsFailTest() {
+    var catName = getUnusedName();
+    var category = categoryRepository.save(new Category(catName));
+    wordRepository.save(new Word(getUnusedName(), "description", category));
+
+    var response = categoryController.delete(catName);
+
+    Assertions.assertEquals(response.getStatusCode(), HttpStatus.FORBIDDEN);
+  }
+
+  @Test
+  void deleteNonExistingCategoryFailTest() {
+    var response = categoryController.delete(getUnusedName());
+    Assertions.assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
+  }
+
+  @Test
+  void deleteNullCategoryFailTest() {
+    var response = categoryController.delete(null);
+    Assertions.assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
   }
 
   private String getUnusedName() {

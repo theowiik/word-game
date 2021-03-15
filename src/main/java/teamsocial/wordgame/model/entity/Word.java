@@ -16,8 +16,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "words")
 public class Word implements Serializable {
 
@@ -32,9 +32,4 @@ public class Word implements Serializable {
   @JoinColumn(name = "category")
   @NotNull
   private Category category;
-
-  public Word(String word, @NotNull String description) {
-    this.word = word;
-    this.description = description;
-  }
 }
