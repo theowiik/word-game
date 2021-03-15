@@ -2,7 +2,7 @@ import Axios from 'axios';
 import { Container, Navbar } from 'components';
 import { Button } from 'components/Button/Button';
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 export function StartGame() {
   const [categories, setCategories] = useState([]);
@@ -49,7 +49,14 @@ export function StartGame() {
           className="flex flex-col justify-center items-center"
         >
           <div className="bg-gray-700 rounded-xl w-full sm:w-96 p-10 mt-20">
-            <h2 className="text-2xl font-bold">Select category</h2>
+          <div className='flex justify-between items-center'>
+          <h2 className="text-2xl font-bold">Select category</h2>
+          <Link to="/modify">
+          <button className="px-5 py-2 bg-gray-600 hover:bg-gray-800 rounded-full">Edit</button>
+          </Link>
+          
+          </div>
+            
             <ul className="mt-5">
               {categories.map((category, index) => (
                 <div key={`category-${index}`}>
