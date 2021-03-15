@@ -93,8 +93,7 @@ export const Modify = () => {
         toast.success(`${category.name} deleted`);
       })
       .catch((err) => {
-        console.log(err);
-        toast.error('Failed to delete category');
+        toast.error(err.response.data);
       });
   };
 

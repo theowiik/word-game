@@ -2,6 +2,7 @@ package teamsocial.wordgame.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamsocial.wordgame.controller.requestwrapper.CategoryUpdateRequest;
@@ -50,9 +51,8 @@ public class CategoryController {
       return ResponseEntity.notFound().build();
     }
 
-    for (var word : categoryInDatabase.get().getWords()) {
-      word.setCategory(null);
-      wordRepository.save(word);
+    if (!categoryInDatabase.get().getWords().isEmpty()){
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Delete the words of the category first");
     }
 
     categoryRepository.delete(categoryInDatabase.get());
