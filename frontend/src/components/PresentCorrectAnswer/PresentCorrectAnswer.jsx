@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 export const PresentCorrectAnswer = () => {
   const [view, setView] = useState([]);
   const { currentWord, selectedExplanations } = useGame();
-  const delaySeconds = 2;
+  const delaySeconds = 8;
 
   function sortBy(key) {
     return (a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0);
