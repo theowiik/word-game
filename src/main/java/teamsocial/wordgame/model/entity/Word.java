@@ -30,6 +30,7 @@ public class Word implements Serializable {
 
   @ManyToOne(optional = true)
   @JoinColumn(name = "category")
+  @NotNull
   private Category category;
 
   public Word(String word, @NotNull String description) {
