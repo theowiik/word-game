@@ -32,16 +32,22 @@ public class GameManagerBean implements Game.GameFinishedListeners {
     return game;
   }
 
-  public Game createGame(String category) {
-    var categoryOptional = categoryRepository.findById(category);
+  public Game createGame(String categoryName) {
+    var categoryOptional = categoryRepository.findById(categoryName);
 
     if (categoryOptional.isEmpty()) {
-      throw new IllegalArgumentException("No category with the name " + category);
+      throw new IllegalArgumentException("No category with the name " + categoryName);
     }
 
-    var cat = categoryRepository.findById(category).get();
+    var category = categoryOptional.get();
+    if (category.getWords() == null || category.getWords().isEmpty()) {
+      throw new IllegalStateException(
+        "Cant create a game with a category that has no words" + category
+      );
+    }
+
     var pin = getUnusedPin();
-    var game = new Game(cat, pin);
+    var game = new Game(category, pin);
     game.addGameChangedObserver(pushService);
     game.addGameFinishedListener(this);
     games.put(pin, game);

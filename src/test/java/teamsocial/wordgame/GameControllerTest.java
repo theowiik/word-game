@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import teamsocial.wordgame.controller.CategoryController;
 import teamsocial.wordgame.controller.GameController;
 import teamsocial.wordgame.model.GameManagerBean;
@@ -48,12 +49,22 @@ class GameControllerTest {
   }
 
   @Test
+  void createGameWithNonExistingCategoryFailTest() {
+    Assertions.assertThrows(
+      ResponseStatusException.class,
+      () -> gameController.create(getUnusedName())
+    );
+  }
+
+  @Test
   void createGameWithCategoryNoWordsFailTest() {
-    //var category = new Category(getUnusedName());
-    //gameManagerBean.createGame(category.getName());
-    //var response = gameController.get(pin);
-    //
-    //Assertions.assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
+    var category = categoryRepository.save(new Category(getUnusedName()));
+    gameManagerBean.createGame(category.getName());
+    var response = gameController.create(category.getName());
+
+    Assertions.assertEquals(response.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+    Assertions.assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
   }
 
   @Test
