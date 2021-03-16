@@ -58,13 +58,12 @@ class GameControllerTest {
 
   @Test
   void createGameWithCategoryNoWordsFailTest() {
-    var category = categoryRepository.save(new Category(getUnusedName()));
-    gameManagerBean.createGame(category.getName());
-    var response = gameController.create(category.getName());
-
-    Assertions.assertEquals(response.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
-
-    Assertions.assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
+    var catName = getUnusedName();
+    categoryRepository.save(new Category(catName));
+    Assertions.assertThrows(
+      ResponseStatusException.class,
+      () -> gameController.create(catName)
+    );
   }
 
   @Test
