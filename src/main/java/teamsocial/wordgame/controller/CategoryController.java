@@ -4,7 +4,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import teamsocial.wordgame.controller.requestwrapper.CategoryUpdateRequest;
 import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.repository.ICategoryRepository;
@@ -60,24 +67,27 @@ public class CategoryController {
   }
 
   @PutMapping
-  public ResponseEntity update(@RequestBody CategoryUpdateRequest categoryUpdateRequest) {
-    var categoryInDB = categoryRepository.findById(
+  public ResponseEntity<Category> update(@RequestBody CategoryUpdateRequest categoryUpdateRequest) {
+    var oldCategoryOptional = categoryRepository.findById(
       categoryUpdateRequest.getOldName()
     );
 
-    if (categoryInDB.isEmpty()) {
-      return ResponseEntity.badRequest().build();
+    if (oldCategoryOptional.isEmpty()) {
+      return ResponseEntity.notFound().build();
     }
+    var oldCategory = oldCategoryOptional.get();
 
-    var newCategory = categoryRepository.save(new Category(categoryUpdateRequest.getNewName()));
-    var savedNewCategory = categoryRepository.save(newCategory);
-    var oldCategory = categoryInDB.get();
+    var newCategory = categoryRepository.save(
+      new Category(categoryUpdateRequest.getNewName())
+    );
 
     for (var word : oldCategory.getWords()) {
-      word.setCategory(savedNewCategory);
+      word.setCategory(newCategory);
+      wordRepository.save(word);
     }
     categoryRepository.delete(oldCategory);
 
-    return ResponseEntity.ok(savedNewCategory);
+    var categoryWithWords = categoryRepository.getOne(newCategory.getName());
+    return ResponseEntity.ok(categoryWithWords);
   }
 }
