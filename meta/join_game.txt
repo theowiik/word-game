@@ -1,0 +1,17 @@
+@startuml
+
+ReactClient -> WebSocketWrapper: Request connection to websocket with id: {pin}
+
+WebSocketWrapper -> ReactClient: Ok
+
+ReactClient -> GameController: POST request "/games/{pin}/join"
+
+GameController -> GameManagerBean: Add player to game {pin}
+
+GameManagerBean -> Game: Add player
+
+Game -> WebSocketWrapper: Notify GameChangedListener's
+
+WebSocketWrapper -> ReactClient: Send game state for websocket with id: {pin}
+
+@enduml

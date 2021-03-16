@@ -1,0 +1,15 @@
+@startuml
+
+ReactClient -> GameController: POST request "/games/{pin}/add_explanation" with explanation in request parameter
+
+GameController -> GameManagerBean: Add explanation to game {pin}
+
+GameManagerBean -> Game: Add player
+
+GameController -> ReactClient: Ok
+
+Game -> WebSocketWrapper: Notify GameChangedListeners
+
+WebSocketWrapper -> ReactClient: Send game state for websocket with id: {pin}
+
+@enduml
