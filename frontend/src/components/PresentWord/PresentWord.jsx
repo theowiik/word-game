@@ -12,10 +12,10 @@ import { toast } from 'react-toastify';
  */
 export const PresentWord = () => {
   const [hasPosted, setHasPosted] = useState(false);
-  const { currentWord, pin, currentStateEndTime } = useGame();
+  const { currentWord, pin } = useGame();
   const [disabledButton, setDisabledButton] = useState(true);
 
-  const startTime = new Date().getTime();
+  let startTime = new Date().getTime();
 
   const postExplanation = (explanation) => {
     const form = new FormData();
@@ -56,7 +56,7 @@ export const PresentWord = () => {
         <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold text-center justify-center mb-10 animate__animated animate__bounceIn animate__delay-1s">
           {currentWord}
         </h1>{' '}
-        <Timer start={startTime} end={currentStateEndTime} />
+        <Timer start={startTime} />
         {!hasPosted ? (
           <form
             onSubmit={handleExplanationSubmit}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Timer, PresentAnswerTile } from 'components';
 import { useGame } from 'contexts/game';
 import axios from 'axios';
@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 export const PresentAnswers = () => {
   const [hasSelected, setHasSelected] = useState(false);
 
-  const { currentWord, explanations, currentStateEndTime, pin } = useGame();
+  const { currentWord, explanations,  pin } = useGame();
 
   const startTime = new Date().getTime();
 
@@ -40,7 +40,7 @@ export const PresentAnswers = () => {
       <h1 className="text-center mt-14 text-6xl font-bold">{currentWord}</h1>
 
       <div className="mt-14 w-full">
-        <Timer start={startTime} end={currentStateEndTime} />
+        <Timer start={startTime} />
       </div>
 
       <div className="w-full items-center mt-10">
