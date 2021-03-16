@@ -223,15 +223,6 @@ public class Round implements Serializable {
     void performOnRoundStateChanged();
   }
 
-  public Player whoWrote(String explanation) {
-    for (var entry : explanations.entrySet()) {
-      if (entry.getValue().equals(explanation)) {
-        return entry.getKey();
-      }
-    }
-
-    return null;
-  }
 
   public boolean isCorrect(String explanation) {
     return explanation.equals(word.getDescription());
