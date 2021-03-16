@@ -147,6 +147,7 @@ public class Round implements Serializable {
     return correctPlayers;
   }
 
+
   /**
    *  If the round is in the correct state the player selects an explanation
    *
@@ -241,6 +242,23 @@ public class Round implements Serializable {
   private void callAfter(Invokable invokable, int delayInSeconds) {
     ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
     exec.schedule(invokable::perform, delayInSeconds, TimeUnit.SECONDS);
+  }
+
+  /**
+   *  Check how many player chosed a given explanation
+   *
+   * @param player the player to exlude
+   * @param explanation the explanation to check who many chosed
+   * @return
+   */
+  public int countWhoManyChosed(Player player, String explanation) {
+    var n = 0;
+    for (var e : selectedExplanations.entrySet()) {
+      if (explanation.equals(e.getValue()) && e.getKey() != player) {
+        n++;
+      }
+    }
+    return n;
   }
 
   /**
