@@ -10,13 +10,22 @@ import { websocketBaseUrl } from 'services/urlConstants';
 import { createStompClient } from 'services/websocketService';
 import { toast } from 'react-toastify';
 
+
+/**
+ * The game class controlling the flow of the game components
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const Game = () => {
   const params = useParams();
   const pin = params.pin;
   const websocketEndpointUrl = `${websocketBaseUrl}/chat`;
   const subscribeToEndpoint = `/topic/messages/${pin}`;
 
-  
+
+  /**
+   * Sends requests to backend to join a game
+   */
   const joinGame = () => {
     const form = new FormData();
     form.append('name', getRandomName());
@@ -31,6 +40,9 @@ export const Game = () => {
       });
   };
 
+  /**
+   * Sets the name of the player
+   */
   const setCurrentPlayerName = () => {
     axios
       .get(`/games/${pin}/whoami`)
@@ -45,6 +57,10 @@ export const Game = () => {
     setCurrentPlayerName();
   };
 
+  /**
+   * Sets different variables depending on the message it receives
+   * @param message
+   */
   const messageCallback = (message) => {
     let game;
     try {
@@ -104,6 +120,10 @@ export const Game = () => {
     checkIfGameExists();
   }, []);
 
+
+  /**
+   * Changes view depending on the state
+   */
   return (
     <GameLayout>
       {(() => {

@@ -4,6 +4,12 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { gameExists } from 'services/database-service';
 
+
+/**
+ * The view for the home page
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function Home() {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -22,6 +28,10 @@ export function Home() {
     setLoading(false);
   };
 
+
+  /**
+   * Allows to write game pin and then join game. Also allows you to redirect to start a new game
+   */
   return (
     <div className="w-full h-screen bg-gray-800 flex justify-center items-center">
       <div className="flex flex-col items-center">

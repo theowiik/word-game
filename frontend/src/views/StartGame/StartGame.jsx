@@ -4,6 +4,12 @@ import { Button } from 'components/Button/Button';
 import { useEffect, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 
+
+/**
+ * The view for starting a new game, includes selecting a category for the page.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function StartGame() {
   const [categories, setCategories] = useState([]);
   const history = useHistory();
@@ -31,8 +37,6 @@ export function StartGame() {
       .catch((err) => {
         console.log(err);
       });
-
-  
   };
 
   useEffect(() => {

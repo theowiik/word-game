@@ -4,10 +4,20 @@ import { Container } from 'components';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+
+/**
+ * The page where you can change settings for the game, including adding new words and categories
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const Modify = () => {
   const [categories, setCategories] = useState([]);
   const [words, setWords] = useState([]);
 
+  /**
+   * Receives all the current categories
+   * @returns {Promise<void>}
+   */
   const fetchCategories = () =>
     axios
       .get('/categories')
@@ -18,6 +28,10 @@ export const Modify = () => {
         console.log(err);
       });
 
+  /**
+   * Receives all the current words
+   * @returns {Promise<void>}
+   */
   const fetchWords = () =>
     axios
       .get('/words')
@@ -33,6 +47,10 @@ export const Modify = () => {
     fetchWords();
   }, []);
 
+  /**
+   * Allows the addition of new categories
+   * @param category
+   */
   const handleNewCategory = (category) => {
     //Add to db
     axios
@@ -47,6 +65,10 @@ export const Modify = () => {
       });
   };
 
+  /**
+   * Allows the addition of new words
+   * @param word
+   */
   const handleNewWord = (word) => {
     //add to db
     axios
@@ -61,6 +83,10 @@ export const Modify = () => {
       });
   };
 
+  /**
+   * An update method if word is changed
+   * @param newData
+   */
   const handleUpdateWord = (newData) => {
     axios
       .put('/words', newData)
@@ -73,6 +99,11 @@ export const Modify = () => {
       });
   };
 
+  /**
+   * An update method if category is changed
+   * @param index
+   * @param newData
+   */
   const handleUpdateCategory = (index, newData) => {
     axios
       .put('/categories', newData)
@@ -85,6 +116,10 @@ export const Modify = () => {
       });
   };
 
+  /**
+   * A delete method to delete category
+   * @param category
+   */
   const handleDeleteCategory = (category) => {
     axios
       .delete(`/categories/${category.name}`, {})
@@ -96,6 +131,10 @@ export const Modify = () => {
       });
   };
 
+  /**
+   * A delete method to delete words
+   * @param word
+   */
   const handleDeleteWord = (word) => {
     axios
       .delete(`/words/${word.word}`, {})
@@ -108,6 +147,10 @@ export const Modify = () => {
       });
   };
 
+
+  /**
+   * Displays buttons to interact with the modify page such as deleting, updating and adding.
+   */
   return (
     <div className="bg-gray-800 text-white min-h-screen">
       <Container>
