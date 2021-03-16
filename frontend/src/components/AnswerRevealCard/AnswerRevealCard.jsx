@@ -5,7 +5,7 @@ const getCardClassNames = (props) => {
   return classNames({
     'p-10 rounded-lg rounded-xl mt-8 text-white transition': true,
     'bg-green-500': props.showBy,
-    'bg-gray-600': !props.showBy
+    'bg-gray-600': !props.showBy,
   });
 };
 
@@ -15,7 +15,7 @@ const getBadgeClassNames = (props) => {
     'animate__animated animate__fadeInDown': true,
     'bg-red-700': props.danger,
     'bg-green-800 text-white': props.success,
-    'bg-gray-700': props.dark
+    'bg-gray-700': props.dark,
   });
 };
 
@@ -54,38 +54,43 @@ export function AnswerRevealCard({ text, byPlayer, playersWhoChose, correct }) {
   return (
     <>
       <div className={cardClassNames}>
-        <p className='text-center font-bold text-2xl'>{text}</p>
+        <p className="text-center font-bold text-2xl">{text}</p>
       </div>
 
-      <div className='flex flex-row flex-wrap justify-end mt-2'>
-        {
-          showChose && playersWhoChose.length > 0 && (
-            playersWhoChose.map((player, i) => {
-              return (
-                <p className={getBadgeClassNames({ success: correct, danger: !correct })} key={i}>
-                  {correct ? '+' : '-'}1 {player.name}
-                </p>
-              );
-            })
-          )
-        }
-        {
-          showChose && playersWhoChose.length === 0 && (
-            <p className={getBadgeClassNames({ dark: true })}>
-              No one 😢
-            </p>
-          )
-        }
+      <div className="flex flex-row flex-wrap justify-end mt-2">
+        {showChose &&
+          playersWhoChose.length > 0 &&
+          playersWhoChose.map((player, i) => {
+            return (
+              <p
+                className={getBadgeClassNames({
+                  success: correct,
+                  danger: !correct,
+                })}
+                key={i}
+              >
+                {correct ? '+20' : ''} {player.name}
+              </p>
+            );
+          })}
+        {showChose && playersWhoChose.length === 0 && (
+          <p className={getBadgeClassNames({ dark: true })}>No one 😢</p>
+        )}
       </div>
 
-      <div className='flex flex-row justify-end'>
-        {
-          showBy && (
-            <p className='text-3xl font-semibold animate__animated animate__fadeInDown'>
+      <div className="flex flex-row justify-end">
+        {showBy && (
+          <div className="flex flex-col items-end">
+            <p className="text-3xl font-semibold animate__animated animate__fadeInDown">
               {byPlayer ? `by ${byPlayer.name}` : 'Correct answer'}
             </p>
-          )
-        }
+            <span className="text-sm">
+              {playersWhoChose.length > 0
+                ? `+${playersWhoChose.length * 10} points`
+                : ''}
+            </span>
+          </div>
+        )}
       </div>
     </>
   );

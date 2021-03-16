@@ -147,6 +147,7 @@ public class Round implements Serializable {
     return correctPlayers;
   }
 
+
   /**
    *  If the round is in the correct state the player selects an explanation
    *
@@ -208,7 +209,8 @@ public class Round implements Serializable {
     state = State.SELECT_EXPLANATION;
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
-    callAfter(this::enterPresentAnswer, state.getDurationSeconds());
+    callAfter(this::enterPresentAnswer,
+      state.getScaledDurationSeconds(getAllExplanations().size()));
   }
 
   /**
@@ -222,7 +224,7 @@ public class Round implements Serializable {
     state = State.PRESENT_ANSWER;
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
-    callAfter(this::enterPresentScore, state.getDurationSeconds());
+    callAfter(this::enterPresentScore, state.getScaledDurationSeconds(getAllExplanations().size()));
   }
 
   /**
@@ -236,7 +238,8 @@ public class Round implements Serializable {
     state = State.PRESENT_SCORE;
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
-    callAfter(this::notifyRoundFinishedListeners, state.getDurationSeconds());
+    callAfter(this::notifyRoundFinishedListeners,
+      state.getScaledDurationSeconds(getAllExplanations().size()));
   }
 
   /**
@@ -271,12 +274,29 @@ public class Round implements Serializable {
   }
 
   /**
+   * Check how many player chosed a given explanation
+   *
+   * @param player      the player to exlude
+   * @param explanation the explanation to check who many chosed
+   * @return the amount of players that chose the explanation excluding the provided player.
+   */
+  public int countWowManyChosed(Player player, String explanation) {
+    var n = 0;
+    for (var e : selectedExplanations.entrySet()) {
+      if (explanation.equals(e.getValue()) && e.getKey() != player) {
+        n++;
+      }
+    }
+    return n;
+  }
+
+  /**
    * Enum that holds State and its duration
    */
   public enum State {
     PRESENT_WORD_INPUT_EXPLANATION(0, 60),
-    SELECT_EXPLANATION(1, 7 * (3 + 1)),
-    PRESENT_ANSWER(2, 10 * (3 + 1)),
+    SELECT_EXPLANATION(1, 7),
+    PRESENT_ANSWER(2, 10),
     PRESENT_SCORE(3, 15);
 
     private final int orderIndex;
@@ -301,7 +321,17 @@ public class Round implements Serializable {
     }
 
     /**
+     * Get the duration seconds of a state scaled with players
+     *
+     * @return int of seconds
+     */
+    public int getScaledDurationSeconds(int amountOfExplanations) {
+      return amountOfExplanations * durationSeconds;
+    }
+
+    /**
      * Convert duration seconds to milliseconds
+     *
      * @return int of milliseconds
      */
     public int getDurationMilliSeconds() {
