@@ -88,6 +88,11 @@ public class GameController implements Serializable {
     try {
       var game = getGame(pin);
       game.addExplanation(userBean.getPlayer(), explanation);
+
+      if (game.everyoneHasSubmittedExplanation()) {
+        game.getCurrentRound().skipCurrentRoundState();
+      }
+
       return ResponseEntity.ok().build();
     } catch (IllegalStateException e) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not add player explanation");

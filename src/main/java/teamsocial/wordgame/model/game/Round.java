@@ -187,7 +187,11 @@ public class Round implements Serializable {
    * Keep the state during its duration and then call enterSelectExplanation
    */
   private void enterPresentWordInputExplanation() {
-    this.state = State.PRESENT_WORD_INPUT_EXPLANATION;
+    if (hasEntered(State.PRESENT_WORD_INPUT_EXPLANATION)) {
+      return;
+    }
+
+    state = State.PRESENT_WORD_INPUT_EXPLANATION;
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
     callAfter(this::enterSelectExplanation, state.getDurationSeconds());
@@ -197,7 +201,11 @@ public class Round implements Serializable {
    * Keep the state during its duration and then call enterPresentAnswer
    */
   private void enterSelectExplanation() {
-    this.state = State.SELECT_EXPLANATION;
+    if (hasEntered(State.SELECT_EXPLANATION)) {
+      return;
+    }
+
+    state = State.SELECT_EXPLANATION;
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
     callAfter(this::enterPresentAnswer, state.getDurationSeconds());
@@ -207,6 +215,10 @@ public class Round implements Serializable {
    * Keep the state during its duration and then call enterPresentScore
    */
   private void enterPresentAnswer() {
+    if (hasEntered(State.PRESENT_ANSWER)) {
+      return;
+    }
+
     state = State.PRESENT_ANSWER;
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
@@ -217,6 +229,10 @@ public class Round implements Serializable {
    * Keep the state during its duration and then call notifyRoundFinishedListeners
    */
   private void enterPresentScore() {
+    if (state == State.PRESENT_SCORE) {
+      return;
+    }
+
     state = State.PRESENT_SCORE;
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
@@ -244,18 +260,35 @@ public class Round implements Serializable {
   }
 
   /**
+   * Skips the current state, does nothing if the state is the final state (PRESENT_SCORE).
+   */
+  public void skipCurrentRoundState() {
+    switch (state) {
+      case PRESENT_WORD_INPUT_EXPLANATION -> enterSelectExplanation();
+      case SELECT_EXPLANATION -> enterPresentAnswer();
+      case PRESENT_ANSWER -> enterPresentScore();
+    }
+  }
+
+  /**
    * Enum that holds State and its duration
    */
   public enum State {
-    PRESENT_WORD_INPUT_EXPLANATION(60),
-    SELECT_EXPLANATION(7 * (3 + 1)),
-    PRESENT_ANSWER(10 * (3 + 1)),
-    PRESENT_SCORE(15);
+    PRESENT_WORD_INPUT_EXPLANATION(0, 60),
+    SELECT_EXPLANATION(1, 7 * (3 + 1)),
+    PRESENT_ANSWER(2, 10 * (3 + 1)),
+    PRESENT_SCORE(3, 15);
 
+    private final int orderIndex;
     private final int durationSeconds;
 
-    State(int durationSeconds) {
+    State(int orderIndex, int durationSeconds) {
+      this.orderIndex = orderIndex;
       this.durationSeconds = durationSeconds;
+    }
+
+    public int getOrderIndex() {
+      return orderIndex;
     }
 
     /**
@@ -312,5 +345,19 @@ public class Round implements Serializable {
   private interface Invokable {
 
     void perform();
+  }
+
+  /**
+   * Checks whether the round has been in the provided round.
+   *
+   * @param stateToCheck the state to check.
+   * @return true if the round has been in the provided state.
+   */
+  private boolean hasEntered(State stateToCheck) {
+    if (state == null) {
+      return false;
+    }
+
+    return state.getOrderIndex() >= stateToCheck.getOrderIndex();
   }
 }

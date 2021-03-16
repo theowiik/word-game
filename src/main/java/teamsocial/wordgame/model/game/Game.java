@@ -1,13 +1,17 @@
 package teamsocial.wordgame.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import teamsocial.wordgame.model.entity.Category;
-
-import java.io.Serializable;
-import java.util.*;
 
 @Getter
 @Setter
@@ -208,10 +212,20 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
 
   /**
    * Gets the word for the current round
+   *
    * @return current word of type Word
    */
   public String getCurrentWord() {
     return getCurrentRound().getCurrentWord();
+  }
+
+  /**
+   * Checks whether everyone has entered an explanation of the word.
+   *
+   * @return true if everyone has entered an explanation of the word.
+   */
+  public boolean everyoneHasSubmittedExplanation() {
+    return getCurrentRound().getExplanations().size() == players.size();
   }
 
   /**
