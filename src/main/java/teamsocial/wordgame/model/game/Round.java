@@ -238,8 +238,7 @@ public class Round implements Serializable {
     state = State.PRESENT_SCORE;
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
-    callAfter(this::notifyRoundFinishedListeners,
-      state.getScaledDurationSeconds(getAllExplanations().size()));
+    callAfter(this::notifyRoundFinishedListeners, state.getDurationSeconds());
   }
 
   /**

@@ -1,7 +1,6 @@
 import { useGame } from 'contexts/game';
 import { AnswerRevealCard } from 'components/AnswerRevealCard';
 import { TimeCountDown } from 'components/TimeCountDown';
-
 import { useState, useEffect } from 'react';
 
 /**
@@ -33,20 +32,28 @@ export const PresentCorrectAnswer = () => {
     return () => window.clearInterval(timer);
   }, [view]);
 
+  useEffect(() => {
+    if (view.length >= selectedExplanations.length) return;
+
+    setView((previousState) => {
+      return [...previousState, selectedExplanations[previousState.length]];
+    });
+  }, []);
+
   return (
-    <div className="m-14 w-full reveal-card">
-      <p className="text-yellow-400 tracking-wide uppercase">
+    <div className='m-14 w-full reveal-card'>
+      <p className='text-yellow-400 tracking-wide uppercase'>
         Result of this round
       </p>
-      <h1 className="text-6xl font-bold">{currentWord}</h1>
+      <h1 className='text-6xl font-bold'>{currentWord}</h1>
 
       {console.log(view)}
 
-      <div className="flex flex-col-reverse transition-all duration-300 ease-in-out">
+      <div className='flex flex-col-reverse transition-all duration-300 ease-in-out'>
         {view.map((explanation, i) => {
           return (
             <div
-              className="transition animate__animated animate__fadeIn"
+              className='transition animate__animated animate__fadeIn'
               key={i}
             >
               <AnswerRevealCard
@@ -61,8 +68,8 @@ export const PresentCorrectAnswer = () => {
           );
         })}
       </div>
-      <div className="fixed bottom-10 right-10">
-        <TimeCountDown label="Scores will be displayed in:"></TimeCountDown>
+      <div className='fixed bottom-10 right-10'>
+        <TimeCountDown label='Scores will be displayed in:'></TimeCountDown>
       </div>
     </div>
   );

@@ -1,6 +1,22 @@
-# Word Game :nerd_face:
+# Word Game :nerd:
 
 The best game.
+
+## Instructions
+
+Where to find the files.
+
+### Backend
+
+The backend is in the root project of the repo following a standard maven structure.
+
+### Frontend
+
+The files for the frontend can be found in the `frontend` folder of the repo.
+
+## Final Report
+
+The final report can be found in the `meta` folder with the name `KahoKalja_WebbApp.pdf`.
 
 ## Environment Variables
 
