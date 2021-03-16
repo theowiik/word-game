@@ -98,6 +98,16 @@ class GameTest {
   }
 
   @Test
+  void checkCorrectCategoryTest() {
+    var category = createNewUniqueCategoryWithWords();
+    var game = new Game(category, "00002");
+
+    Assert.isTrue(category == game.getCategory());
+    Assert.isTrue(game.getCurrentRound().getCurrentWord() == category.getWords().get(0).getWord());
+
+  }
+
+  @Test
   void addGameChangedObserverTest() {
     var category = createNewUniqueCategoryWithWords();
     var game = new Game(category, "00003");
@@ -153,9 +163,23 @@ class GameTest {
   }
 
   @Test
-  void playerIsJoinedTest() {
+  void notifyRoundFinishedTest() {
     var category = createNewUniqueCategoryWithWords();
     var game = new Game(category, "00008");
+    Assert.isTrue(game.getState() == Game.State.LOBBY);
+    game.notifyRoundFinished();
+    game.notifyRoundFinished();
+    game.notifyRoundFinished();
+    game.notifyRoundFinished();
+    Assert.isTrue(game.getActiveRoundIndex() == 5);
+    game.notifyRoundFinished();
+    Assert.isTrue(game.getState() == Game.State.END);
+  }
+
+  @Test
+  void playerIsJoinedTest() {
+    var category = createNewUniqueCategoryWithWords();
+    var game = new Game(category, "00009");
     Player nullPLayer = null;
     var player = new Player("Billy");
     game.addPlayer(player);
@@ -167,7 +191,7 @@ class GameTest {
   @Test
   void getCurrentWord() {
     var category = createNewUniqueCategoryWithWords();
-    var game = new Game(category, "00009");
+    var game = new Game(category, "00010");
 
     Assert.hasText(game.getCurrentWord());
   }
