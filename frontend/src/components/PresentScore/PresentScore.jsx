@@ -8,7 +8,7 @@ import { TimeCountDown } from 'components/TimeCountDown';
  * @constructor
  */
 export const PresentScore = () => {
-  const { players, currentStateEndTime } = useGame();
+  const { players } = useGame();
 
   function compare(a, b) {
     if (a.score < b.score) {

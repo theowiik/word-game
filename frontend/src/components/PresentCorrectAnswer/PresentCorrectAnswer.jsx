@@ -36,7 +36,7 @@ export const PresentCorrectAnswer = () => {
   return (
     <div className="m-14 w-full reveal-card">
       <p className="text-yellow-400 tracking-wide uppercase">
-        Correct description of
+        Result of this round
       </p>
       <h1 className="text-6xl font-bold">{currentWord}</h1>
 
