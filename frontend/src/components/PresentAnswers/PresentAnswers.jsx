@@ -9,6 +9,8 @@ export const PresentAnswers = () => {
 
   const { currentWord, explanations, currentStateEndTime, pin } = useGame();
 
+  const startTime = new Date().getTime();
+
   const pickExplanation = (explanation) => {
     const form = new FormData();
     form.append('explanation', explanation);
@@ -18,23 +20,21 @@ export const PresentAnswers = () => {
       .then((res) => {
         console.log(res);
         toast.success('Picked explanation 😎');
-        setHasSelected(true)
+        setHasSelected(true);
       })
       .catch((err) => {
         console.log('yoooo');
         toast.error('Failed to pick explanation 😩');
         console.log(err);
       });
-  }
+  };
 
   return (
     <>
-      <h1 className="text-center mt-14 text-6xl font-bold">
-        {currentWord}
-      </h1>
+      <h1 className="text-center mt-14 text-6xl font-bold">{currentWord}</h1>
 
       <div className="mt-14 w-full">
-        <Timer start={new Date().getTime()} end={currentStateEndTime} />
+        <Timer start={startTime} end={currentStateEndTime} />
       </div>
 
       <div className="w-full items-center mt-10">
