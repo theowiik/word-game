@@ -12,6 +12,7 @@ import teamsocial.wordgame.controller.GameController;
 import teamsocial.wordgame.model.GameManagerBean;
 import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.model.entity.Word;
+import teamsocial.wordgame.model.game.Game.State;
 import teamsocial.wordgame.repository.ICategoryRepository;
 import teamsocial.wordgame.repository.IWordRepository;
 
@@ -73,6 +74,20 @@ class GameControllerTest {
 
     var response2 = gameController.get("weee!!");
     Assertions.assertEquals(response2.getStatusCode(), HttpStatus.NOT_FOUND);
+  }
+
+  @Test
+  void startGameSuccessTest() {
+    var catName = getUnusedName();
+    var category = categoryRepository.save(new Category(catName));
+    wordRepository.save(new Word(getUnusedName(), "Desc", category));
+    var gameResponse = gameController.create(category.getName());
+    var game = gameResponse.getBody();
+
+    Assertions.assertNotNull(game);
+    gameController.startGame(game.getPin());
+
+    Assertions.assertEquals(game.getState(), State.PLAYING);
   }
 
   private String getUnusedName() {
