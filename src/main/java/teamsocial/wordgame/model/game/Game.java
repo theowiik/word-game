@@ -72,11 +72,14 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     for (var player : this.players) {
       scores.put(player, 0);
     }
-
     for (var round : this.rounds) {
       for (var player : round.correctPlayers()) {
-        scores.put(player, scores.get(player) + 1);
+        scores.put(player, scores.get(player) + 20);
       }
+      round.getExplanations().forEach((player, explanation) -> {
+        var nFooled = round.countWhoManyChosed(player, explanation);
+        scores.put(player, scores.get(player) + (nFooled * 10));
+      });
     }
 
     return scores;
