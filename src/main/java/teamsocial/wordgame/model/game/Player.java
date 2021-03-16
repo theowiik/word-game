@@ -7,13 +7,13 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+/**
+ * The Player of the game
+ */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-/**
- * The Player of the game
- */
 public class Player implements Serializable {
   private String name;
 }
