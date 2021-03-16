@@ -19,8 +19,8 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
 
   private final static int ROUNDS = 5; //How many rounds each game should contain
   @Getter(onMethod = @__(@JsonIgnore))
-  private final Set<GameObserver> observers;
-  private final Set<GameFinishedListeners> gameFinishedListeners;
+  private final Set<GameChangedObserver> observers;
+  private final Set<GameFinishedObserver> gameFinishedListeners;
   @Getter(onMethod = @__(@JsonIgnore))
   private final Set<Player> players;
   private final Category category;
@@ -106,7 +106,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
    *
    * @param go an object that implements GameObserver
    */
-  public void addGameChangedObserver(GameObserver go) {
+  public void addGameChangedObserver(GameChangedObserver go) {
     observers.add(go);
   }
 
@@ -115,7 +115,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
    *
    * @param gfl an object that implements GameFinishedListener
    */
-  public void addGameFinishedListener(GameFinishedListeners gfl) {
+  public void addGameFinishedListener(GameFinishedObserver gfl) {
     gameFinishedListeners.add(gfl);
   }
 
@@ -250,7 +250,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
   /**
    * Interface for game changed observers to implement
    */
-  public interface GameObserver {
+  public interface GameChangedObserver {
 
     /**
      * Apply logic for when game has changed
@@ -263,7 +263,7 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
   /**
    * Interface for game finished listeners to implement
    */
-  public interface GameFinishedListeners {
+  public interface GameFinishedObserver {
     /**
      * Apply logic for when game has finished
      * @param pin the pin for the game that has finished
