@@ -17,6 +17,9 @@ import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.repository.ICategoryRepository;
 import teamsocial.wordgame.repository.IWordRepository;
 
+/**
+ * Controller for handling actions on categories
+ */
 @RestController
 @RequestMapping("/api/v1/categories")
 public class CategoryController {
@@ -27,11 +30,21 @@ public class CategoryController {
   @Autowired
   private IWordRepository wordRepository;
 
+  /**
+   * Get all categories in the database
+   * @return list of categories
+   */
   @GetMapping
   public List<Category> index() {
     return categoryRepository.findAll();
   }
 
+  /**
+   * Create a new category
+   *
+   * @param categoryRequest the requested category to create
+   * @return corresponding ResponseEntity
+   */
   @PostMapping
   public ResponseEntity<Category> create(@RequestBody Category categoryRequest) {
     if (categoryRequest == null) {
@@ -46,6 +59,11 @@ public class CategoryController {
     return ResponseEntity.ok(savedCategory);
   }
 
+  /**
+   * Delete a category from database
+   * @param category the key of the category to delete
+   * @return corresponding ResponseEntity
+   */
   @DeleteMapping("/{category}")
   public ResponseEntity delete( @PathVariable("category") String category) {
     if (category == null) {
@@ -66,6 +84,11 @@ public class CategoryController {
     return ResponseEntity.noContent().build();
   }
 
+  /**
+   * Update a category in the database
+   * @param categoryUpdateRequest an object containing the current key and the new key of the category
+   * @return corresponding ResponseEntity
+   */
   @PutMapping
   public ResponseEntity<Category> update(@RequestBody CategoryUpdateRequest categoryUpdateRequest) {
     var oldCategoryOptional = categoryRepository.findById(
