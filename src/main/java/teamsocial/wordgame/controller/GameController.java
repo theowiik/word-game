@@ -17,6 +17,9 @@ import teamsocial.wordgame.model.UserBean;
 import teamsocial.wordgame.model.game.Game;
 import teamsocial.wordgame.model.game.Player;
 
+/**
+ * Controller for handling actions on a game
+ */
 @RestController
 @RequestMapping("/api/v1/games")
 @SessionScope // TODO Can this be ApplicationScope?
@@ -28,6 +31,12 @@ public class GameController implements Serializable {
   @Autowired
   private UserBean userBean;
 
+  /**
+   * Get the game with corresponding pin
+   *
+   * @param pin the pin of the requested game
+   * @return corresponding ResponseEntity
+   */
   @GetMapping("/{pin}")
   public ResponseEntity get(@PathVariable("pin") String pin) {
     var game = gameManager.getGameByPin(pin);
@@ -39,11 +48,24 @@ public class GameController implements Serializable {
     }
   }
 
+  /**
+   * Create a game with requested category
+   *
+   * @param category the key of the category for the requested game
+   * @return the game created
+   */
   @PostMapping("/")
   public Game create(@RequestParam("category") String category) {
     return gameManager.createGame(category);
   }
 
+  /**
+   * Add an explanation for the game with given pin
+   *
+   * @param pin the pin of the game
+   * @param explanation the added explanation
+   * @return corresponding ResponseEntity
+   */
   @PostMapping("/{pin}/add_explanation")
   public ResponseEntity addExplanation(
     @PathVariable("pin") String pin,
@@ -58,6 +80,13 @@ public class GameController implements Serializable {
     }
   }
 
+  /**
+   * Let the player of the session pick an explanation
+   *
+   * @param pin the pin of the game
+   * @param explanation the selected explanation
+   * @return corresponding ResponseEntity
+   */
   @PostMapping("/{pin}/select")
   public ResponseEntity pickExplanation(
     @PathVariable("pin") String pin,
@@ -72,6 +101,13 @@ public class GameController implements Serializable {
     }
   }
 
+  /**
+   * Join the user of the session to the game with the requested pin
+   *
+   * @param pin the pin for the game to join
+   * @param name the name of the player that joins
+   * @return corresponding ResponseEntity
+   */
   @PostMapping("/{pin}/join")
   public ResponseEntity joinGame(
     @PathVariable("pin") String pin,
@@ -96,6 +132,12 @@ public class GameController implements Serializable {
     return ResponseEntity.ok().build();
   }
 
+
+  /**
+   * Get the user of the session present in the game with the requested pin
+   * @param pin the pin of the game the check is done in
+   * @return String with the name of the user if it is present in the game
+   */
   @GetMapping("/{pin}/whoami")
   public ResponseEntity<String> getWhoAmI(@PathVariable("pin") String pin) {
 
@@ -117,6 +159,12 @@ public class GameController implements Serializable {
 
   }
 
+  /**
+   * Request for starting the game
+   *
+   * @param pin the pin of the game to start
+   * @return corresponding ResponseEntity
+   */
   @PostMapping("/{pin}/start")
   public ResponseEntity startGame(@PathVariable("pin") String pin) {
     var game = getGame(pin);
@@ -130,6 +178,12 @@ public class GameController implements Serializable {
     return ResponseEntity.ok().build();
   }
 
+  /**
+   * Get the game with corresponding pin
+   *
+   * @param pin the pin of the requested game
+   * @return the requested game
+   */
   private Game getGame(String pin) {
     var game = gameManager.getGameByPin(pin);
 
