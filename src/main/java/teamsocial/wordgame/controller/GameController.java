@@ -40,8 +40,22 @@ public class GameController implements Serializable {
   }
 
   @PostMapping("/")
-  public Game create(@RequestParam("category") String category) {
-    return gameManager.createGame(category);
+  public ResponseEntity<Game> create(@RequestParam("category") String category) {
+    Game game;
+
+    try {
+      game = gameManager.createGame(category);
+    } catch (IllegalArgumentException e) {
+      throw new ResponseStatusException(
+        HttpStatus.BAD_REQUEST, "No category with name " + category
+      );
+    } catch (IllegalStateException e) {
+      throw new ResponseStatusException(
+        HttpStatus.BAD_REQUEST, "Cant create a game with a category that has no words" + category
+      );
+    }
+
+    return ResponseEntity.ok(game);
   }
 
   @PostMapping("/{pin}/add_explanation")
