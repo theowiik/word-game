@@ -63,7 +63,7 @@ export function AnswerRevealCard({ text, byPlayer, playersWhoChose, correct }) {
             playersWhoChose.map((player, i) => {
               return (
                 <p className={getBadgeClassNames({ success: correct, danger: !correct })} key={i}>
-                  {correct ? '+' : '-'}1 {player.name}
+                  {correct ? '+20' : ''} {player.name}
                 </p>
               );
             })
