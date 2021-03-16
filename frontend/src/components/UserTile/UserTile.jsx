@@ -1,3 +1,11 @@
+/**
+ * The tile to display users in Lobby view as well as on the side of every round page
+ * @param name name of the user
+ * @param color the color to indicate the user
+ * @param isCurrentUser a check ot see if you are the user, to then change it to indicate that you are that person
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function UserTile({ name, color, isCurrentUser }) {
   return (
     <div

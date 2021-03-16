@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useGame } from 'contexts/game';
 
+
+/**
+ * A timer to indicate when a new page is about to be revealed
+ * @param label the text next to the countdown
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const TimeCountDown = ({ label }) => {
   const { currentStateEndTime } = useGame();
 

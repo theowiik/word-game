@@ -65,6 +65,11 @@ public class Round implements Serializable {
     return output;
   }
 
+  /**
+   * Sets a random word as the word of the round.
+   *
+   * @param category the category the word should be collected from
+   */
   private void setRandomWord(Category category) {
     var rand = new java.util.Random();
     var words = category.getWords();
@@ -76,6 +81,11 @@ public class Round implements Serializable {
     word = words.get(rand.nextInt(words.size()));
   }
 
+  /**
+   * Gets the word of the round
+   *
+   * @return the word of the round
+   */
   public String getCurrentWord() {
     return word.getWord();
   }
@@ -88,6 +98,11 @@ public class Round implements Serializable {
     }
   }
 
+  /**
+   * Add a listener to the list of roundFinishedlisteners
+   *
+   * @param listener the listener to add
+   */
   public void addRoundFinishedListener(RoundFinishedListeners listener) {
     roundFinishedListeners.add(listener);
   }
@@ -108,11 +123,17 @@ public class Round implements Serializable {
     explanations.put(player, description);
   }
 
+  /**
+   * Get the correct explanation of the word of the round.
+   *
+   * @return the string of the correct explanation
+   */
   public String getCorrectExplanation() {
     return word.getDescription();
   }
 
   /**
+   *
    * @return a list of players who guessed correctly.
    */
   public Set<Player> correctPlayers() {
@@ -126,6 +147,12 @@ public class Round implements Serializable {
     return correctPlayers;
   }
 
+  /**
+   *  If the round is in the correct state the player selects an explanation
+   *
+   * @param player the player that selects an explanation
+   * @param selectedExplanation the selected explanation
+   */
   void selectExplanation(Player player, String selectedExplanation) {
     if (state != State.SELECT_EXPLANATION) {
       throw new IllegalStateException();
@@ -133,6 +160,11 @@ public class Round implements Serializable {
     selectedExplanations.put(player, selectedExplanation);
   }
 
+  /**
+   * Checks if a given string is a valid description
+   * @param string the string to check if it is valid
+   * @return boolean if it is valid or not
+   */
   private boolean validDescription(String string) {
 
     // Has content
@@ -144,10 +176,16 @@ public class Round implements Serializable {
     return string.length() > 1 && string.length() < 50;
   }
 
+  /**
+   * Starts a round. Call first state.
+   */
   public void start() {
     enterPresentWordInputExplanation();
   }
 
+  /**
+   * Keep the state during its duration and then call enterSelectExplanation
+   */
   private void enterPresentWordInputExplanation() {
     this.state = State.PRESENT_WORD_INPUT_EXPLANATION;
     currentStateStartedAt = now();
@@ -155,6 +193,9 @@ public class Round implements Serializable {
     callAfter(this::enterSelectExplanation, state.getDurationSeconds());
   }
 
+  /**
+   * Keep the state during its duration and then call enterPresentAnswer
+   */
   private void enterSelectExplanation() {
     this.state = State.SELECT_EXPLANATION;
     currentStateStartedAt = now();
@@ -162,6 +203,9 @@ public class Round implements Serializable {
     callAfter(this::enterPresentAnswer, state.getDurationSeconds());
   }
 
+  /**
+   * Keep the state during its duration and then call enterPresentScore
+   */
   private void enterPresentAnswer() {
     state = State.PRESENT_ANSWER;
     currentStateStartedAt = now();
@@ -169,6 +213,9 @@ public class Round implements Serializable {
     callAfter(this::enterPresentScore, state.getDurationSeconds());
   }
 
+  /**
+   * Keep the state during its duration and then call notifyRoundFinishedListeners
+   */
   private void enterPresentScore() {
     state = State.PRESENT_SCORE;
     currentStateStartedAt = now();
@@ -176,6 +223,9 @@ public class Round implements Serializable {
     callAfter(this::notifyRoundFinishedListeners, state.getDurationSeconds());
   }
 
+  /**
+   * Iterate over all listeners and call notifyRoundFinished
+   */
   private void notifyRoundFinishedListeners() {
     for (var o : roundFinishedListeners) {
       o.notifyRoundFinished();
@@ -193,6 +243,9 @@ public class Round implements Serializable {
     exec.schedule(invokable::perform, delayInSeconds, TimeUnit.SECONDS);
   }
 
+  /**
+   * Enum that holds State and its duration
+   */
   public enum State {
     PRESENT_WORD_INPUT_EXPLANATION(60),
     SELECT_EXPLANATION(7 * (3 + 1)),
@@ -205,34 +258,44 @@ public class Round implements Serializable {
       this.durationSeconds = durationSeconds;
     }
 
+    /**
+     * Get the duration seconds of a state
+     *
+     * @return int of seconds
+     */
     public int getDurationSeconds() {
       return durationSeconds;
     }
 
+    /**
+     * Convert duration seconds to milliseconds
+     * @return int of milliseconds
+     */
     public int getDurationMilliSeconds() {
       return durationSeconds * 1000;
     }
   }
 
+  /**
+   * Interface for listeners of the round
+   */
   public interface RoundFinishedListeners {
     void notifyRoundFinished();
   }
 
+  /**
+   * Interface holding method for state changes of the round
+   */
   interface RoundChanged {
-
     void performOnRoundStateChanged();
   }
 
-  public Player whoWrote(String explanation) {
-    for (var entry : explanations.entrySet()) {
-      if (entry.getValue().equals(explanation)) {
-        return entry.getKey();
-      }
-    }
-
-    return null;
-  }
-
+  /**
+   * Checks if a given explanation is the correct explanation
+   *
+   * @param explanation string of an explanation
+   * @return boolean value if it is true or not
+   */
   public boolean isCorrect(String explanation) {
     return explanation.equals(word.getDescription());
   }

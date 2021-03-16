@@ -1,5 +1,14 @@
 import React, { useState } from "react";
 
+
+/**
+ * The tiles to present the answer of the players
+ * @param explanation the text of the answer
+ * @param onClick selects the tile if clicked
+ * @param clickable prevents the player from choosing a new answer
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function PresentAnswerTile({ explanation , onClick, clickable}) {
   const [isChosen, setChosen] = useState(false);
 

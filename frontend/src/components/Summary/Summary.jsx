@@ -1,6 +1,12 @@
 import React from 'react';
 import { useGame } from 'contexts/game';
 
+
+/**
+ * The page to display the winner of the game
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const Summary = () => {
   const { players } = useGame();
   function compare(a, b) {

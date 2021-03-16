@@ -9,6 +9,12 @@ import {
 import { UserTile } from 'components/UserTile/UserTile';
 import { states, colors } from 'lib/constants';
 
+/**
+ * The template for all the round views, changes depending on state. Includes a list of players in the game
+ * to the left of the page for every round page.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const Round = () => {
   const { players, globalGameState } = useGame();
 

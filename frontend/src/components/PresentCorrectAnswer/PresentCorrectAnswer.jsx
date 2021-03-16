@@ -4,6 +4,11 @@ import { TimeCountDown } from 'components/TimeCountDown';
 
 import { useState, useEffect } from 'react';
 
+/**
+ * Display for the correct answers page
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const PresentCorrectAnswer = () => {
   const [view, setView] = useState([]);
   const { currentWord, selectedExplanations } = useGame();

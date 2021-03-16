@@ -1,5 +1,15 @@
 import { useState } from "react";
 
+/**
+ * Design for the input fields in the app.
+ * @param placeholder the input hint
+ * @param type what type it should be
+ * @param id an id for the input field to extract info
+ * @param name name for the input field to extract info
+ * @param regex control for string input
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function Input({ placeholder, type, id, name, regex }) {
   const [value, setValue] = useState('');
 

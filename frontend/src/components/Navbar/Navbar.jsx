@@ -1,5 +1,12 @@
 import { Link } from 'react-router-dom';
 
+/**
+ * A template to display the top of every screen, sets label and redirect back button if needed
+ * @param label title of the page
+ * @param onBackClickPath what page to be redirected to
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function Navbar({ label, onBackClickPath }) {
   return (
     <div className="relative w-full pt-11">
