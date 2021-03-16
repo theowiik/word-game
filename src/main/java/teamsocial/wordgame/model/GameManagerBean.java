@@ -33,7 +33,13 @@ public class GameManagerBean implements Game.GameFinishedListeners {
   }
 
   public Game createGame(String category) {
-    var cat = categoryRepository.findById(category).get(); // TODO: Throw error.
+    var categoryOptional = categoryRepository.findById(category);
+
+    if (categoryOptional.isEmpty()) {
+      throw new IllegalArgumentException("No category with the name " + category);
+    }
+
+    var cat = categoryRepository.findById(category).get();
     var pin = getUnusedPin();
     var game = new Game(cat, pin);
     game.addGameChangedObserver(pushService);
