@@ -229,6 +229,15 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
   }
 
   /**
+   * Checks whether everyone has chosen an explanation.
+   *
+   * @return true if everyone has chosen an explanation.
+   */
+  public boolean everyoneHasSelectedExplanation() {
+    return getCurrentRound().getSelectedExplanations().size() == players.size();
+  }
+
+  /**
    * Enum holding the different states of a game
    */
   public enum State {

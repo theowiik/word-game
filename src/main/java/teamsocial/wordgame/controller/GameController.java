@@ -114,6 +114,11 @@ public class GameController implements Serializable {
     try {
       var game = getGame(pin);
       game.selectExplanation(userBean.getPlayer(), explanation);
+
+      if (game.everyoneHasSelectedExplanation()) {
+        game.getCurrentRound().skipCurrentRoundState();
+      }
+
       return ResponseEntity.ok().build();
     } catch (IllegalStateException e) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Could not pick explanation");
