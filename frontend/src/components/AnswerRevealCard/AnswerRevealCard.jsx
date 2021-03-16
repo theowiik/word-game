@@ -19,6 +19,16 @@ const getBadgeClassNames = (props) => {
   });
 };
 
+/**
+ * This component reveals the answer with an animation and adds effects depending on who picked what answer and if
+ * it was correct or incorrect.
+ * @param text the answer to display
+ * @param byPlayer who wrote this answer
+ * @param playersWhoChose who picked this specific answer
+ * @param correct if it was the correct answer or not
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function AnswerRevealCard({ text, byPlayer, playersWhoChose, correct }) {
   const showByDelaySeconds = 6;
   const showChoseDelaySeconds = 3;

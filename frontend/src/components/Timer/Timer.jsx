@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
+
+/**
+ * The progress bar timer
+ * @param start starttime
+ * @param end endtime
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function Timer({ start, end }) {
   const [progress, setProgress] = useState(100);
   const duration = end - start;

@@ -1,6 +1,12 @@
 import { useGame } from 'contexts/game';
 import { TimeCountDown } from 'components/TimeCountDown';
 
+
+/**
+ * The view to displays the current score for the game
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const PresentScore = () => {
   const { players, currentStateEndTime } = useGame();
 

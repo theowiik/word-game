@@ -4,6 +4,12 @@ import { useGame } from 'contexts/game';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
+
+/**
+ * The view to present the unusual word, the input field to write and answer and a timer.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const PresentWord = () => {
   const [hasPosted, setHasPosted] = useState(false);
   const { currentWord, pin, currentStateEndTime } = useGame();

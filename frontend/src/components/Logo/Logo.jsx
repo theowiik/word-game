@@ -1,5 +1,12 @@
 import React from "react";
 
+/**
+ * A component to display the Logo for the app
+ * @param height height of the logo
+ * @param width width of the logo
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function Logo({height}, {width}) {
   return (
     <div>

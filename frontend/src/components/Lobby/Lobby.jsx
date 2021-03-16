@@ -4,6 +4,12 @@ import { useGame } from 'contexts/game';
 import { colors } from 'lib/constants';
 import React from 'react';
 
+
+/**
+ * The design for the lobby view.
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const Lobby = () => {
   const { players, pin } = useGame();
 

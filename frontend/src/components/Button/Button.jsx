@@ -12,6 +12,20 @@ const getButtonClassNames = (props) => {
   });
 };
 
+/**
+ * Custom button used throughout the app
+ * @param label what to write in the button
+ * @param type what type of button it should be
+ * @param onClick what it should do when clicked
+ * @param primary change to primary style if chosen
+ * @param danger change to danger style if chosen
+ * @param success change to success style if chosen
+ * @param secondary change to custom secondary style if chosen
+ * @param large change to custom large style if chosen
+ * @param disabled change to custom disabled style if chosen
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function Button({
   label,
   type,

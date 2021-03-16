@@ -4,6 +4,12 @@ import { useGame } from 'contexts/game';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+
+/**
+ * The page to display all answers
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const PresentAnswers = () => {
   const [hasSelected, setHasSelected] = useState(false);
 
