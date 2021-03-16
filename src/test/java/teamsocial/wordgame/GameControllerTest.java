@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 import teamsocial.wordgame.controller.CategoryController;
 import teamsocial.wordgame.controller.GameController;
@@ -88,6 +89,31 @@ class GameControllerTest {
     gameController.startGame(game.getPin());
 
     Assertions.assertEquals(game.getState(), State.PLAYING);
+
+    // Dont start already started game
+    Assertions.assertThrows(
+      ResponseStatusException.class,
+      () -> gameController.startGame(game.getPin())
+    );
+  }
+
+  @Test
+  void JoinGameTest() {
+    var catName = getUnusedName();
+    var category = categoryRepository.save(new Category(catName));
+    wordRepository.save(new Word(getUnusedName(), "Desc", category));
+    var gameResponse = gameController.create(category.getName());
+    var game = gameResponse.getBody();
+    Assertions.assertNotNull(game);
+
+    gameController.joinGame(game.getPin(), getUnusedName());
+    var playersInGame = game.getPlayers();
+    Assertions.assertEquals(playersInGame.size(), 1);
+
+    // Dont join an active game
+    gameController.startGame(game.getPin());
+    var response = gameController.joinGame(game.getPin(), "_");
+    Assertions.assertEquals(response.getStatusCode(), HttpStatus.FORBIDDEN);
   }
 
   private String getUnusedName() {
