@@ -1,28 +1,34 @@
 package teamsocial.wordgame;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
+import teamsocial.wordgame.controller.CategoryController;
 import teamsocial.wordgame.controller.WordController;
 import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.model.entity.Word;
 import teamsocial.wordgame.repository.IWordRepository;
 
 @SpringBootTest
-public class WordControllerTest {
+class WordControllerTest {
 
   @Autowired
   private WordController wordController;
 
   @Autowired
-  IWordRepository wordRepository;
+  private IWordRepository wordRepository;
+
+  @Autowired
+  private CategoryController categoryController;
 
   @Test
-  public void createTest(){
+  void createTest(){
 
       Word word = new Word();
       Category category = new Category("hej");
+      categoryController.create(category);
       word.setWord("Tjena");
       word.setDescription("TestTest");
       word.setCategory(category);
@@ -39,25 +45,26 @@ public class WordControllerTest {
 
 
   @Test
-  public void updateWordTest(){
+  void updateWordTest(){
 
     Word word = new Word();
     Category category = new Category("cat1111");
+    categoryController.create(category);
     word.setWord("Lol");
     word.setDescription("TestTestTest");
     word.setCategory(category);
 
+    wordController.update(word);
 
-    var response = wordController.create(word);
-    var responseWord = response.getBody();
+    Assert.isTrue(word.getDescription() == "TestTestTest");
 
-    //TODO
   }
 
   @Test
-  public void deleteWordTest(){
+ void deleteWordTest(){
     Word word = new Word();
     Category category = new Category("cat1111");
+    categoryController.create(category);
     word.setWord("Lol");
     word.setDescription("TestTestTest");
     word.setCategory(category);
@@ -68,8 +75,6 @@ public class WordControllerTest {
     var checkForEmptyWord = wordRepository.findById(word.getWord());
 
     Assert.isTrue(checkForEmptyWord.isEmpty());
-
-
 
   }
 
