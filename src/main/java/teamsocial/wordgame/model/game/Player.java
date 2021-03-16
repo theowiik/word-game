@@ -11,7 +11,9 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * The Player of the game
+ */
 public class Player implements Serializable {
-
   private String name;
 }

@@ -13,7 +13,7 @@ import java.util.*;
 @Setter
 public class Game implements Serializable, Round.RoundFinishedListeners {
 
-  private final static int ROUNDS = 5;
+  private final static int ROUNDS = 5; //How many rounds each game should contain
   @Getter(onMethod = @__(@JsonIgnore))
   private final Set<GameObserver> observers;
   private final Set<GameFinishedListeners> gameFinishedListeners;
@@ -62,6 +62,11 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     return pin.matches(regexString);
   }
 
+  /**
+   * Creates a HashMap and populate it with the scores from all played rounds
+   *
+   * @return The scores for each player so far in the game as HashMap<Player, Integer>
+   */
   public Map<Player, Integer> getPlayerScores() {
     Map<Player, Integer> scores = new HashMap<>();
     for (var player : this.players) {
@@ -77,6 +82,10 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     return scores;
   }
 
+  /**
+   * Starts the game and put it in PLAYING state.
+   * Starts the first round of the game.
+   */
   public void startGame() {
     if (!started) {
       state = State.PLAYING;
@@ -85,14 +94,29 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     }
   }
 
+  /**
+   * Add a GameObserver to the list of observers
+   *
+   * @param go an object that implements GameObserver
+   */
   public void addGameChangedObserver(GameObserver go) {
     observers.add(go);
   }
 
+  /**
+   * Add a GameFinishedListener to listeners of the game
+   *
+   * @param gfl an object that implements GameFinishedListener
+   */
   public void addGameFinishedListener(GameFinishedListeners gfl) {
     gameFinishedListeners.add(gfl);
   }
 
+  /**
+   * Returns the round that is currently active
+   *
+   * @return The active Round of the game
+   */
   public Round getCurrentRound() {
     return rounds.get(activeRoundIndex - 1);
   }
@@ -106,32 +130,59 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     getCurrentRound().addRoundFinishedListener(this);
   }
 
+  /**
+   * Add an explanation to the list of explanation for the current word in the current round.
+   *
+   * @param player the player that submits an explanation
+   * @param explanation the explanation submitted
+   */
   public void addExplanation(Player player, String explanation) {
     getCurrentRound().addPlayerExplanation(player, explanation);
     notifyGameChangedObservers();
   }
 
+  /**
+   *  Select explanation for a player in current round.
+   *
+   * @param player the player that selects an explanation
+   * @param explanation the explanation selected
+   */
   public void selectExplanation(Player player, String explanation) {
     getCurrentRound().selectExplanation(player, explanation);
   }
 
+  /**
+   * Add a player to the game and notify game changes
+   *
+   * @param player the player that has joined the game
+   */
   public void addPlayer(Player player) {
     players.add(player);
     notifyGameChangedObservers();
   }
 
+  /**
+   * Notify all observers that something has changed in the game.
+   */
   public void notifyGameChangedObservers() {
     for (var o : observers) {
       o.notifyGameChanged(this);
     }
   }
 
+  /**
+   * Notify all listeners that the game has ended.
+   */
   public void notifyGameFinishedListeners() {
     for (var l : gameFinishedListeners) {
       l.notifyGameFinished(pin);
     }
   }
 
+  /**
+   * If its not the last round call for a new round to start.
+   * If it is the last round, put the game to state END and notify observers and listeners
+   */
   @Override
   public void notifyRoundFinished() {
     if (activeRoundIndex >= ROUNDS) {
@@ -155,20 +206,42 @@ public class Game implements Serializable, Round.RoundFinishedListeners {
     return players.contains(player);
   }
 
+  /**
+   * Gets the word for the current round
+   * @return current word of type Word
+   */
   public String getCurrentWord() {
     return getCurrentRound().getCurrentWord();
   }
 
+  /**
+   * Enum holding the different states of a game
+   */
   public enum State {
     LOBBY, PLAYING, END
   }
 
+  /**
+   * Interface for game changed observers to implement
+   */
   public interface GameObserver {
 
+    /**
+     * Apply logic for when game has changed
+     *
+     * @param game the game that has changed
+     */
     void notifyGameChanged(Game game);
   }
 
+  /**
+   * Interface for game finished listeners to implement
+   */
   public interface GameFinishedListeners {
+    /**
+     * Apply logic for when game has finished
+     * @param pin the pin for the game that has finished
+     */
     void notifyGameFinished(String pin);
   }
 }
