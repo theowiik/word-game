@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Timer, PresentAnswerTile } from 'components';
 import { useGame } from 'contexts/game';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-
+import { useRef } from 'react'
+ 
 
 /**
  * The page to display all answers
@@ -13,9 +14,9 @@ import { toast } from 'react-toastify';
 export const PresentAnswers = () => {
   const [hasSelected, setHasSelected] = useState(false);
 
-  const { currentWord, explanations,  pin } = useGame();
-
-  const startTime = new Date().getTime();
+  const { currentWord, explanations,  pin, currentStateEndTime } = useGame();
+  
+  const [startTime, setStartTime] = useState(new Date().getTime())
 
   const pickExplanation = (explanation) => {
     const form = new FormData();
@@ -40,7 +41,7 @@ export const PresentAnswers = () => {
       <h1 className="text-center mt-14 text-6xl font-bold">{currentWord}</h1>
 
       <div className="mt-14 w-full">
-        <Timer start={startTime} />
+        <Timer start={startTime} end={currentStateEndTime} />
       </div>
 
       <div className="w-full items-center mt-10">
