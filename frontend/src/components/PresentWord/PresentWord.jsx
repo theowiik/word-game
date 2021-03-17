@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Button, Timer } from 'components';
 import { useGame } from 'contexts/game';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 
@@ -12,10 +12,9 @@ import { toast } from 'react-toastify';
  */
 export const PresentWord = () => {
   const [hasPosted, setHasPosted] = useState(false);
-  const { currentWord, pin } = useGame();
+  const { currentWord, pin, currentStateEndTime } = useGame();
   const [disabledButton, setDisabledButton] = useState(true);
-
-  let startTime = new Date().getTime();
+  const [startTime, setStartTime] = useState(new Date().getTime())
 
   const postExplanation = (explanation) => {
     const form = new FormData();
@@ -56,7 +55,7 @@ export const PresentWord = () => {
         <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold text-center justify-center mb-10 animate__animated animate__bounceIn animate__delay-1s">
           {currentWord}
         </h1>{' '}
-        <Timer start={startTime} />
+        <Timer start={startTime} end={currentStateEndTime} />
         {!hasPosted ? (
           <form
             onSubmit={handleExplanationSubmit}

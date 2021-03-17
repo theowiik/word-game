@@ -1,21 +1,16 @@
 package teamsocial.wordgame.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import teamsocial.wordgame.model.entity.Category;
 import teamsocial.wordgame.model.entity.Word;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @Getter
 @Setter
@@ -92,7 +87,7 @@ public class Round implements Serializable {
 
   public Long getCurrentStateEndTime() {
     if (getState() != null){
-      return getCurrentStateStartedAt() + getState().getDurationMilliSeconds();
+      return getCurrentStateStartedAt() + getState().getDurationMilliSeconds(getAllExplanations().size());
     } else {
       return null;
     }
@@ -195,7 +190,7 @@ public class Round implements Serializable {
     state = State.PRESENT_WORD_INPUT_EXPLANATION;
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
-    callAfter(this::enterSelectExplanation, state.getDurationSeconds());
+    callAfter(this::enterSelectExplanation, state.getDurationSeconds(getAllExplanations().size()));
   }
 
   /**
@@ -210,7 +205,7 @@ public class Round implements Serializable {
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
     callAfter(this::enterPresentAnswer,
-      state.getScaledDurationSeconds(getAllExplanations().size()));
+      state.getDurationSeconds(getAllExplanations().size()));
   }
 
   /**
@@ -224,7 +219,7 @@ public class Round implements Serializable {
     state = State.PRESENT_ANSWER;
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
-    callAfter(this::enterPresentScore, state.getScaledDurationSeconds(getAllExplanations().size()));
+    callAfter(this::enterPresentScore, state.getDurationSeconds(getAllExplanations().size()));
   }
 
   /**
@@ -238,7 +233,7 @@ public class Round implements Serializable {
     state = State.PRESENT_SCORE;
     currentStateStartedAt = now();
     roundChangedImpl.performOnRoundStateChanged();
-    callAfter(this::notifyRoundFinishedListeners, state.getDurationSeconds());
+    callAfter(this::notifyRoundFinishedListeners, state.getDurationSeconds(getAllExplanations().size()));
   }
 
   /**
@@ -293,17 +288,19 @@ public class Round implements Serializable {
    * Enum that holds State and its duration
    */
   public enum State {
-    PRESENT_WORD_INPUT_EXPLANATION(0, 60),
-    SELECT_EXPLANATION(1, 7),
-    PRESENT_ANSWER(2, 10),
-    PRESENT_SCORE(3, 15);
+    PRESENT_WORD_INPUT_EXPLANATION(0, 60, false),
+    SELECT_EXPLANATION(1, 7, true),
+    PRESENT_ANSWER(2, 10, true),
+    PRESENT_SCORE(3, 15, false);
 
     private final int orderIndex;
     private final int durationSeconds;
+    private final boolean isScaled;
 
-    State(int orderIndex, int durationSeconds) {
+    State(int orderIndex, int durationSeconds, boolean isScaled) {
       this.orderIndex = orderIndex;
       this.durationSeconds = durationSeconds;
+      this.isScaled = isScaled;
     }
 
     public int getOrderIndex() {
@@ -311,21 +308,15 @@ public class Round implements Serializable {
     }
 
     /**
-     * Get the duration seconds of a state
-     *
-     * @return int of seconds
-     */
-    public int getDurationSeconds() {
-      return durationSeconds;
-    }
-
-    /**
      * Get the duration seconds of a state scaled with players
      *
      * @return int of seconds
      */
-    public int getScaledDurationSeconds(int amountOfExplanations) {
-      return amountOfExplanations * durationSeconds;
+    public int getDurationSeconds(int amountOfExplanations) {
+      if(isScaled){
+        return amountOfExplanations * durationSeconds;
+      }
+      return durationSeconds;
     }
 
     /**
@@ -333,8 +324,8 @@ public class Round implements Serializable {
      *
      * @return int of milliseconds
      */
-    public int getDurationMilliSeconds() {
-      return durationSeconds * 1000;
+    public int getDurationMilliSeconds(int amountOfExplanations) {
+      return getDurationSeconds(amountOfExplanations) * 1000;
     }
   }
 
