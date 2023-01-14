@@ -1,6 +1,15 @@
-# Word Game :nerd:
+# Word Game 🤓
 
-The best game.
+A word game.
+
+- [Word Game 🤓](#word-game-)
+  - [Instructions](#instructions)
+    - [Backend](#backend)
+    - [Frontend](#frontend)
+  - [Final report](#final-report)
+  - [Environment variables](#environment-variables)
+    - [Database](#database)
+    - [Database testing](#database-testing)
 
 ## Instructions
 
@@ -14,11 +23,11 @@ The backend is in the root project of the repo following a standard maven struct
 
 The files for the frontend can be found in the `frontend` folder of the repo.
 
-## Final Report
+## Final report
 
 The final report can be found in the `meta` folder with the name `KahoKalja_WebbApp.pdf`.
 
-## Environment Variables
+## Environment variables
 
 These environment variables must be set.
 
@@ -28,7 +37,7 @@ These environment variables must be set.
 - SPRING_DATASOURCE_USERNAME
 - SPRING_DATASOURCE_PASSWORD
 
-### Database Testing
+### Database testing
 
 - SPRING_DATASOURCE_URL_TEST
 - SPRING_DATASOURCE_USERNAME_TEST
